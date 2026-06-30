@@ -6,11 +6,14 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "setup:emu": "node scripts/setup-emu.mjs",
+    "postinstall": "node scripts/setup-emu.mjs"
   },
   "dependencies": {
     "@serwist/next": "^9.5.11",
     "framer-motion": "^12.42.2",
+    "js-dos": "^8.4.0",
     "next": "14.2.35",
     "react": "^18",
     "react-dom": "^18",

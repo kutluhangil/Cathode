@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { V86Engine, type EmuPhase } from "@/lib/emu/v86Engine";
 import type { OsDefinition } from "@/data/os";
 import { cn } from "@/lib/cn";
+import { deleteState, hasState, readState, writeState } from "@/lib/persist";
 
 interface Props {
   os: OsDefinition;
@@ -22,6 +23,15 @@ export function EmulatorWindow({ os, override }: Props) {
   const [phase, setPhase] = useState<EmuPhase>("idle");
   const [progress, setProgress] = useState(0);
   const [error, setError] = useState<string | null>(null);
+  const [savedSession, setSavedSession] = useState(false);
+  const [sleeping, setSleeping] = useState(false);
+
+  // OPFS anahtarı — BYOI dahil os.id bazlı
+  const stateKey = `v86-${os.id}`;
+
+  useEffect(() => {
+    void hasState(stateKey).then(setSavedSession);
+  }, [stateKey]);
 
   useEffect(() => {
     if (!screenRef.current) return;
@@ -57,6 +67,28 @@ export function EmulatorWindow({ os, override }: Props) {
     URL.revokeObjectURL(a.href);
   };
 
+  // OPFS'e uyut: çalışan durumu kalıcı sakla ("uyku/devam" hissi)
+  const sleep = async () => {
+    setSleeping(true);
+    const state = await engineRef.current?.saveState();
+    if (state) {
+      const ok = await writeState(stateKey, state);
+      if (ok) setSavedSession(true);
+    }
+    setSleeping(false);
+  };
+
+  // kaydedilen oturumdan devam et
+  const resume = useCallback(async () => {
+    const state = await readState(stateKey);
+    if (state) await engineRef.current?.restoreState(state);
+  }, [stateKey]);
+
+  const dropSession = async () => {
+    await deleteState(stateKey);
+    setSavedSession(false);
+  };
+
   const loading = phase === "downloading" || phase === "booting";
 
   return (
@@ -77,8 +109,11 @@ export function EmulatorWindow({ os, override }: Props) {
         />
         <div className="ml-auto flex items-center gap-1">
           <Ctl onClick={reset}>sıfırla</Ctl>
+          <Ctl onClick={sleep} disabled={phase !== "ready" || sleeping}>
+            {sleeping ? "uyutuluyor…" : "uyut"}
+          </Ctl>
           <Ctl onClick={saveState} disabled={phase !== "ready"}>
-            durumu kaydet
+            indir
           </Ctl>
           <Ctl onClick={fullscreen}>tam ekran</Ctl>
         </div>
@@ -129,6 +164,17 @@ export function EmulatorWindow({ os, override }: Props) {
                 )}
               </>
             )}
+          </div>
+        )}
+
+        {/* kayıtlı oturum — uykudan devam */}
+        {phase === "ready" && savedSession && (
+          <div className="absolute right-3 top-3 flex items-center gap-2 rounded-[10px] border border-accent/50 bg-void/85 px-3 py-2 backdrop-blur">
+            <span className="font-mono text-[11px] text-text">
+              kayıtlı oturum var
+            </span>
+            <Ctl onClick={resume}>devam et</Ctl>
+            <Ctl onClick={dropSession}>sil</Ctl>
           </div>
         )}
 

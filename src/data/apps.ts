@@ -3,8 +3,11 @@ import { About } from "@/components/apps/About";
 import { Settings } from "@/components/apps/Settings";
 import { Notepad } from "@/components/apps/Notepad";
 import { Systems } from "@/components/apps/Systems";
+import { Games } from "@/components/apps/Games";
 import { LazyEmulator } from "@/components/apps/emulator/LazyEmulator";
+import { LazyJsDos } from "@/components/apps/emulator/LazyJsDos";
 import { enabledOs } from "@/data/os";
+import { enabledGames } from "@/data/games";
 
 /** Etkin OS'ler için otomatik uygulama girişleri — masaüstü/dock/başlat'ta ikon olur. */
 const osApps: AppDefinition[] = enabledOs().map((os) => ({
@@ -14,6 +17,17 @@ const osApps: AppDefinition[] = enabledOs().map((os) => ({
   description: os.description,
   component: () => LazyEmulator({ os }),
   defaultSize: { w: 760, h: 560 },
+  minSize: { w: 480, h: 360 },
+}));
+
+/** Etkin DOS oyunları için otomatik uygulama girişleri. */
+const gameApps: AppDefinition[] = enabledGames().map((g) => ({
+  id: `game-${g.id}`,
+  name: g.name,
+  glyph: g.glyph,
+  description: g.description,
+  component: () => LazyJsDos({ game: g }),
+  defaultSize: { w: 720, h: 540 },
   minSize: { w: 480, h: 360 },
 }));
 
@@ -59,9 +73,19 @@ const baseApps: AppDefinition[] = [
     minSize: { w: 420, h: 400 },
     pinned: true,
   },
+  {
+    id: "games",
+    name: "Oyunlar",
+    glyph: "✦",
+    description: "DOS oyunları · js-dos + kendi bundle'ın",
+    component: Games,
+    defaultSize: { w: 560, h: 560 },
+    minSize: { w: 420, h: 400 },
+    pinned: true,
+  },
 ];
 
-export const APPS: AppDefinition[] = [...baseApps, ...osApps];
+export const APPS: AppDefinition[] = [...baseApps, ...osApps, ...gameApps];
 
 const byId = new Map(APPS.map((a) => [a.id, a]));
 

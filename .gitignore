@@ -34,3 +34,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# emülatör binary'leri — git'e gömülmez, `npm run setup:emu` ile üretilir
+/public/v86/
+/public/jsdos/
+/public/images/
+# serwist tarafından üretilen service worker
+/public/sw.js
+/public/sw.js.map
