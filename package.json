@@ -14,6 +14,7 @@
     "next": "14.2.35",
     "react": "^18",
     "react-dom": "^18",
+    "v86": "^0.5.419",
     "zustand": "^5.0.14"
   },
   "devDependencies": {

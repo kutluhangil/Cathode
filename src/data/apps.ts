@@ -2,9 +2,23 @@ import type { AppDefinition } from "@/lib/types";
 import { About } from "@/components/apps/About";
 import { Settings } from "@/components/apps/Settings";
 import { Notepad } from "@/components/apps/Notepad";
+import { Systems } from "@/components/apps/Systems";
+import { LazyEmulator } from "@/components/apps/emulator/LazyEmulator";
+import { enabledOs } from "@/data/os";
+
+/** Etkin OS'ler için otomatik uygulama girişleri — masaüstü/dock/başlat'ta ikon olur. */
+const osApps: AppDefinition[] = enabledOs().map((os) => ({
+  id: `os-${os.id}`,
+  name: os.name,
+  glyph: os.glyph,
+  description: os.description,
+  component: () => LazyEmulator({ os }),
+  defaultSize: { w: 760, h: 560 },
+  minSize: { w: 480, h: 360 },
+}));
 
 /** Uygulama kayıt defteri — masaüstü, dock ve başlat menüsü buradan beslenir. */
-export const APPS: AppDefinition[] = [
+const baseApps: AppDefinition[] = [
   {
     id: "about",
     name: "Hakkında",
@@ -35,7 +49,19 @@ export const APPS: AppDefinition[] = [
     minSize: { w: 300, h: 240 },
     pinned: true,
   },
+  {
+    id: "systems",
+    name: "Sistemler",
+    glyph: "▦",
+    description: "Emülatör · OS kataloğu + kendi imajın",
+    component: Systems,
+    defaultSize: { w: 560, h: 560 },
+    minSize: { w: 420, h: 400 },
+    pinned: true,
+  },
 ];
+
+export const APPS: AppDefinition[] = [...baseApps, ...osApps];
 
 const byId = new Map(APPS.map((a) => [a.id, a]));
 
