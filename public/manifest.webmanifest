@@ -1,0 +1,19 @@
+{
+  "name": "Cathode",
+  "short_name": "Cathode",
+  "description": "Tarayıcıda çalışan, özgün tasarımlı retro işletim sistemi kabuğu.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#08080a",
+  "theme_color": "#08080a",
+  "icons": [
+    {
+      "src": "/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
