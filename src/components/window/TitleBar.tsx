@@ -47,35 +47,35 @@ export function TitleBar({ win, glyph, active }: Props) {
         {win.title}
       </span>
 
-      <div className="flex items-center gap-1.5">
-        <WinDot
-          label="küçült"
-          onClick={() => minimize(win.id)}
-          className="bg-text-dim/40 hover:bg-text-dim"
-        />
-        <WinDot
-          label="büyüt"
-          onClick={() => toggleMaximize(win.id)}
-          className="bg-text-dim/40 hover:bg-accent"
-        />
-        <WinDot
+      <div className="flex items-center gap-1">
+        <WinBtn label="küçült" onClick={() => minimize(win.id)}>
+          −
+        </WinBtn>
+        <WinBtn label="büyüt" onClick={() => toggleMaximize(win.id)}>
+          ▢
+        </WinBtn>
+        <WinBtn
           label="kapat"
           onClick={() => close(win.id)}
-          className="bg-text-dim/40 hover:bg-[#ff5f56]"
-        />
+          className="hover:bg-[#ff5f56] hover:text-white"
+        >
+          ✕
+        </WinBtn>
       </div>
     </div>
   );
 }
 
-function WinDot({
+function WinBtn({
   label,
   onClick,
   className,
+  children,
 }: {
   label: string;
   onClick: () => void;
-  className: string;
+  className?: string;
+  children: React.ReactNode;
 }) {
   return (
     <button
@@ -84,9 +84,11 @@ function WinDot({
       onClick={onClick}
       onPointerDown={(e) => e.stopPropagation()}
       className={cn(
-        "h-3 w-3 rounded-full transition-colors duration-150",
+        "flex h-6 w-6 items-center justify-center rounded-[7px] text-[13px] leading-none text-text-dim transition-colors duration-150 hover:bg-white/10 hover:text-text",
         className,
       )}
-    />
+    >
+      {children}
+    </button>
   );
 }

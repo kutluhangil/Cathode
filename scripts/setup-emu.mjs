@@ -62,11 +62,15 @@ async function main() {
     true,
   );
 
-  // KolibriOS (GPL, serbest) — gömülü demo OS
+  // Serbest gömülü OS'ler — R2 olmadan hemen açılır
   ensureDir("public/images");
   await download(
     "https://copy.sh/v86/images/kolibri.img",
     "public/images/kolibri.img",
+  );
+  await download(
+    "https://copy.sh/v86/images/freedos722.img",
+    "public/images/freedos722.img",
   );
 
   log("tamam.");
