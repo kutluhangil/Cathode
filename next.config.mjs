@@ -34,7 +34,9 @@ const nextConfig = {
         source: "/(.*)",
         headers: [
           { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
-          { key: "Cross-Origin-Embedder-Policy", value: "require-corp" },
+          // credentialless: SAB açık kalır + CORS'lu cross-origin imajlar (BYOI URL / R2)
+          // CORP başlığı olmadan yüklenebilir. (Safari düşerse v86 tek-thread'e geçer.)
+          { key: "Cross-Origin-Embedder-Policy", value: "credentialless" },
         ],
       },
     ];
