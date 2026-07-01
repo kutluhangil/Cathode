@@ -1,36 +1,83 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Cathode
 
-## Getting Started
+Tarayıcıda çalışan, özgün tasarımlı retro işletim sistemi kabuğu. Login yok, reklam
+yok, veri toplama yok — her şey senin tarayıcında, client-side ve izole çalışır.
 
-First, run the development server:
+**İki katman:**
+- **Kabuk (shell)** — tamamen özgün "Obsidian Cathode" işletim sistemi arayüzü: boot
+  ekranı, masaüstü, pencere yöneticisi, dock, uygulamalar. Bu, sitenin markası.
+- **Emülasyon** — gerçek eski sistemler (KolibriOS gömülü; ReactOS/FreeDOS/Win9x/2000
+  R2'den) bir pencere içinde, WebAssembly emülatörü (v86) ve DOS için js-dos ile.
+  Emüle edilen sistem modern makineye erişemez; internete de bağlı değildir.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Stack
+
+Next.js 14 (App Router) · TypeScript (strict) · Tailwind CSS · Framer Motion ·
+Zustand · PWA (`@serwist/next`) · v86 (WASM x86) · js-dos v8 (DOSBox-X).
+
+## Geliştirme
+
+```sh
+npm install         # postinstall → emülatör binary'lerini public/'e hazırlar
+npm run dev         # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Emülatör binary'leri (v86 wasm, BIOS, js-dos, KolibriOS) git'e gömülmez;
+`npm run setup:emu` ile üretilir (idempotent). Kaynaklar: `node_modules` + serbest
+imaj indirmesi.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```sh
+npm run build       # production
+npm run lint
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Deploy
 
-## Learn More
+Docker (standalone) → Ubuntu → nginx → Cloudflare Tunnel. Büyük imajlar R2'de.
 
-To learn more about Next.js, take a look at the following resources:
+```sh
+docker build -t cathode .
+docker run -p 3000:3000 cathode
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `deploy/nginx.conf` — reverse proxy, WASM MIME, range request, COOP/COEP korunur.
+- `deploy/R2.md` — disk imajı barındırma + kayıt defteri güncelleme.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+> **Önemli:** Emülatör (SharedArrayBuffer) için `Cross-Origin-Opener-Policy: same-origin`
+> ve `Cross-Origin-Embedder-Policy: require-corp` header'ları HTTPS altında sunulmalı.
+> Bunlar `next.config.mjs`'te tanımlı; ara katmanlar strip etmemeli.
 
-## Deploy on Vercel
+## Klasör yapısı
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```
+src/
+  app/            layout, page (boot→masaüstü), globals.css (token + CRT), sw.ts, og
+  components/     boot · desktop · window · dock · apps (About/Settings/Notepad/
+                  Systems/Games + emulator) · ui
+  store/          windowsStore · settingsStore (localStorage persist)
+  lib/            motion · cn · pwa · persist (OPFS) · emu/v86Engine
+  data/           apps · os (v86 kataloğu) · games (js-dos kataloğu)
+public/           icons · wallpapers · (setup:emu) v86 · jsdos · images
+deploy/           nginx.conf · R2.md
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Ayarlar (kalıcı, localStorage)
+
+Accent (amber ↔ fosfor yeşil), CRT efektleri (scanline/vignette/grain/glow),
+hareket (`prefers-reduced-motion` saygılı), duvar kâğıdı, arayüz sesleri.
+
+## Yasal / içerik politikası
+
+Cathode bir hobi/eğitim/dijital koruma projesidir. Emülasyon motorları açık kaynaktır.
+Eski işletim sistemleri telif sahiplerine aittir ve yalnızca arşiv/nostalji amacıyla,
+tarayıcıda izole biçimde çalıştırılır. Telif sahibi talep ederse ilgili içerik kaldırılır.
+Bu site reklam içermez, ticari amaç gütmez. **Windows XP gömülmez**; telifli sürümler
+yalnızca kullanıcının kendi yüklediği imajla (BYOI) çalışır.
+
+## Teşekkürler
+
+- [v86](https://github.com/copy/v86) — tarayıcıda x86 emülasyonu (WASM).
+- [js-dos](https://js-dos.com) — DOSBox-X tabanlı DOS emülatörü.
+- [ReactOS](https://reactos.org), [KolibriOS](https://kolibrios.org),
+  [FreeDOS](https://freedos.org) — açık kaynak işletim sistemleri.
+- [SeaBIOS](https://www.seabios.org) — açık kaynak BIOS.

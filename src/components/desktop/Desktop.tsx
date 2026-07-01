@@ -64,6 +64,15 @@ export function Desktop() {
         ))}
       </motion.div>
 
+      {/* görünür disclaimer (spec §5) — tıkla → Hakkında */}
+      <button
+        onClick={() => openApp("about")}
+        className="absolute bottom-5 left-4 z-[1000] max-w-[240px] text-left font-mono text-[10px] leading-tight text-text-dim/70 transition-colors hover:text-text-dim"
+      >
+        hobi / arşiv / eğitim projesi · emülasyon açık kaynak · reklam yok ·
+        detay için tıkla
+      </button>
+
       <WindowManager />
       <Dock />
 

@@ -9,6 +9,7 @@ const withSerwist = withSerwistInit({
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: "standalone", // Docker imajı için minimal runtime
   webpack: (config, { webpack, isServer }) => {
     // v86 evrensel build'i node:fs/promises'a referans verir; tarayıcıda gereksiz.
     if (!isServer) {
