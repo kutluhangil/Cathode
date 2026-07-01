@@ -26,6 +26,7 @@ function Row({
 }
 
 const WALLPAPERS: { value: WallpaperId; label: string }[] = [
+  { value: "horizon", label: "Horizon" },
   { value: "aurora", label: "Aurora" },
   { value: "grid", label: "Grid" },
   { value: "monolith", label: "Monolith" },

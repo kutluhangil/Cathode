@@ -13,7 +13,7 @@ import { ContextMenu, type MenuItem } from "./ContextMenu";
 import { WindowManager } from "@/components/window/WindowManager";
 import { Dock } from "@/components/dock/Dock";
 
-const WP_ORDER: WallpaperId[] = ["aurora", "grid", "monolith"];
+const WP_ORDER: WallpaperId[] = ["horizon", "aurora", "grid", "monolith"];
 
 export function Desktop() {
   const open = useWindows((s) => s.open);

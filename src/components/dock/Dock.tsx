@@ -6,6 +6,7 @@ import { APPS } from "@/data/apps";
 import { useWindows } from "@/store/windowsStore";
 import { useSettings } from "@/store/settingsStore";
 import { cn } from "@/lib/cn";
+import { AppIcon } from "@/components/ui/AppIcon";
 import { Clock } from "./Clock";
 import { StartMenu } from "./StartMenu";
 
@@ -66,19 +67,16 @@ export function Dock() {
               >
                 <span
                   className={cn(
-                    "flex h-11 w-11 items-center justify-center rounded-[12px] border text-lg transition-all duration-150",
-                    "group-hover:-translate-y-1 group-hover:scale-110",
-                    active
-                      ? "border-accent bg-accent/15 text-accent shadow-glow"
-                      : "border-transparent text-text hover:border-border hover:bg-white/5",
+                    "transition-all duration-150 group-hover:-translate-y-1.5 group-hover:scale-110",
+                    active && "drop-shadow-[0_0_10px_var(--accent-glow)]",
                   )}
                 >
-                  {a.glyph}
+                  <AppIcon app={a} size={44} />
                 </span>
                 {/* çalışıyor göstergesi */}
                 <span
                   className={cn(
-                    "absolute -bottom-0.5 h-1 w-1 rounded-full transition-opacity",
+                    "absolute -bottom-1 h-1 w-1 rounded-full transition-opacity",
                     running ? "bg-accent opacity-100" : "opacity-0",
                   )}
                 />

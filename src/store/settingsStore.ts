@@ -27,7 +27,7 @@ export const useSettings = create<SettingsState>()(
       crt: true, // spec §4: CRT varsayılan hafif açık
       motion: true,
       sound: false,
-      wallpaper: "aurora",
+      wallpaper: "horizon",
       setAccent: (accent) => set({ accent }),
       toggleAccent: () =>
         set((s) => ({ accent: s.accent === "amber" ? "green" : "amber" })),

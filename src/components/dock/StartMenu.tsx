@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { APPS } from "@/data/apps";
 import { useWindows } from "@/store/windowsStore";
+import { AppIcon } from "@/components/ui/AppIcon";
 import { cn } from "@/lib/cn";
 
 interface Props {
@@ -74,9 +75,7 @@ export function StartMenu({ onClose }: Props) {
               "hover:bg-accent/15",
             )}
           >
-            <span className="flex h-9 w-9 items-center justify-center rounded-[9px] border border-border bg-surface/70 text-base text-text">
-              {a.glyph}
-            </span>
+            <AppIcon app={a} size={36} />
             <span className="flex flex-col">
               <span className="text-sm text-text">{a.name}</span>
               {a.description && (

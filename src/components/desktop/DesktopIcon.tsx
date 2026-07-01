@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { cn } from "@/lib/cn";
+import { AppIcon } from "@/components/ui/AppIcon";
 import type { AppDefinition } from "@/lib/types";
 
 interface Props {
@@ -28,17 +29,16 @@ export function DesktopIcon({ app, onOpen }: Props) {
     >
       <span
         className={cn(
-          "flex h-11 w-11 items-center justify-center rounded-[12px] border text-xl",
-          "bg-surface/70 backdrop-blur transition-all duration-200",
+          "rounded-[14px] p-0.5 transition-all duration-200",
           selected
-            ? "border-accent text-accent shadow-glow"
-            : "border-border text-text group-hover:border-accent/60",
+            ? "ring-2 ring-accent/70"
+            : "group-hover:-translate-y-0.5 group-hover:scale-105",
         )}
         aria-hidden
       >
-        {app.glyph}
+        <AppIcon app={app} size={48} />
       </span>
-      <span className="line-clamp-2 text-[11px] leading-tight text-text/90 drop-shadow">
+      <span className="line-clamp-2 text-[11px] leading-tight text-text/90 [text-shadow:0_1px_3px_rgba(0,0,0,0.8)]">
         {app.name}
       </span>
     </button>
