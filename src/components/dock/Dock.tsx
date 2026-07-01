@@ -31,25 +31,26 @@ export function Dock() {
 
   return (
     <>
-      <AnimatePresence>
-        {menuOpen && <StartMenu onClose={() => setMenuOpen(false)} />}
-      </AnimatePresence>
-
       <div className="pointer-events-none absolute bottom-4 left-0 right-0 z-[2000] flex items-end justify-center px-4">
         <div className="pointer-events-auto flex items-center gap-1.5 rounded-[16px] border border-border bg-glass px-2 py-2 shadow-win">
-          {/* Cathode launcher */}
-          <button
-            onClick={() => setMenuOpen((v) => !v)}
-            aria-label="Cathode menüsü"
-            className={cn(
-              "flex h-11 w-11 items-center justify-center rounded-[12px] text-lg transition-all duration-150",
-              menuOpen
-                ? "bg-accent text-accent-ink shadow-glow"
-                : "text-accent hover:bg-white/5",
-            )}
-          >
-            <span className="phosphor">◉</span>
-          </button>
+          {/* Cathode launcher — menü butonun üstüne çıpalanır */}
+          <div className="relative">
+            <AnimatePresence>
+              {menuOpen && <StartMenu onClose={() => setMenuOpen(false)} />}
+            </AnimatePresence>
+            <button
+              onClick={() => setMenuOpen((v) => !v)}
+              aria-label="Cathode menüsü"
+              className={cn(
+                "flex h-11 w-11 items-center justify-center rounded-[12px] text-lg transition-all duration-150",
+                menuOpen
+                  ? "bg-accent text-accent-ink shadow-glow"
+                  : "text-accent hover:bg-white/5",
+              )}
+            >
+              <span className="phosphor">◉</span>
+            </button>
+          </div>
 
           <div className="mx-1 h-8 w-px bg-border-soft" />
 

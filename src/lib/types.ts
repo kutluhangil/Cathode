@@ -4,7 +4,7 @@ import type { ComponentType } from "react";
 
 export type AccentName = "amber" | "green";
 
-export type WallpaperId = "horizon" | "aurora" | "grid" | "monolith";
+export type WallpaperId = "horizon" | "aurora" | "grid" | "monolith" | "photo";
 
 export type WindowStatus = "normal" | "minimized" | "maximized";
 

@@ -47,7 +47,7 @@ export function StartMenu({ onClose }: Props) {
       transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
       onPointerDown={(e) => e.stopPropagation()}
       role="menu"
-      className="absolute bottom-[72px] left-1/2 z-[3000] w-80 -translate-x-1/2 overflow-hidden rounded-[14px] border border-border bg-glass shadow-win"
+      className="absolute bottom-full left-0 z-[3000] mb-3 w-80 origin-bottom-left overflow-hidden rounded-[14px] border border-border bg-glass shadow-win"
     >
       <div className="border-b border-border-soft p-3">
         <input

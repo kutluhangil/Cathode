@@ -15,8 +15,8 @@ export function DesktopIcon({ app, onOpen }: Props) {
 
   return (
     <button
-      onClick={() => setSelected(true)}
-      onDoubleClick={onOpen}
+      onClick={onOpen}
+      onFocus={() => setSelected(true)}
       onBlur={() => setSelected(false)}
       onKeyDown={(e) => {
         if (e.key === "Enter") onOpen();

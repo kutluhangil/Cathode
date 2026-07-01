@@ -1,13 +1,15 @@
 "use client";
 
+import { useState } from "react";
 import { useSettings } from "@/store/settingsStore";
 
 /**
- * Özgün, koda dayalı duvar kâğıtları — hiçbir telifli görsel yok.
+ * Özgün, koda dayalı duvar kâğıtları + isteğe bağlı rastgele 4K fotoğraf.
  * accent değişkenine tepki verir; CRT'siz de premium görünür.
  */
 export function Wallpaper() {
   const wallpaper = useSettings((s) => s.wallpaper);
+  const photoSeed = useSettings((s) => s.photoSeed);
 
   return (
     <div className="absolute inset-0 -z-10 overflow-hidden bg-desk">
@@ -15,6 +17,40 @@ export function Wallpaper() {
       {wallpaper === "aurora" && <Aurora />}
       {wallpaper === "grid" && <Grid />}
       {wallpaper === "monolith" && <Monolith />}
+      {wallpaper === "photo" && <Photo seed={photoSeed} />}
+    </div>
+  );
+}
+
+/**
+ * Rastgele 4K fotoğraf. Önce Unsplash (source.unsplash.com), yüklenmezse
+ * Lorem Picsum'a düşer (ikisi de anahtarsız/ücretsiz). seed her yenilemede artar.
+ * next/image değil — harici, anahtarsız kaynak; COEP credentialless ile yüklenir.
+ */
+function Photo({ seed }: { seed: number }) {
+  const [loaded, setLoaded] = useState(false);
+  const [fallback, setFallback] = useState(false);
+
+  const src = fallback
+    ? `https://picsum.photos/seed/cathode${seed}/3840/2160`
+    : `https://source.unsplash.com/random/3840x2160?wallpaper,landscape&sig=${seed}`;
+
+  return (
+    <div className="absolute inset-0 bg-[#050507]">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        key={src}
+        src={src}
+        alt=""
+        aria-hidden
+        onLoad={() => setLoaded(true)}
+        onError={() => (fallback ? undefined : setFallback(true))}
+        className={`h-full w-full object-cover transition-opacity duration-700 ${
+          loaded ? "opacity-100" : "opacity-0"
+        }`}
+      />
+      {/* okunabilirlik için hafif karartma + vinyet */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/10 to-black/55" />
     </div>
   );
 }

@@ -30,6 +30,7 @@ const WALLPAPERS: { value: WallpaperId; label: string }[] = [
   { value: "aurora", label: "Aurora" },
   { value: "grid", label: "Grid" },
   { value: "monolith", label: "Monolith" },
+  { value: "photo", label: "Foto" },
 ];
 
 export function Settings() {
@@ -61,7 +62,10 @@ export function Settings() {
         <Toggle checked={s.motion} onChange={s.setMotion} label="hareket" />
       </Row>
 
-      <Row title="Duvar kâğıdı" hint="Masaüstü arka planı.">
+      <Row
+        title="Duvar kâğıdı"
+        hint='Masaüstü arka planı. "Foto" = rastgele 4K fotoğraf.'
+      >
         <Segmented
           ariaLabel="duvar kâğıdı"
           value={s.wallpaper}
@@ -69,6 +73,17 @@ export function Settings() {
           options={WALLPAPERS}
         />
       </Row>
+
+      {s.wallpaper === "photo" && (
+        <Row title="Fotoğrafı yenile" hint="Yeni rastgele 4K görsel çek.">
+          <button
+            onClick={s.shufflePhoto}
+            className="rounded-[8px] border border-border bg-black/30 px-3 py-1.5 text-xs font-medium text-text-dim transition-colors hover:border-accent hover:text-text"
+          >
+            ↻ yenile
+          </button>
+        </Row>
+      )}
 
       <Row title="Arayüz sesleri" hint="Aç/kapa tıkları (varsayılan kapalı).">
         <Toggle checked={s.sound} onChange={s.setSound} label="sesler" />

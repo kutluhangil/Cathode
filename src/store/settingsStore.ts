@@ -10,6 +10,8 @@ interface SettingsState {
   motion: boolean; // animasyonlar açık mı (prefers-reduced-motion ile birlikte değerlendirilir)
   sound: boolean;
   wallpaper: WallpaperId;
+  /** "photo" duvar kâğıdı için rastgele tohum — her yenilemede yeni 4K görsel */
+  photoSeed: number;
   /** boot bu oturumda gösterildi mi (kalıcı değil — bkz. sessionStorage mantığı page'de) */
   setAccent: (a: AccentName) => void;
   toggleAccent: () => void;
@@ -18,6 +20,8 @@ interface SettingsState {
   setMotion: (v: boolean) => void;
   setSound: (v: boolean) => void;
   setWallpaper: (w: WallpaperId) => void;
+  /** yeni rastgele fotoğraf çek (photo duvar kâğıdı) */
+  shufflePhoto: () => void;
 }
 
 export const useSettings = create<SettingsState>()(
@@ -28,6 +32,7 @@ export const useSettings = create<SettingsState>()(
       motion: true,
       sound: false,
       wallpaper: "horizon",
+      photoSeed: 1,
       setAccent: (accent) => set({ accent }),
       toggleAccent: () =>
         set((s) => ({ accent: s.accent === "amber" ? "green" : "amber" })),
@@ -36,6 +41,8 @@ export const useSettings = create<SettingsState>()(
       setMotion: (motion) => set({ motion }),
       setSound: (sound) => set({ sound }),
       setWallpaper: (wallpaper) => set({ wallpaper }),
+      shufflePhoto: () =>
+        set((s) => ({ wallpaper: "photo", photoSeed: s.photoSeed + 1 })),
     }),
     { name: "cathode.settings" },
   ),
