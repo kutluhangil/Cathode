@@ -99,6 +99,16 @@ export function Settings() {
                 label="monitör modu"
               />
             </Row>
+            <Row
+              title="Ekran koruyucu"
+              hint="3 dk hareketsizlikte fosfor koruyucu."
+            >
+              <Toggle
+                checked={s.screensaver}
+                onChange={s.setScreensaver}
+                label="ekran koruyucu"
+              />
+            </Row>
             <Row title="Arayüz sesleri" hint="Aç/kapa tıkları (varsayılan kapalı).">
               <Toggle checked={s.sound} onChange={s.setSound} label="sesler" />
             </Row>

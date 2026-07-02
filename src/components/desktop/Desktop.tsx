@@ -10,7 +10,10 @@ import type { WallpaperId } from "@/lib/types";
 import { Wallpaper } from "./Wallpaper";
 import { DesktopIcon } from "./DesktopIcon";
 import { ContextMenu, type MenuItem } from "./ContextMenu";
+import { CommandPalette } from "./CommandPalette";
+import { Screensaver } from "./Screensaver";
 import { WindowManager } from "@/components/window/WindowManager";
+import { WindowSwitcher } from "@/components/window/WindowSwitcher";
 import { Dock } from "@/components/dock/Dock";
 import { SystemBar } from "@/components/dock/SystemBar";
 
@@ -86,8 +89,11 @@ export function Desktop() {
       </button>
 
       <WindowManager />
+      <WindowSwitcher />
+      <CommandPalette />
       <SystemBar />
       <Dock />
+      <Screensaver />
 
       {menu && (
         <ContextMenu

@@ -3,6 +3,7 @@
 import { create } from "zustand";
 import type { Rect, WindowInstance } from "@/lib/types";
 import { DOCK_RESERVE, SYSTEM_BAR_H } from "@/lib/layout";
+import { playSound } from "@/lib/sound";
 
 interface WindowsState {
   windows: WindowInstance[];
@@ -58,6 +59,7 @@ export const useWindows = create<WindowsState>((set, get) => ({
 
   open: (appId, title, size) => {
     const id = nextId();
+    playSound("open");
     set((s) => {
       const z = s.zCounter + 1;
       const win: WindowInstance = {
@@ -74,7 +76,8 @@ export const useWindows = create<WindowsState>((set, get) => ({
     return id;
   },
 
-  close: (id) =>
+  close: (id) => {
+    playSound("close");
     set((s) => {
       const windows = s.windows.filter((w) => w.id !== id);
       const focusedId =
@@ -84,7 +87,8 @@ export const useWindows = create<WindowsState>((set, get) => ({
             : null
           : s.focusedId;
       return { windows, focusedId };
-    }),
+    });
+  },
 
   focus: (id) =>
     set((s) => {

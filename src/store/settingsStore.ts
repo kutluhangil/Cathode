@@ -11,6 +11,8 @@ interface SettingsState {
   monitor: boolean;
   motion: boolean; // animasyonlar açık mı (prefers-reduced-motion ile birlikte değerlendirilir)
   sound: boolean;
+  /** 3 dk hareketsizlikte fosfor ekran koruyucu */
+  screensaver: boolean;
   wallpaper: WallpaperId;
   /** "photo" duvar kâğıdı için rastgele tohum — her yenilemede yeni 4K görsel */
   photoSeed: number;
@@ -22,6 +24,7 @@ interface SettingsState {
   toggleMonitor: () => void;
   setMotion: (v: boolean) => void;
   setSound: (v: boolean) => void;
+  setScreensaver: (v: boolean) => void;
   setWallpaper: (w: WallpaperId) => void;
   /** yeni rastgele fotoğraf çek (photo duvar kâğıdı) */
   shufflePhoto: () => void;
@@ -43,6 +46,7 @@ export const useSettings = create<SettingsState>()(
       monitor: false, // spec v2 §9: monitör modu varsayılan kapalı
       motion: true,
       sound: false,
+      screensaver: true,
       wallpaper: "phosphor",
       photoSeed: 1,
       setAccent: (accent) => set({ accent }),
@@ -54,6 +58,7 @@ export const useSettings = create<SettingsState>()(
       toggleMonitor: () => set((s) => ({ monitor: !s.monitor })),
       setMotion: (motion) => set({ motion }),
       setSound: (sound) => set({ sound }),
+      setScreensaver: (screensaver) => set({ screensaver }),
       setWallpaper: (wallpaper) => set({ wallpaper }),
       shufflePhoto: () =>
         set((s) => ({ wallpaper: "photo", photoSeed: s.photoSeed + 1 })),

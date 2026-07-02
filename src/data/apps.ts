@@ -2,6 +2,7 @@ import type { AppDefinition } from "@/lib/types";
 import { About } from "@/components/apps/About";
 import { Settings } from "@/components/apps/Settings";
 import { Notepad } from "@/components/apps/Notepad";
+import { Terminal } from "@/components/apps/Terminal";
 import { Systems } from "@/components/apps/Systems";
 import { Games } from "@/components/apps/Games";
 import { LazyEmulator } from "@/components/apps/emulator/LazyEmulator";
@@ -61,6 +62,16 @@ const baseApps: AppDefinition[] = [
     component: Notepad,
     defaultSize: { w: 460, h: 420 },
     minSize: { w: 300, h: 240 },
+    pinned: true,
+  },
+  {
+    id: "terminal",
+    name: "Terminal",
+    glyph: ">_",
+    description: "Cathode shell · komutla yönet",
+    component: Terminal,
+    defaultSize: { w: 560, h: 400 },
+    minSize: { w: 360, h: 260 },
     pinned: true,
   },
   {

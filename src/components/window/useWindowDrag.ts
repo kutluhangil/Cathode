@@ -2,11 +2,13 @@
 
 import { useCallback, useRef } from "react";
 import { useWindows } from "@/store/windowsStore";
+import { DOCK_RESERVE, SYSTEM_BAR_H } from "@/lib/layout";
 import type { Rect } from "@/lib/types";
 
-const DOCK_RESERVE = 84;
 const MIN_W = 280;
 const MIN_H = 180;
+/** Kenardan bu kadar piksel içeride bırakılırsa yarım ekrana snap */
+const SNAP_EDGE = 12;
 
 export type ResizeDir =
   | "n"
@@ -22,6 +24,8 @@ interface DragState {
   startX: number;
   startY: number;
   rect: Rect;
+  /** gerçek sürükleme oldu mu — tek tık snap tetiklemesin */
+  moved: boolean;
 }
 
 /** Title bar sürükleme — pencereyi taşır, ekran içinde tutar. */
@@ -33,7 +37,7 @@ export function useWindowMove(id: string, rect: Rect) {
     (e: React.PointerEvent) => {
       if (e.button !== 0) return;
       (e.target as HTMLElement).setPointerCapture?.(e.pointerId);
-      state.current = { startX: e.clientX, startY: e.clientY, rect };
+      state.current = { startX: e.clientX, startY: e.clientY, rect, moved: false };
     },
     [rect],
   );
@@ -44,6 +48,7 @@ export function useWindowMove(id: string, rect: Rect) {
       if (!s) return;
       const dx = e.clientX - s.startX;
       const dy = e.clientY - s.startY;
+      if (Math.abs(dx) + Math.abs(dy) > 4) s.moved = true;
       const vw = window.innerWidth;
       const vh = window.innerHeight;
       // title bar her zaman görünür kalsın
@@ -54,10 +59,31 @@ export function useWindowMove(id: string, rect: Rect) {
     [id, setRect],
   );
 
-  const onPointerUp = useCallback((e: React.PointerEvent) => {
-    (e.target as HTMLElement).releasePointerCapture?.(e.pointerId);
-    state.current = null;
-  }, []);
+  const onPointerUp = useCallback(
+    (e: React.PointerEvent) => {
+      (e.target as HTMLElement).releasePointerCapture?.(e.pointerId);
+      const dragged = state.current?.moved ?? false;
+      state.current = null;
+      if (!dragged) return;
+
+      // kenara bırak → yarım ekran snap (workstation dokunuşu)
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+      const top = SYSTEM_BAR_H + 6;
+      const half: Rect = {
+        x: 0,
+        y: top,
+        w: Math.round(vw / 2),
+        h: vh - top - DOCK_RESERVE,
+      };
+      if (e.clientX <= SNAP_EDGE) {
+        setRect(id, half);
+      } else if (e.clientX >= vw - SNAP_EDGE) {
+        setRect(id, { ...half, x: vw - half.w });
+      }
+    },
+    [id, setRect],
+  );
 
   return { onPointerDown, onPointerMove, onPointerUp };
 }

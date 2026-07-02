@@ -126,6 +126,11 @@ const ICONS: Record<string, IconDef> = {
     fg: "#79e06a",
     svg: terminal,
   },
+  terminal: {
+    bg: "linear-gradient(145deg,#1c1d24,#0d0d12)",
+    fg: "var(--accent)",
+    svg: terminal,
+  },
 };
 
 function pickIcon(id: string): IconDef {

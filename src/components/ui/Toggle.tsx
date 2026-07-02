@@ -1,6 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/cn";
+import { playSound } from "@/lib/sound";
 
 interface Props {
   checked: boolean;
@@ -17,7 +18,10 @@ export function Toggle({ checked, onChange, label, id }: Props) {
       role="switch"
       aria-checked={checked}
       aria-label={label}
-      onClick={() => onChange(!checked)}
+      onClick={() => {
+        playSound("toggle");
+        onChange(!checked);
+      }}
       className={cn(
         "relative h-6 w-11 shrink-0 rounded-full border transition-colors duration-200",
         checked
