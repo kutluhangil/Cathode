@@ -2,6 +2,7 @@
 
 import dynamic from "next/dynamic";
 import type { OsDefinition } from "@/data/os";
+import { CathodeMark } from "@/components/icons";
 
 // v86 ağırdır — yalnız bir OS penceresi açılınca yüklenir (spec §3 perf).
 const Emulator = dynamic(
@@ -10,7 +11,9 @@ const Emulator = dynamic(
     ssr: false,
     loading: () => (
       <div className="flex h-full items-center justify-center bg-black">
-        <span className="phosphor animate-pulse text-2xl text-accent">◉</span>
+        <span className="phosphor animate-pulse text-accent">
+          <CathodeMark size={28} />
+        </span>
       </div>
     ),
   },

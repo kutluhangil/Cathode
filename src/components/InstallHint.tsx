@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { registerServiceWorker } from "@/lib/pwa";
+import { CathodeMark, Icon } from "@/components/icons";
 
 interface BIPEvent extends Event {
   prompt: () => Promise<void>;
@@ -48,10 +49,10 @@ export function InstallHint() {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 20 }}
           transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-          className="fixed left-1/2 top-4 z-[6000] flex max-w-xs -translate-x-1/2 items-center gap-3 rounded-[12px] border border-border bg-glass px-4 py-3 shadow-win"
+          className="fixed left-1/2 top-10 z-[6000] flex max-w-xs -translate-x-1/2 items-center gap-3 rounded-ui bg-surface-2 px-4 py-3 shadow-float"
         >
-          <span className="phosphor text-lg text-accent" aria-hidden>
-            ◉
+          <span className="phosphor text-accent" aria-hidden>
+            <CathodeMark size={22} />
           </span>
           <div className="flex-1">
             <p className="text-[13px] text-text">
@@ -61,7 +62,7 @@ export function InstallHint() {
           </div>
           <button
             onClick={install}
-            className="rounded-[8px] bg-accent px-2.5 py-1 text-xs font-medium text-accent-ink"
+            className="rounded-btn bg-accent px-2.5 py-1 text-xs font-medium text-accent-ink"
           >
             Kur
           </button>
@@ -70,7 +71,7 @@ export function InstallHint() {
             aria-label="kapat"
             className="text-text-dim hover:text-text"
           >
-            ✕
+            <Icon name="close" size={14} />
           </button>
         </motion.div>
       )}

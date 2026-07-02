@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { APPS } from "@/data/apps";
 import { useWindows } from "@/store/windowsStore";
 import { AppIcon } from "@/components/ui/AppIcon";
+import { Icon } from "@/components/icons";
 import { cn } from "@/lib/cn";
 
 interface Props {
@@ -47,16 +48,21 @@ export function StartMenu({ onClose }: Props) {
       transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
       onPointerDown={(e) => e.stopPropagation()}
       role="menu"
-      className="absolute bottom-full left-0 z-[3000] mb-3 w-80 origin-bottom-left overflow-hidden rounded-[14px] border border-border bg-glass shadow-win"
+      className="absolute bottom-full left-0 z-[3000] mb-3 w-80 origin-bottom-left overflow-hidden rounded-ui bg-surface-2 shadow-float"
     >
       <div className="border-b border-border-soft p-3">
-        <input
-          ref={inputRef}
-          value={q}
-          onChange={(e) => setQ(e.target.value)}
-          placeholder="uygulama ara…"
-          className="w-full rounded-[8px] border border-border bg-black/30 px-3 py-2 text-sm text-text outline-none placeholder:text-text-dim/60 focus:border-accent"
-        />
+        <div className="flex items-center gap-2 rounded-btn border border-border-soft bg-surface-0 px-3 py-2 focus-within:border-accent">
+          <span className="text-faint">
+            <Icon name="search" size={14} />
+          </span>
+          <input
+            ref={inputRef}
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            placeholder="uygulama ara…"
+            className="w-full bg-transparent text-sm text-text outline-none placeholder:text-faint"
+          />
+        </div>
       </div>
 
       <div className="max-h-72 overflow-y-auto p-2">
@@ -71,8 +77,8 @@ export function StartMenu({ onClose }: Props) {
             role="menuitem"
             onClick={() => launch(a.id, a.name, a.defaultSize)}
             className={cn(
-              "flex w-full items-center gap-3 rounded-[8px] px-3 py-2 text-left transition-colors",
-              "hover:bg-accent/15",
+              "flex w-full items-center gap-3 rounded-btn px-3 py-2 text-left transition-colors",
+              "hover:bg-surface-3",
             )}
           >
             <AppIcon app={a} size={36} />

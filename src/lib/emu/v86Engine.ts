@@ -1,5 +1,6 @@
 "use client";
 
+import "./globalShim"; // v86'dan önce: libv86.mjs `global` bekliyor
 import { V86 } from "v86";
 import type { OsDefinition } from "@/data/os";
 
@@ -43,6 +44,7 @@ function diskOption(os: OsDefinition, override?: ArrayBuffer): V86Image {
 export class V86Engine {
   private vm: V86 | null = null;
   private cb: EmuCallbacks;
+  private ready = false;
 
   constructor(cb: EmuCallbacks = {}) {
     this.cb = cb;
@@ -78,8 +80,14 @@ export class V86Engine {
       this.cb.onPhase?.("error");
       this.cb.onError?.("imaj indirilemedi");
     });
-    this.vm.add_listener("emulator-loaded", () => this.cb.onPhase?.("booting"));
-    this.vm.add_listener("emulator-ready", () => this.cb.onPhase?.("ready"));
+    // loaded, ready'den sonra da gelebiliyor — hazır fazını geri düşürme
+    this.vm.add_listener("emulator-loaded", () => {
+      if (!this.ready) this.cb.onPhase?.("booting");
+    });
+    this.vm.add_listener("emulator-ready", () => {
+      this.ready = true;
+      this.cb.onPhase?.("ready");
+    });
   }
 
   restart() {

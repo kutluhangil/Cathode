@@ -41,24 +41,19 @@ export function Window({ win, active, reduced }: Props) {
         zIndex: win.z,
       }}
       className={cn(
-        "pointer-events-auto absolute flex flex-col overflow-hidden bg-glass",
+        // opak workstation gövdesi — cam yok (spec §4.4)
+        "pointer-events-auto absolute flex flex-col overflow-hidden bg-surface",
         maximized ? "rounded-none" : "rounded-win",
         active
-          ? "shadow-win ring-[0.5px] ring-accent/40"
-          : "shadow-win ring-[0.5px] ring-border",
+          ? "shadow-win ring-1 ring-border"
+          : "shadow-win ring-1 ring-border-soft opacity-[0.97]",
       )}
     >
-      {/* aktif pencerede üstte ince accent çizgisi */}
-      <div
-        className={cn(
-          "h-px w-full shrink-0 transition-opacity",
-          active ? "bg-accent opacity-80" : "opacity-0",
-        )}
-      />
-      <TitleBar win={win} glyph={app.glyph} active={active} />
+      <TitleBar win={win} active={active} />
 
-      <div className="relative flex-1 overflow-hidden bg-surface/60">
+      <div className="relative flex-1 overflow-hidden">
         <Body windowId={win.id} />
+        <div className="win-noise" aria-hidden />
       </div>
 
       {!maximized && (

@@ -58,9 +58,17 @@ export default function RootLayout({
         <InstallHint />
 
         {/* CRT overlay katmanları — her zaman render, görünürlük CSS data-crt'ye bağlı */}
-        <div className="crt-layer crt-scanlines" aria-hidden="true" />
+        <div className="crt-layer crt-grille" aria-hidden="true" />
         <div className="crt-layer crt-vignette" aria-hidden="true" />
         <div className="crt-layer crt-grain" aria-hidden="true" />
+
+        {/* Cathode 5100 monitör çerçevesi — görünürlük CSS data-monitor'a bağlı */}
+        <div className="monitor-mask" aria-hidden="true" />
+        <div className="monitor-glare" aria-hidden="true" />
+        <div className="monitor-plate" aria-hidden="true">
+          <span>cathode 5100</span>
+          <span className="monitor-led" />
+        </div>
       </body>
     </html>
   );

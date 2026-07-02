@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { V86Engine, type EmuPhase } from "@/lib/emu/v86Engine";
 import type { OsDefinition } from "@/data/os";
 import { cn } from "@/lib/cn";
+import { Icon } from "@/components/icons";
 import { deleteState, hasState, readState, writeState } from "@/lib/persist";
 
 interface Props {
@@ -35,16 +36,24 @@ export function EmulatorWindow({ os, override }: Props) {
 
   useEffect(() => {
     if (!screenRef.current) return;
-    const engine = new V86Engine({
-      onPhase: setPhase,
-      onError: setError,
-      onProgress: (loaded, total) =>
-        setProgress(Math.round((loaded / total) * 100)),
-    });
-    engineRef.current = engine;
-    engine.start(screenRef.current, os, override);
+    // Start bir tick geciktirilir: React StrictMode'un mount→cleanup→mount
+    // döngüsünde ilk mount'un engine'i hiç kurulmaz — aynı DOM container'da
+    // iki V86 örneğinin yarışması ekranı kilitliyordu.
+    let engine: V86Engine | null = null;
+    const timer = setTimeout(() => {
+      if (!screenRef.current) return;
+      engine = new V86Engine({
+        onPhase: setPhase,
+        onError: setError,
+        onProgress: (loaded, total) =>
+          setProgress(Math.round((loaded / total) * 100)),
+      });
+      engineRef.current = engine;
+      engine.start(screenRef.current, os, override);
+    }, 60);
     return () => {
-      void engine.destroy();
+      clearTimeout(timer);
+      void engine?.destroy();
       engineRef.current = null;
     };
     // os.id / override değişince yeniden kur
@@ -142,14 +151,16 @@ export function EmulatorWindow({ os, override }: Props) {
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-void/90 backdrop-blur">
             {phase === "error" ? (
               <>
-                <span className="text-2xl text-[#ff5f56]">✕</span>
+                <span className="text-danger">
+                  <Icon name="close" size={26} />
+                </span>
                 <p className="text-sm text-text">{error ?? "hata"}</p>
                 <Ctl onClick={() => location.reload()}>tekrar dene</Ctl>
               </>
             ) : (
               <>
-                <span className="phosphor animate-pulse text-3xl text-accent">
-                  {os.glyph}
+                <span className="phosphor animate-pulse text-accent">
+                  <Icon name="disk" size={30} />
                 </span>
                 <p className="font-mono text-xs text-text-dim">
                   {HINTS[phase] ?? "hazırlanıyor…"}

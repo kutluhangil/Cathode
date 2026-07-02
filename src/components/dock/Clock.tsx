@@ -7,13 +7,13 @@ function fmt(d: Date) {
     hour: "2-digit",
     minute: "2-digit",
   });
-  const date = d.toLocaleDateString("tr-TR", {
-    day: "2-digit",
-    month: "short",
-  });
+  const date = d
+    .toLocaleDateString("tr-TR", { day: "2-digit", month: "short" })
+    .toLowerCase(); // sentence case kuralı — otomatik büyük harf yok
   return { time, date };
 }
 
+/** Tek satır sistem saati — SystemBar tray'inde yaşar. */
 export function Clock() {
   const [now, setNow] = useState<Date | null>(null);
 
@@ -23,15 +23,13 @@ export function Clock() {
     return () => clearInterval(t);
   }, []);
 
-  if (!now) return <div className="w-14" aria-hidden />;
+  if (!now) return <div className="w-24" aria-hidden />;
   const { time, date } = fmt(now);
 
   return (
-    <div className="flex flex-col items-end leading-tight">
-      <span className="font-mono text-[13px] tabular-nums text-text">
-        {time}
-      </span>
-      <span className="font-mono text-[10px] text-text-dim">{date}</span>
-    </div>
+    <span className="px-1 font-mono text-[12px] tabular-nums text-text-dim">
+      {time}
+      <span className="text-faint"> · {date}</span>
+    </span>
   );
 }

@@ -49,8 +49,8 @@ const baseApps: AppDefinition[] = [
     glyph: "⚙",
     description: "Tema, CRT, duvar kâğıdı",
     component: Settings,
-    defaultSize: { w: 480, h: 520 },
-    minSize: { w: 360, h: 360 },
+    defaultSize: { w: 640, h: 520 },
+    minSize: { w: 520, h: 400 },
     pinned: true,
   },
   {

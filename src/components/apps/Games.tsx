@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import { GAME_LIST, type GameDefinition } from "@/data/games";
 import { useWindows } from "@/store/windowsStore";
 import { cn } from "@/lib/cn";
+import { AppIcon } from "@/components/ui/AppIcon";
+import { Icon } from "@/components/icons";
 import { LazyJsDos } from "./emulator/LazyJsDos";
 
 const SIZE = { w: 720, h: 540 };
@@ -27,9 +29,9 @@ export function Games() {
       <div className="flex h-full flex-col">
         <button
           onClick={() => setByog(null)}
-          className="shrink-0 border-b border-border-soft px-3 py-1.5 text-left font-mono text-[11px] text-text-dim hover:text-text"
+          className="flex shrink-0 items-center gap-1.5 border-b border-border-soft px-3 py-1.5 text-left font-mono text-[11px] text-text-dim hover:text-text"
         >
-          ‹ oyunlara dön
+          <Icon name="chevron-left" size={11} /> oyunlara dön
         </button>
         <div className="flex-1">
           <LazyJsDos game={byog.game} override={byog.url} />
@@ -70,17 +72,17 @@ export function Games() {
           <div
             key={g.id}
             className={cn(
-              "rounded-[12px] border bg-surface/50 p-4",
+              "rounded-ui border bg-surface-0 p-4",
               g.enabled
-                ? "border-border hover:border-accent/60"
+                ? "border-border-soft hover:border-accent/60"
                 : "border-border-soft opacity-60",
             )}
           >
-            <div className="mb-2 flex items-center gap-2">
-              <span className="text-lg text-accent">{g.glyph}</span>
+            <div className="mb-2 flex items-center gap-2.5">
+              <AppIcon app={{ id: `game-${g.id}` }} size={22} />
               <span className="text-sm text-text">{g.name}</span>
               {!g.enabled && (
-                <span className="ml-auto rounded-full border border-border-soft px-2 py-0.5 font-mono text-[9px] text-text-dim">
+                <span className="ml-auto rounded-btn border border-border-soft px-2 py-0.5 font-mono text-[9px] text-text-dim">
                   yakında
                 </span>
               )}
@@ -92,10 +94,10 @@ export function Games() {
               disabled={!g.enabled}
               onClick={() => open(`game-${g.id}`, g.name, SIZE)}
               className={cn(
-                "w-full rounded-[8px] py-1.5 text-xs font-medium transition-colors",
+                "w-full rounded-btn py-1.5 text-xs font-medium transition-colors",
                 g.enabled
                   ? "bg-accent text-accent-ink hover:brightness-110"
-                  : "cursor-not-allowed bg-white/5 text-text-dim",
+                  : "cursor-not-allowed bg-surface-2 text-faint",
               )}
             >
               {g.enabled ? "oyna" : "bundle hazırlanıyor"}
@@ -108,8 +110,10 @@ export function Games() {
         <h3 className="mb-2 font-mono text-[11px] uppercase tracking-widest text-text-dim">
           kendi oyununu yükle
         </h3>
-        <label className="flex cursor-pointer flex-col items-center justify-center gap-1 rounded-[12px] border border-dashed border-border py-6 text-center transition-colors hover:border-accent/50">
-          <span className="text-xl text-text-dim">✦</span>
+        <label className="flex cursor-pointer flex-col items-center justify-center gap-1.5 rounded-ui border border-dashed border-border py-6 text-center transition-colors hover:border-accent/50">
+          <span className="text-text-dim">
+            <Icon name="upload" size={20} />
+          </span>
           <span className="text-xs text-text">.jsdos / .zip seç</span>
           <span className="text-[10px] text-text-dim">
             sunucuya gitmez — yalnız senin tarayıcında çalışır

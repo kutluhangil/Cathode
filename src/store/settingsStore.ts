@@ -7,16 +7,19 @@ import type { AccentName, WallpaperId } from "@/lib/types";
 interface SettingsState {
   accent: AccentName;
   crt: boolean;
+  /** fiziksel "Cathode 5100" monitör çerçevesi (bezel + LED) */
+  monitor: boolean;
   motion: boolean; // animasyonlar açık mı (prefers-reduced-motion ile birlikte değerlendirilir)
   sound: boolean;
   wallpaper: WallpaperId;
   /** "photo" duvar kâğıdı için rastgele tohum — her yenilemede yeni 4K görsel */
   photoSeed: number;
-  /** boot bu oturumda gösterildi mi (kalıcı değil — bkz. sessionStorage mantığı page'de) */
   setAccent: (a: AccentName) => void;
   toggleAccent: () => void;
   setCrt: (v: boolean) => void;
   toggleCrt: () => void;
+  setMonitor: (v: boolean) => void;
+  toggleMonitor: () => void;
   setMotion: (v: boolean) => void;
   setSound: (v: boolean) => void;
   setWallpaper: (w: WallpaperId) => void;
@@ -24,26 +27,52 @@ interface SettingsState {
   shufflePhoto: () => void;
 }
 
+const VALID_WALLPAPERS: WallpaperId[] = [
+  "phosphor",
+  "blueprint",
+  "testcard",
+  "void",
+  "photo",
+];
+
 export const useSettings = create<SettingsState>()(
   persist(
     (set) => ({
       accent: "amber",
       crt: true, // spec §4: CRT varsayılan hafif açık
+      monitor: false, // spec v2 §9: monitör modu varsayılan kapalı
       motion: true,
       sound: false,
-      wallpaper: "horizon",
+      wallpaper: "phosphor",
       photoSeed: 1,
       setAccent: (accent) => set({ accent }),
       toggleAccent: () =>
         set((s) => ({ accent: s.accent === "amber" ? "green" : "amber" })),
       setCrt: (crt) => set({ crt }),
       toggleCrt: () => set((s) => ({ crt: !s.crt })),
+      setMonitor: (monitor) => set({ monitor }),
+      toggleMonitor: () => set((s) => ({ monitor: !s.monitor })),
       setMotion: (motion) => set({ motion }),
       setSound: (sound) => set({ sound }),
       setWallpaper: (wallpaper) => set({ wallpaper }),
       shufflePhoto: () =>
         set((s) => ({ wallpaper: "photo", photoSeed: s.photoSeed + 1 })),
     }),
-    { name: "cathode.settings" },
+    {
+      name: "cathode.settings",
+      version: 2,
+      // v1 → v2: eski duvar kâğıdı adları (horizon/aurora/grid/monolith) kalktı
+      migrate: (persisted) => {
+        const s = (persisted ?? {}) as Partial<SettingsState>;
+        if (
+          !s.wallpaper ||
+          !VALID_WALLPAPERS.includes(s.wallpaper as WallpaperId)
+        ) {
+          s.wallpaper = "phosphor";
+        }
+        if (typeof s.monitor !== "boolean") s.monitor = false;
+        return s as SettingsState;
+      },
+    },
   ),
 );

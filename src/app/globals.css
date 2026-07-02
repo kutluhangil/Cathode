@@ -3,56 +3,72 @@
 @tailwind utilities;
 
 /* ============================================================
-   Cathode — "Obsidian Cathode" design tokens
-   Premium dark minimalist + retro CRT.
+   Cathode — "Cathode Workstation" tasarım dili (v2)
+   Kurgu: Cathode Systems, 1989 — kendi grafik OS'i + 5100 monitörü.
+   İnandırıcı işletim sistemi + fiziksel CRT sunumu.
    ============================================================ */
 
 :root {
-  /* Surfaces — obsidian stack */
-  --bg-void: #08080a; /* en arka plan, obsidyen */
-  --bg-desk: #0c0c10; /* masaüstü */
-  --surface: #16161c; /* pencere gövdesi */
-  --surface-glass: rgba(22, 22, 28, 0.72); /* cam pencere + backdrop-blur */
-  --border: #26262e;
-  --border-soft: #1c1c22;
+  /* Zemin katmanları — elevation ölçeği */
+  --bg-void: #050506;
+  --bg-desk: #0a0a0d;
+  --surface-0: #0e0e12; /* çökük paneller, input zemini */
+  --surface: #14141a; /* pencere gövdesi (opak) */
+  --surface-2: #1a1a21; /* yükseltilmiş: menü, dropdown */
+  --surface-3: #22222a; /* hover / aktif satır */
+  --surface-glass: rgba(20, 20, 26, 0.78); /* yalnız sistem katmanları: bar, dock, menü */
 
-  /* Text */
-  --text: #e9e6df; /* sıcak beyaz */
-  --text-dim: #8a887f;
+  /* Çizgiler + kenar işçiliği */
+  --border: #32323c; /* line-strong */
+  --border-soft: #24242c; /* line-hair */
+  --edge-light: rgba(255, 255, 255, 0.055); /* üst kenar içsel highlight — machined edge */
 
-  /* Accent — varsayılan: amber (P3 fosfor) */
+  /* Metin — 3 kademe */
+  --text: #ece8de;
+  --text-dim: #a6a29a;
+  --text-faint: #6d6a64;
+
+  /* Accent — amber P3 fosfor (varsayılan) */
   --accent: #ffb000;
-  --accent-glow: rgba(255, 176, 0, 0.35);
-  --accent-ink: #1a1206; /* accent zemin üstü koyu metin */
+  --accent-dim: #b87f0a;
+  --accent-glow: rgba(255, 176, 0, 0.32);
+  --accent-ink: #1a1206;
+
+  /* Semantik durumlar — fosfor tonları */
+  --ok: #2bd96a;
+  --warn: #ffb000;
+  --danger: #ff4d3d;
 
   /* Motion */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
 
-  /* Radii / chrome */
-  --radius-win: 12px;
-  --radius-sm: 8px;
-  --hairline: 0.5px;
+  /* Köşeler — donanım hissi: küçük radius */
+  --radius-win: 8px;
+  --radius-ui: 6px;
+  --radius-btn: 4px;
+  --hairline: 1px;
 
-  /* CRT efekt yoğunlukları — settingsStore bunları override eder */
-  --crt-scanline-opacity: 0;
+  /* CRT efekt yoğunlukları — data-crt bunları açar */
+  --crt-grille-opacity: 0;
   --crt-vignette-opacity: 0;
   --crt-grain-opacity: 0;
-  --crt-glow-strength: 0; /* 0 = glow yok, 1 = tam */
+  --crt-glow-strength: 0;
 }
 
 /* Alternatif accent: phosphor green (P1) */
 :root[data-accent="green"] {
-  --accent: #2bd96a;
-  --accent-glow: rgba(43, 217, 106, 0.3);
+  --accent: #33e86c;
+  --accent-dim: #1e9a47;
+  --accent-glow: rgba(51, 232, 108, 0.28);
   --accent-ink: #04140a;
 }
 
-/* CRT açıkken (data-crt="on") efekt katmanlarını görünür kıl */
+/* CRT açıkken efekt katmanları görünür */
 :root[data-crt="on"] {
-  --crt-scanline-opacity: 0.05;
-  --crt-vignette-opacity: 0.55;
-  --crt-grain-opacity: 0.04;
+  --crt-grille-opacity: 0.55;
+  --crt-vignette-opacity: 0.45;
+  --crt-grain-opacity: 0.035;
   --crt-glow-strength: 1;
 }
 
@@ -75,12 +91,9 @@ body {
   overflow: hidden; /* masaüstü kabuğu — sayfa kaymaz */
 }
 
-/* Sentence case zorunlu: hiçbir yerde otomatik büyük harf yok */
-
 /* ============================================================
-   CRT overlay katmanları
-   layout.tsx bunları her zaman render eder; görünürlük CSS'te.
-   pointer-events: none — etkileşimi engellemez.
+   CRT katmanları — aperture grille + vinyet + grain
+   layout.tsx her zaman render eder; görünürlük CSS'te.
    ============================================================ */
 
 .crt-layer {
@@ -90,43 +103,173 @@ body {
   z-index: 9999;
 }
 
-.crt-scanlines {
-  background: repeating-linear-gradient(
-    to bottom,
-    rgba(0, 0, 0, 0) 0px,
-    rgba(0, 0, 0, 0) 2px,
-    rgba(0, 0, 0, 0.6) 3px,
-    rgba(0, 0, 0, 0) 4px
-  );
-  opacity: var(--crt-scanline-opacity);
+/* Dikey fosfor şeritleri (grille) + yatay scanline — tek katman */
+.crt-grille {
+  background-image:
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.035) 0 1px,
+      transparent 1px 3px
+    ),
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0 2px,
+      rgba(0, 0, 0, 0.42) 2px 3px,
+      transparent 3px 4px
+    );
+  opacity: var(--crt-grille-opacity);
   transition: opacity 0.4s var(--ease-out);
-  mix-blend-mode: multiply;
 }
 
 .crt-vignette {
   background: radial-gradient(
     120% 120% at 50% 50%,
-    rgba(0, 0, 0, 0) 55%,
-    rgba(0, 0, 0, 0.85) 100%
+    rgba(0, 0, 0, 0) 58%,
+    rgba(0, 0, 0, 0.8) 100%
   );
   opacity: var(--crt-vignette-opacity);
   transition: opacity 0.4s var(--ease-out);
 }
 
 .crt-grain {
-  /* tekrarlı SVG fractal noise — atmosfer/derinlik */
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   opacity: var(--crt-grain-opacity);
   transition: opacity 0.4s var(--ease-out);
 }
 
 /* ============================================================
+   Monitör modu — fiziksel "Cathode 5100" çerçevesi
+   Overlay yaklaşımı: konumlama/containing-block değişmez.
+   data-monitor="on" iken görünür; mobilde daima kapalı.
+   ============================================================ */
+
+/* Ekran maskesi: kavisli köşeli ekran alanı; dışı bezel plastiği */
+.monitor-mask {
+  position: fixed;
+  inset: 8px 8px 32px;
+  border-radius: 14px;
+  pointer-events: none;
+  z-index: 10000;
+  display: none;
+  /* dev spread — yuvarlak dikdörtgenin dışını bezel rengiyle örter */
+  box-shadow:
+    0 0 0 200vmax #0b0b0e,
+    inset 0 0 0 1px rgba(255, 255, 255, 0.04),
+    inset 0 0 42px rgba(0, 0, 0, 0.55);
+}
+
+/* Cam yansıması — üst köşeden tek diyagonal highlight */
+.monitor-glare {
+  position: fixed;
+  inset: 8px 8px 32px;
+  border-radius: 14px;
+  pointer-events: none;
+  z-index: 10001;
+  display: none;
+  background: linear-gradient(
+    115deg,
+    rgba(255, 255, 255, 0.05) 0%,
+    rgba(255, 255, 255, 0.015) 18%,
+    transparent 34%
+  );
+}
+
+/* Alt bezel bandı: model baskısı + güç LED'i */
+.monitor-plate {
+  position: fixed;
+  left: 8px;
+  right: 8px;
+  bottom: 0;
+  height: 32px;
+  padding: 0 22px;
+  pointer-events: none;
+  z-index: 10002;
+  display: none;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  color: #55555e;
+}
+
+.monitor-led {
+  width: 5px;
+  height: 5px;
+  border-radius: 9999px;
+  background: var(--accent);
+  box-shadow: 0 0 6px var(--accent-glow);
+  animation: led-breathe 3s var(--ease-in-out) infinite;
+}
+
+@keyframes led-breathe {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+:root[data-monitor="on"] .monitor-mask,
+:root[data-monitor="on"] .monitor-glare {
+  display: block;
+}
+:root[data-monitor="on"] .monitor-plate {
+  display: flex;
+}
+
+/* Monitör açıkken kabuk öğeleri bezel içine çekilir */
+:root[data-monitor="on"] .system-bar {
+  top: 8px;
+  left: 8px;
+  right: 8px;
+}
+:root[data-monitor="on"] .dock-wrap {
+  bottom: 40px;
+}
+:root[data-monitor="on"] .desk-disclaimer {
+  bottom: 44px;
+}
+
+/* Mobil: monitör çerçevesi daima kapalı, ofsetler sıfırlanır */
+@media (max-width: 640px) {
+  .monitor-mask,
+  .monitor-glare,
+  .monitor-plate {
+    display: none !important;
+  }
+  :root[data-monitor="on"] .system-bar {
+    top: 0;
+    left: 0;
+    right: 0;
+  }
+  :root[data-monitor="on"] .dock-wrap {
+    bottom: 16px;
+  }
+  :root[data-monitor="on"] .desk-disclaimer {
+    bottom: 20px;
+  }
+}
+
+/* ============================================================
    Yardımcı sınıflar
    ============================================================ */
 
-/* Fosfor glow — abartısız, CRT açıkken devreye girer */
+/* Fosfor glow — CRT açıkken devreye girer, abartısız */
 .phosphor {
   text-shadow: 0 0 calc(8px * var(--crt-glow-strength)) var(--accent-glow);
+}
+
+/* Pencere gövdesi doku katmanı — çok hafif noise (overlay div olarak) */
+.win-noise {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.02;
 }
 
 @layer utilities {
@@ -135,14 +278,21 @@ body {
   }
   .bg-glass {
     background: var(--surface-glass);
-    backdrop-filter: blur(18px) saturate(1.2);
-    -webkit-backdrop-filter: blur(18px) saturate(1.2);
+    backdrop-filter: blur(18px) saturate(1.15);
+    -webkit-backdrop-filter: blur(18px) saturate(1.15);
+  }
+}
+
+/* backdrop-filter yoksa cam katmanlar opak yüzeye düşer */
+@supports not (backdrop-filter: blur(1px)) {
+  .bg-glass {
+    background: var(--surface-2);
   }
 }
 
 /* Görünür klavye odağı (a11y) */
 :focus-visible {
-  outline: var(--hairline) solid var(--accent);
+  outline: 1px solid var(--accent);
   outline-offset: 2px;
   box-shadow: 0 0 0 2px var(--accent-glow);
 }
@@ -152,7 +302,7 @@ body {
   color: var(--accent-ink);
 }
 
-/* Hareket azaltma saygısı — tüm animasyonlar durur */
+/* Hareket azaltma saygısı — tüm animasyonlar durur (LED dahil) */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

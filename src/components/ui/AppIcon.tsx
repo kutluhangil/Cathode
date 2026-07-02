@@ -17,13 +17,13 @@ interface IconDef {
 }
 
 const S = {
-  // sık kullanılan stroke ayarı
+  // sık kullanılan stroke ayarı — sistem ikon diliyle aynı: kare uç, 1.5px
   stroke: {
     fill: "none",
     stroke: "currentColor",
-    strokeWidth: 1.8,
-    strokeLinecap: "round" as const,
-    strokeLinejoin: "round" as const,
+    strokeWidth: 1.5,
+    strokeLinecap: "square" as const,
+    strokeLinejoin: "miter" as const,
   },
 };
 
@@ -149,7 +149,7 @@ interface Props {
 
 export function AppIcon({ app, size = 44, className }: Props) {
   const icon = pickIcon(app.id);
-  const radius = Math.round(size * 0.26);
+  const radius = Math.round(size * 0.22);
   return (
     <span
       className={cn(
@@ -161,18 +161,11 @@ export function AppIcon({ app, size = 44, className }: Props) {
         height: size,
         borderRadius: radius,
         background: icon.bg,
+        // makine paneli hissi: parlak gloss yok, üstte ince machined edge
         boxShadow:
-          "inset 0 1px 0 rgba(255,255,255,0.12), inset 0 -1px 0 rgba(0,0,0,0.4), 0 4px 10px rgba(0,0,0,0.35)",
+          "inset 0 1px 0 var(--edge-light), inset 0 -1px 0 rgba(0,0,0,0.45), 0 0 0 1px rgba(0,0,0,0.35), 0 4px 10px rgba(0,0,0,0.35)",
       }}
     >
-      {/* üst parlama */}
-      <span
-        className="pointer-events-none absolute inset-x-0 top-0 h-1/2 opacity-40"
-        style={{
-          background:
-            "linear-gradient(180deg,rgba(255,255,255,0.25),transparent)",
-        }}
-      />
       <svg
         width={size * 0.56}
         height={size * 0.56}

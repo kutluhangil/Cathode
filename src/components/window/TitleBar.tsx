@@ -2,80 +2,88 @@
 
 import { useWindows } from "@/store/windowsStore";
 import { cn } from "@/lib/cn";
+import { AppIcon } from "@/components/ui/AppIcon";
+import { Icon, type IconName } from "@/components/icons";
 import { useWindowMove } from "./useWindowDrag";
 import type { WindowInstance } from "@/lib/types";
 
 interface Props {
   win: WindowInstance;
-  glyph: string;
   active: boolean;
 }
 
-export function TitleBar({ win, glyph, active }: Props) {
+/**
+ * Workstation başlık çubuğu: app ikonu + mono başlık + kare makine-butonlar.
+ * Aktif pencerede altta 1px fosfor çizgi; pasif tümüyle sönük.
+ */
+export function TitleBar({ win, active }: Props) {
   const move = useWindowMove(win.id, win.rect);
   const minimize = useWindows((s) => s.minimize);
   const toggleMaximize = useWindows((s) => s.toggleMaximize);
   const close = useWindows((s) => s.close);
+  const maximized = win.status === "maximized";
 
   return (
-    <div
-      onPointerDown={move.onPointerDown}
-      onPointerMove={move.onPointerMove}
-      onPointerUp={move.onPointerUp}
-      onDoubleClick={() => toggleMaximize(win.id)}
-      className={cn(
-        "flex h-9 shrink-0 select-none items-center gap-2 px-3",
-        "cursor-grab active:cursor-grabbing",
-        "border-b border-border-soft",
-      )}
-    >
-      <span
+    <div className="shrink-0">
+      <div
+        onPointerDown={move.onPointerDown}
+        onPointerMove={move.onPointerMove}
+        onPointerUp={move.onPointerUp}
+        onDoubleClick={() => toggleMaximize(win.id)}
         className={cn(
-          "font-mono text-[13px] leading-none",
-          active ? "text-accent phosphor" : "text-text-dim",
-        )}
-        aria-hidden
-      >
-        {glyph}
-      </span>
-      <span
-        className={cn(
-          "flex-1 truncate text-[13px]",
-          active ? "text-text" : "text-text-dim",
+          "flex h-8 select-none items-center gap-2 px-2.5",
+          "cursor-grab active:cursor-grabbing",
         )}
       >
-        {win.title}
-      </span>
-
-      <div className="flex items-center gap-1">
-        <WinBtn label="küçült" onClick={() => minimize(win.id)}>
-          −
-        </WinBtn>
-        <WinBtn label="büyüt" onClick={() => toggleMaximize(win.id)}>
-          ▢
-        </WinBtn>
-        <WinBtn
-          label="kapat"
-          onClick={() => close(win.id)}
-          className="hover:bg-[#ff5f56] hover:text-white"
+        <span className={cn(!active && "opacity-50 saturate-50")} aria-hidden>
+          <AppIcon app={{ id: win.appId }} size={16} />
+        </span>
+        <span
+          className={cn(
+            "flex-1 truncate font-mono text-[12px]",
+            active ? "text-text" : "text-faint",
+          )}
         >
-          ✕
-        </WinBtn>
+          {win.title}
+        </span>
+
+        <div className="flex items-center gap-1">
+          <WinBtn label="küçült" icon="minimize" onClick={() => minimize(win.id)} />
+          <WinBtn
+            label={maximized ? "geri yükle" : "büyüt"}
+            icon={maximized ? "restore" : "maximize"}
+            onClick={() => toggleMaximize(win.id)}
+          />
+          <WinBtn
+            label="kapat"
+            icon="close"
+            onClick={() => close(win.id)}
+            className="hover:bg-danger/90 hover:text-white"
+          />
+        </div>
       </div>
+
+      {/* aktif pencere göstergesi — title bar altı fosfor çizgi */}
+      <div
+        className={cn(
+          "h-px w-full transition-colors duration-200",
+          active ? "bg-accent shadow-glow" : "bg-border-soft",
+        )}
+      />
     </div>
   );
 }
 
 function WinBtn({
   label,
+  icon,
   onClick,
   className,
-  children,
 }: {
   label: string;
+  icon: IconName;
   onClick: () => void;
   className?: string;
-  children: React.ReactNode;
 }) {
   return (
     <button
@@ -84,11 +92,11 @@ function WinBtn({
       onClick={onClick}
       onPointerDown={(e) => e.stopPropagation()}
       className={cn(
-        "flex h-6 w-6 items-center justify-center rounded-[7px] text-[13px] leading-none text-text-dim transition-colors duration-150 hover:bg-white/10 hover:text-text",
+        "flex h-[22px] w-[22px] items-center justify-center rounded-btn text-text-dim transition-colors duration-150 hover:bg-surface-3 hover:text-text",
         className,
       )}
     >
-      {children}
+      <Icon name={icon} size={12} />
     </button>
   );
 }

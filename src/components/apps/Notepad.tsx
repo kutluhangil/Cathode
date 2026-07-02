@@ -35,9 +35,9 @@ export function Notepad() {
         placeholder="bir şeyler yaz…"
         className="flex-1 resize-none bg-transparent px-5 py-4 font-mono text-sm leading-relaxed text-text outline-none placeholder:text-text-dim/50"
       />
-      <div className="flex items-center justify-between border-t border-border-soft px-4 py-2 font-mono text-[11px] text-text-dim">
+      <div className="flex items-center justify-between border-t border-border-soft bg-surface-0 px-4 py-2 font-mono text-[11px] text-faint">
         <span>{text.length} karakter</span>
-        <span className={saved ? "text-text-dim" : "text-accent"}>
+        <span className={saved ? "text-faint" : "text-warn"}>
           {saved ? "kaydedildi" : "kaydediliyor…"}
         </span>
       </div>

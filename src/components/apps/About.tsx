@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { cn } from "@/lib/cn";
+import { CathodeMark } from "@/components/icons";
 
 const COPY = {
   tr: {
@@ -20,6 +21,14 @@ const COPY = {
   },
 } as const;
 
+/** Spec-sheet satırları — donanım künyesi hissi (dil bağımsız, mono). */
+const SPECS: [string, string][] = [
+  ["shell", "cathode workstation v2"],
+  ["render", "phosphor crt"],
+  ["emulation", "v86 · js-dos (wasm)"],
+  ["data", "localStorage · OPFS — no server"],
+];
+
 export function About() {
   const [lang, setLang] = useState<"tr" | "en">("tr");
   const t = COPY[lang];
@@ -27,13 +36,18 @@ export function About() {
   return (
     <div className="flex h-full flex-col overflow-y-auto p-6">
       <div className="mb-5 flex items-start justify-between gap-4">
-        <div>
-          <h2 className="phosphor text-2xl font-semibold tracking-tight text-text">
-            Cathode
-          </h2>
-          <p className="mt-1 max-w-sm text-sm text-text-dim">{t.tagline}</p>
+        <div className="flex items-start gap-3">
+          <span className="phosphor mt-1 text-accent">
+            <CathodeMark size={30} />
+          </span>
+          <div>
+            <h2 className="phosphor text-2xl font-semibold tracking-tight text-text">
+              Cathode
+            </h2>
+            <p className="mt-1 max-w-sm text-sm text-text-dim">{t.tagline}</p>
+          </div>
         </div>
-        <div className="flex overflow-hidden rounded-[8px] border border-border text-xs">
+        <div className="flex overflow-hidden rounded-btn border border-border-soft text-xs">
           {(["tr", "en"] as const).map((l) => (
             <button
               key={l}
@@ -51,17 +65,30 @@ export function About() {
         </div>
       </div>
 
+      {/* donanım künyesi — spec sheet */}
+      <div className="mb-5 rounded-ui border border-border-soft bg-surface-0 px-4 py-3 font-mono text-[12px]">
+        {SPECS.map(([k, v]) => (
+          <div
+            key={k}
+            className="flex justify-between gap-4 border-b border-border-soft/60 py-1.5 last:border-b-0"
+          >
+            <span className="text-faint">{k}</span>
+            <span className="text-text-dim">{v}</span>
+          </div>
+        ))}
+      </div>
+
       <p className="text-sm leading-relaxed text-text/90">{t.body}</p>
 
-      <div className="mt-6 rounded-[10px] border border-border-soft bg-black/20 p-4">
-        <h3 className="mb-2 font-mono text-[11px] uppercase tracking-widest text-accent">
+      <div className="mt-6 rounded-ui border border-border-soft bg-surface-0 p-4">
+        <h3 className="mb-2 font-mono text-[11px] uppercase tracking-widest text-warn">
           {t.discTitle}
         </h3>
         <p className="text-xs leading-relaxed text-text-dim">{t.disclaimer}</p>
       </div>
 
-      <p className="mt-auto pt-6 font-mono text-[11px] text-text-dim/70">
-        cathode · obsidian shell · v1
+      <p className="mt-auto pt-6 font-mono text-[11px] text-faint">
+        cathode systems · workstation shell · v2
       </p>
     </div>
   );

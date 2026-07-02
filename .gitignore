@@ -42,3 +42,4 @@ next-env.d.ts
 # serwist tarafından üretilen service worker
 /public/sw.js
 /public/sw.js.map
+.gstack/

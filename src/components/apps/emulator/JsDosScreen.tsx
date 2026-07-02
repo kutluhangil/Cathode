@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { GameDefinition } from "@/data/games";
+import { Icon } from "@/components/icons";
 
 // js-dos v8 global (npm paketi tip/ESM sağlamaz — global script ile yüklenir).
 type DosProps = { stop: () => Promise<void> };
@@ -96,13 +97,15 @@ export function JsDosScreen({ game, override }: Props) {
         <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-3 bg-void/85">
           {phase === "error" ? (
             <>
-              <span className="text-2xl text-[#ff5f56]">✕</span>
+              <span className="text-danger">
+                <Icon name="close" size={26} />
+              </span>
               <p className="text-sm text-text">{error}</p>
             </>
           ) : (
             <>
-              <span className="phosphor animate-pulse text-3xl text-accent">
-                {game.glyph}
+              <span className="phosphor animate-pulse text-accent">
+                <Icon name="gamepad" size={30} />
               </span>
               <p className="font-mono text-xs text-text-dim">
                 DOSBox başlatılıyor…

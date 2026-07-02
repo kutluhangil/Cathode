@@ -22,7 +22,7 @@ export function Toggle({ checked, onChange, label, id }: Props) {
         "relative h-6 w-11 shrink-0 rounded-full border transition-colors duration-200",
         checked
           ? "border-accent bg-accent/25"
-          : "border-border bg-white/5 hover:bg-white/10",
+          : "border-border-soft bg-surface-0 hover:bg-surface-2",
       )}
     >
       <span

@@ -11,12 +11,14 @@ import { useSettings } from "@/store/settingsStore";
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const accent = useSettings((s) => s.accent);
   const crt = useSettings((s) => s.crt);
+  const monitor = useSettings((s) => s.monitor);
 
   useEffect(() => {
     const root = document.documentElement;
     root.dataset.accent = accent;
     root.dataset.crt = crt ? "on" : "off";
-  }, [accent, crt]);
+    root.dataset.monitor = monitor ? "on" : "off";
+  }, [accent, crt, monitor]);
 
   return <>{children}</>;
 }

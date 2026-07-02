@@ -4,6 +4,8 @@ import { useState } from "react";
 import { OS_LIST, type OsDefinition, type DiskDrive } from "@/data/os";
 import { useWindows } from "@/store/windowsStore";
 import { cn } from "@/lib/cn";
+import { AppIcon } from "@/components/ui/AppIcon";
+import { Icon } from "@/components/icons";
 import { LazyEmulator } from "./emulator/LazyEmulator";
 
 const EMU_SIZE = { w: 760, h: 560 };
@@ -22,9 +24,9 @@ export function Systems() {
       <div className="flex h-full flex-col">
         <button
           onClick={() => setRun(null)}
-          className="shrink-0 border-b border-border-soft px-3 py-1.5 text-left font-mono text-[11px] text-text-dim hover:text-text"
+          className="flex shrink-0 items-center gap-1.5 border-b border-border-soft px-3 py-1.5 text-left font-mono text-[11px] text-text-dim hover:text-text"
         >
-          ‹ kataloğa dön
+          <Icon name="chevron-left" size={11} /> kataloğa dön
         </button>
         <div className="flex-1">
           <LazyEmulator os={run.os} override={run.buffer} />
@@ -53,17 +55,17 @@ export function Systems() {
           <div
             key={os.id}
             className={cn(
-              "rounded-[12px] border bg-surface/50 p-4 transition-colors",
+              "rounded-ui border bg-surface-0 p-4 transition-colors",
               os.enabled
-                ? "border-border hover:border-accent/60"
+                ? "border-border-soft hover:border-accent/60"
                 : "border-border-soft opacity-60",
             )}
           >
-            <div className="mb-2 flex items-center gap-2">
-              <span className="text-lg text-accent">{os.glyph}</span>
+            <div className="mb-2 flex items-center gap-2.5">
+              <AppIcon app={{ id: `os-${os.id}` }} size={22} />
               <span className="text-sm text-text">{os.name}</span>
               {!os.enabled && (
-                <span className="ml-auto rounded-full border border-border-soft px-2 py-0.5 font-mono text-[9px] text-text-dim">
+                <span className="ml-auto rounded-btn border border-border-soft px-2 py-0.5 font-mono text-[9px] text-text-dim">
                   yakında
                 </span>
               )}
@@ -75,10 +77,10 @@ export function Systems() {
               disabled={!os.enabled}
               onClick={() => open(`os-${os.id}`, os.name, EMU_SIZE)}
               className={cn(
-                "w-full rounded-[8px] py-1.5 text-xs font-medium transition-colors",
+                "w-full rounded-btn py-1.5 text-xs font-medium transition-colors",
                 os.enabled
                   ? "bg-accent text-accent-ink hover:brightness-110"
-                  : "cursor-not-allowed bg-white/5 text-text-dim",
+                  : "cursor-not-allowed bg-surface-2 text-faint",
               )}
             >
               {os.enabled ? "aç" : "imaj hazırlanıyor"}
@@ -146,9 +148,11 @@ function ByoiCard({ onRun }: { onRun: (t: RunTarget) => void }) {
   };
 
   return (
-    <div className="rounded-[14px] border border-accent/40 bg-accent/[0.04] p-4">
+    <div className="rounded-ui border border-accent/40 bg-accent/[0.04] p-4">
       <div className="mb-1 flex items-center gap-2">
-        <span className="text-lg text-accent">⊕</span>
+        <span className="text-accent">
+          <Icon name="upload" size={16} />
+        </span>
         <h3 className="text-sm font-medium text-text">
           Kendi işletim sistemini aç
         </h3>
@@ -160,7 +164,7 @@ function ByoiCard({ onRun }: { onRun: (t: RunTarget) => void }) {
 
       {/* sekmeler + disk türü */}
       <div className="mb-3 flex items-center justify-between">
-        <div className="flex overflow-hidden rounded-[7px] border border-border text-[11px]">
+        <div className="flex overflow-hidden rounded-btn border border-border-soft text-[11px]">
           {(["dosya", "url"] as const).map((t) => (
             <button
               key={t}
@@ -176,7 +180,7 @@ function ByoiCard({ onRun }: { onRun: (t: RunTarget) => void }) {
             </button>
           ))}
         </div>
-        <div className="flex overflow-hidden rounded-[7px] border border-border text-[10px]">
+        <div className="flex overflow-hidden rounded-btn border border-border-soft text-[10px]">
           {(["hda", "fda", "cdrom"] as DiskDrive[]).map((d) => (
             <button
               key={d}
@@ -209,11 +213,13 @@ function ByoiCard({ onRun }: { onRun: (t: RunTarget) => void }) {
             if (f) void runFile(f);
           }}
           className={cn(
-            "flex cursor-pointer flex-col items-center justify-center gap-1 rounded-[10px] border border-dashed py-6 text-center transition-colors",
+            "flex cursor-pointer flex-col items-center justify-center gap-1.5 rounded-ui border border-dashed py-6 text-center transition-colors",
             over ? "border-accent bg-accent/5" : "border-border hover:border-accent/50",
           )}
         >
-          <span className="text-xl text-text-dim">⊕</span>
+          <span className="text-text-dim">
+            <Icon name="upload" size={20} />
+          </span>
           <span className="text-xs text-text">.img / .iso sürükle ya da seç</span>
           <input
             type="file"
@@ -232,12 +238,12 @@ function ByoiCard({ onRun }: { onRun: (t: RunTarget) => void }) {
             onChange={(e) => setUrl(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && runUrl()}
             placeholder="https://.../winxp.img"
-            className="flex-1 rounded-[8px] border border-border bg-black/30 px-3 py-2 text-xs text-text outline-none placeholder:text-text-dim/60 focus:border-accent"
+            className="flex-1 rounded-btn border border-border-soft bg-surface-0 px-3 py-2 text-xs text-text outline-none placeholder:text-faint focus:border-accent"
           />
           <button
             onClick={runUrl}
             disabled={busy || !url.trim()}
-            className="rounded-[8px] bg-accent px-3 py-2 text-xs font-medium text-accent-ink disabled:opacity-40"
+            className="rounded-btn bg-accent px-3 py-2 text-xs font-medium text-accent-ink disabled:opacity-40"
           >
             {busy ? "…" : "aç"}
           </button>
@@ -249,7 +255,7 @@ function ByoiCard({ onRun }: { onRun: (t: RunTarget) => void }) {
           URL, CORS izni veren bir kaynakta olmalı (kendi R2/sunucun gibi).
         </p>
       )}
-      {err && <p className="mt-2 text-[11px] text-[#ff5f56]">{err}</p>}
+      {err && <p className="mt-2 text-[11px] text-danger">{err}</p>}
     </div>
   );
 }

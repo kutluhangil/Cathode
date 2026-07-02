@@ -12,12 +12,13 @@ import { DesktopIcon } from "./DesktopIcon";
 import { ContextMenu, type MenuItem } from "./ContextMenu";
 import { WindowManager } from "@/components/window/WindowManager";
 import { Dock } from "@/components/dock/Dock";
+import { SystemBar } from "@/components/dock/SystemBar";
 
 const WP_ORDER: WallpaperId[] = [
-  "horizon",
-  "aurora",
-  "grid",
-  "monolith",
+  "phosphor",
+  "blueprint",
+  "testcard",
+  "void",
   "photo",
 ];
 
@@ -39,10 +40,15 @@ export function Desktop() {
   };
 
   const menuItems: MenuItem[] = [
-    { label: "Yenile", onClick: () => setSpin((s) => s + 1) },
-    { label: "Duvar kâğıdını değiştir", onClick: cycleWallpaper },
-    { label: "Ayarlar", onClick: () => openApp("settings"), divider: true },
-    { label: "Hakkında", onClick: () => openApp("about") },
+    { label: "Yenile", icon: "refresh", onClick: () => setSpin((s) => s + 1) },
+    { label: "Duvar kâğıdını değiştir", icon: "image", onClick: cycleWallpaper },
+    {
+      label: "Ayarlar",
+      icon: "settings",
+      onClick: () => openApp("settings"),
+      divider: true,
+    },
+    { label: "Hakkında", icon: "info", onClick: () => openApp("about") },
   ];
 
   return (
@@ -55,13 +61,13 @@ export function Desktop() {
     >
       <Wallpaper key={`${wallpaper}-${spin}`} />
 
-      {/* ikon ızgarası */}
+      {/* ikon ızgarası — sistem çubuğunun altından başlar */}
       <motion.div
         key={spin}
         variants={stagger}
         initial="hidden"
         animate="visible"
-        className="absolute left-4 top-4 grid grid-flow-col grid-rows-[repeat(5,auto)] gap-1"
+        className="absolute left-4 top-10 z-10 grid grid-flow-col grid-rows-[repeat(5,auto)] gap-1"
       >
         {APPS.map((a) => (
           <motion.div key={a.id} variants={riseItem}>
@@ -73,13 +79,14 @@ export function Desktop() {
       {/* görünür disclaimer (spec §5) — tıkla → Hakkında */}
       <button
         onClick={() => openApp("about")}
-        className="absolute bottom-5 left-4 z-[1000] max-w-[240px] text-left font-mono text-[10px] leading-tight text-text-dim/70 transition-colors hover:text-text-dim"
+        className="desk-disclaimer absolute bottom-5 left-4 z-[1000] max-w-[240px] text-left font-mono text-[10px] leading-tight text-text-dim/70 transition-colors hover:text-text-dim"
       >
         hobi / arşiv / eğitim projesi · emülasyon açık kaynak · reklam yok ·
         detay için tıkla
       </button>
 
       <WindowManager />
+      <SystemBar />
       <Dock />
 
       {menu && (

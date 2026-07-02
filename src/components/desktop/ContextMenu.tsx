@@ -1,11 +1,13 @@
 "use client";
 
 import { useEffect } from "react";
+import { Icon, type IconName } from "@/components/icons";
 
 export interface MenuItem {
   label: string;
   onClick: () => void;
   divider?: boolean;
+  icon?: IconName;
 }
 
 interface Props {
@@ -35,21 +37,24 @@ export function ContextMenu({ x, y, items, onClose }: Props) {
       role="menu"
       style={{ left, top }}
       onContextMenu={(e) => e.preventDefault()}
-      className="fixed z-[5000] w-52 overflow-hidden rounded-[10px] border border-border bg-glass p-1 shadow-win"
+      className="fixed z-[5000] w-52 overflow-hidden rounded-ui bg-surface-2 p-1 shadow-float"
     >
       {items.map((it, i) => (
         <div key={i}>
-          {it.divider && i > 0 && (
-            <div className="my-1 h-px bg-border-soft" />
-          )}
+          {it.divider && i > 0 && <div className="my-1 h-px bg-border-soft" />}
           <button
             role="menuitem"
             onClick={() => {
               it.onClick();
               onClose();
             }}
-            className="flex w-full items-center rounded-[6px] px-3 py-2 text-left text-[13px] text-text-dim transition-colors hover:bg-accent/15 hover:text-text"
+            className="flex w-full items-center gap-2.5 rounded-btn px-2.5 py-2 text-left font-mono text-[12px] text-text-dim transition-colors hover:bg-surface-3 hover:text-text"
           >
+            {it.icon && (
+              <span className="text-faint">
+                <Icon name={it.icon} size={14} />
+              </span>
+            )}
             {it.label}
           </button>
         </div>

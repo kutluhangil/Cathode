@@ -2,8 +2,7 @@
 
 import { create } from "zustand";
 import type { Rect, WindowInstance } from "@/lib/types";
-
-const DOCK_RESERVE = 84; // dock için ekran altında ayrılan alan (px)
+import { DOCK_RESERVE, SYSTEM_BAR_H } from "@/lib/layout";
 
 interface WindowsState {
   windows: WindowInstance[];
@@ -29,11 +28,12 @@ const nextId = () => `win-${++idSeq}`;
 
 function maximizedRect(): Rect {
   if (typeof window === "undefined") return { x: 0, y: 0, w: 1024, h: 768 };
+  const top = SYSTEM_BAR_H + 6; // maximize sistem çubuğunu ve dock'u açıkta bırakır
   return {
     x: 0,
-    y: 0,
+    y: top,
     w: window.innerWidth,
-    h: window.innerHeight - DOCK_RESERVE, // maximize dock'u açıkta bırakır
+    h: window.innerHeight - top - DOCK_RESERVE,
   };
 }
 
