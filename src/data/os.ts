@@ -29,6 +29,11 @@ export interface OsDefinition {
   bootOrder?: number;
   /** false = katalogda "yakında" olarak görünür, açılamaz (imaj R2'de hazır değil) */
   enabled: boolean;
+  /**
+   * true = imaj telifli, GÖMÜLMEZ (spec §5). Katalog kartı kullanıcının
+   * kendi imajını seçtirip bu OS'in donanım profiliyle (RAM/VGA/drive) açar.
+   */
+  byoi?: boolean;
   license: string;
 }
 
@@ -72,44 +77,49 @@ export const OS_LIST: OsDefinition[] = [
     enabled: true,
     license: "açık kaynak (GPL) — serbest dağıtılır",
   },
+  // Windows imajları telifli — sitede barındırılmaz (spec §5).
+  // Kart, kullanıcının KENDİ imajını doğru donanım profiliyle açar (BYOI).
   {
     id: "win31",
     name: "Windows 3.1",
     glyph: "◨",
-    description: "Klasik 16-bit masaüstü · arşiv/nostalji",
+    description: "Klasik 16-bit masaüstü · kendi imajınla",
     engine: "v86",
     drive: "hda",
-    image: { url: "https://r2.example/win31.img", async: true, size: 0 },
+    image: { url: "" },
     memoryMB: 64,
     vgaMB: 8,
     enabled: false,
-    license: "telif sahibine ait · arşiv amaçlı (R2/BYOI)",
+    byoi: true,
+    license: "telifli — imaj gömülmez, yalnız kendi kopyanla (tarayıcıda)",
   },
   {
     id: "win98",
     name: "Windows 98",
     glyph: "◫",
-    description: "Klasik 9x masaüstü · arşiv/nostalji",
+    description: "Klasik 9x masaüstü · kendi imajınla",
     engine: "v86",
     drive: "hda",
-    image: { url: "https://r2.example/win98.img", async: true, size: 0 },
+    image: { url: "" },
     memoryMB: 256,
     vgaMB: 16,
     enabled: false,
-    license: "telif sahibine ait · arşiv amaçlı",
+    byoi: true,
+    license: "telifli — imaj gömülmez, yalnız kendi kopyanla (tarayıcıda)",
   },
   {
     id: "win2000",
     name: "Windows 2000",
     glyph: "◳",
-    description: 'NT çekirdeği · "Standart PC" tipi',
+    description: 'NT çekirdeği · "Standart PC" · kendi imajınla',
     engine: "v86",
     drive: "hda",
-    image: { url: "https://r2.example/win2000.img", async: true, size: 0 },
+    image: { url: "" },
     memoryMB: 512,
     vgaMB: 32,
     enabled: false,
-    license: "telif sahibine ait · arşiv amaçlı",
+    byoi: true,
+    license: "telifli — imaj gömülmez, yalnız kendi kopyanla (tarayıcıda)",
   },
 ];
 

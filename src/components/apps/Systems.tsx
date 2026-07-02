@@ -56,7 +56,7 @@ export function Systems() {
             key={os.id}
             className={cn(
               "rounded-ui border bg-surface-0 p-4 transition-colors",
-              os.enabled
+              os.enabled || os.byoi
                 ? "border-border-soft hover:border-accent/60"
                 : "border-border-soft opacity-60",
             )}
@@ -66,25 +66,45 @@ export function Systems() {
               <span className="text-sm text-text">{os.name}</span>
               {!os.enabled && (
                 <span className="ml-auto rounded-btn border border-border-soft px-2 py-0.5 font-mono text-[9px] text-text-dim">
-                  yakında
+                  {os.byoi ? "kendi imajın" : "yakında"}
                 </span>
               )}
             </div>
             <p className="mb-3 h-8 text-[11px] leading-tight text-text-dim">
               {os.description}
             </p>
-            <button
-              disabled={!os.enabled}
-              onClick={() => open(`os-${os.id}`, os.name, EMU_SIZE)}
-              className={cn(
-                "w-full rounded-btn py-1.5 text-xs font-medium transition-colors",
-                os.enabled
-                  ? "bg-accent text-accent-ink hover:brightness-110"
-                  : "cursor-not-allowed bg-surface-2 text-faint",
-              )}
-            >
-              {os.enabled ? "aç" : "imaj hazırlanıyor"}
-            </button>
+            {os.byoi ? (
+              // Telifli sistem: imaj gömülmez — kullanıcı kendi kopyasını seçer,
+              // bu OS'in donanım profiliyle (RAM/VGA/drive) tarayıcıda açılır.
+              <label className="block w-full cursor-pointer rounded-btn border border-accent/40 py-1.5 text-center text-xs font-medium text-accent transition-colors hover:bg-accent/10">
+                kendi imajınla aç
+                <input
+                  type="file"
+                  accept=".img,.iso,.bin"
+                  className="hidden"
+                  onChange={async (e) => {
+                    const f = e.target.files?.[0];
+                    if (!f) return;
+                    const buffer = await f.arrayBuffer();
+                    setRun({ os: { ...os, enabled: true }, buffer });
+                    e.target.value = "";
+                  }}
+                />
+              </label>
+            ) : (
+              <button
+                disabled={!os.enabled}
+                onClick={() => open(`os-${os.id}`, os.name, EMU_SIZE)}
+                className={cn(
+                  "w-full rounded-btn py-1.5 text-xs font-medium transition-colors",
+                  os.enabled
+                    ? "bg-accent text-accent-ink hover:brightness-110"
+                    : "cursor-not-allowed bg-surface-2 text-faint",
+                )}
+              >
+                {os.enabled ? "aç" : "imaj hazırlanıyor"}
+              </button>
+            )}
           </div>
         ))}
       </div>
