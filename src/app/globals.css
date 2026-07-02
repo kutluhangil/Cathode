@@ -64,9 +64,12 @@
   --accent-ink: #04140a;
 }
 
-/* CRT açıkken efekt katmanları görünür */
+/* CRT açıkken efekt katmanları görünür.
+   grille kasıtlı olarak 0: aperture-grille crosshatch masaüstünü "noktalı"
+   gösteriyordu (Linux masaüstü hissiyle çelişiyordu) — vignette + grain
+   CRT kimliğini korumaya yeter, dot-matrix dokusu olmadan. */
 :root[data-crt="on"] {
-  --crt-grille-opacity: 0.55;
+  --crt-grille-opacity: 0;
   --crt-vignette-opacity: 0.45;
   --crt-grain-opacity: 0.035;
   --crt-glow-strength: 1;
@@ -233,6 +236,29 @@ body {
 :root[data-monitor="on"] .desk-disclaimer {
   bottom: 44px;
 }
+
+/* ============================================================
+   Ekran koruyucu — akışkan gradient bulutları (aerial tarzı)
+   Her blob kendi eksenini yavaşça dolaşır; JS animasyon döngüsü yok.
+   ============================================================ */
+@keyframes aerial-drift-1 {
+  0% { transform: translate(-8vw, -6vh) scale(1); }
+  50% { transform: translate(10vw, 8vh) scale(1.15); }
+  100% { transform: translate(-8vw, -6vh) scale(1); }
+}
+@keyframes aerial-drift-2 {
+  0% { transform: translate(12vw, -4vh) scale(1.05); }
+  50% { transform: translate(-10vw, 10vh) scale(0.9); }
+  100% { transform: translate(12vw, -4vh) scale(1.05); }
+}
+@keyframes aerial-drift-3 {
+  0% { transform: translate(-4vw, 10vh) scale(0.95); }
+  50% { transform: translate(8vw, -10vh) scale(1.1); }
+  100% { transform: translate(-4vw, 10vh) scale(0.95); }
+}
+.aerial-blob-1 { animation: aerial-drift-1 22s var(--ease-in-out) infinite; }
+.aerial-blob-2 { animation: aerial-drift-2 28s var(--ease-in-out) infinite; }
+.aerial-blob-3 { animation: aerial-drift-3 34s var(--ease-in-out) infinite; }
 
 /* Mobil: monitör çerçevesi daima kapalı, ofsetler sıfırlanır */
 @media (max-width: 640px) {

@@ -1,26 +1,23 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSettings } from "@/store/settingsStore";
 import { useMotionEnabled } from "@/lib/motion";
-import { CathodeMark } from "@/components/icons";
 
 /** Hareketsizlik eşiği (ms) — 3 dakika */
 const IDLE_MS = 3 * 60 * 1000;
 
 /**
- * Fosfor ekran koruyucu — idle'da sekip duran Cathode markası (DVD tarzı).
- * Herhangi bir giriş kapatır. Hareket kapalıysa (ayar ya da
- * prefers-reduced-motion) hiç devreye girmez. CRT overlay'lerinin altında
- * kalır — scanline/vinyet koruyucunun üstünde de hissedilir.
+ * Aerial ekran koruyucu — yavaşça dolaşan, soyut akışkan gradient bulutları
+ * (Apple tvOS aerial tarzı). Marka/logo yok, saf hareket. Herhangi bir giriş
+ * kapatır. Hareket kapalıysa (ayar ya da prefers-reduced-motion) hiç
+ * devreye girmez — animasyon CSS keyframe ile sürer, JS döngüsü yok.
  */
 export function Screensaver() {
   const enabled = useSettings((s) => s.screensaver);
   const motionOn = useMotionEnabled();
   const [active, setActive] = useState(false);
-  const boxRef = useRef<HTMLDivElement>(null);
 
-  // idle takibi
   useEffect(() => {
     if (!enabled || !motionOn) {
       setActive(false);
@@ -40,47 +37,31 @@ export function Screensaver() {
     };
   }, [enabled, motionOn]);
 
-  // sekme animasyonu (rAF — kütüphanesiz)
-  useEffect(() => {
-    if (!active) return;
-    const el = boxRef.current;
-    if (!el) return;
-    const size = 140;
-    let x = Math.random() * (window.innerWidth - size);
-    let y = Math.random() * (window.innerHeight - size);
-    let vx = 1.6;
-    let vy = 1.3;
-    let raf = 0;
-    const step = () => {
-      const vw = window.innerWidth;
-      const vh = window.innerHeight;
-      x += vx;
-      y += vy;
-      if (x <= 0 || x >= vw - size) vx = -vx;
-      if (y <= 0 || y >= vh - size) vy = -vy;
-      el.style.transform = `translate(${x}px, ${y}px)`;
-      raf = requestAnimationFrame(step);
-    };
-    raf = requestAnimationFrame(step);
-    return () => cancelAnimationFrame(raf);
-  }, [active]);
-
   if (!active) return null;
 
   return (
     <div
       aria-hidden
-      className="fixed inset-0 z-[9000] cursor-none bg-[#030304]"
+      className="fixed inset-0 z-[9000] cursor-none overflow-hidden bg-[#030304]"
     >
       <div
-        ref={boxRef}
-        className="phosphor flex w-[140px] flex-col items-center gap-2 text-accent will-change-transform"
-      >
-        <CathodeMark size={72} />
-        <span className="font-mono text-[11px] tracking-[0.3em] text-text-dim">
-          cathode
-        </span>
-      </div>
+        className="aerial-blob-1 absolute left-[14%] top-[22%] h-[40vw] w-[40vw] rounded-full blur-[100px]"
+        style={{ background: "var(--accent)", opacity: 0.42 }}
+      />
+      <div
+        className="aerial-blob-2 absolute right-[10%] top-[12%] h-[34vw] w-[34vw] rounded-full blur-[95px]"
+        style={{
+          background: "color-mix(in srgb, var(--accent) 30%, #2b6cff 70%)",
+          opacity: 0.36,
+        }}
+      />
+      <div
+        className="aerial-blob-3 absolute bottom-[6%] left-[42%] h-[36vw] w-[36vw] rounded-full blur-[105px]"
+        style={{
+          background: "color-mix(in srgb, var(--accent) 45%, #ff2ea6 55%)",
+          opacity: 0.3,
+        }}
+      />
       <span className="absolute bottom-6 left-1/2 -translate-x-1/2 font-mono text-[10px] tracking-widest text-faint">
         devam etmek için bir tuşa bas
       </span>
