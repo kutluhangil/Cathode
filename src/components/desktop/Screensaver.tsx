@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSettings } from "@/store/settingsStore";
+import { useUiStore } from "@/store/uiStore";
 import { useMotionEnabled } from "@/lib/motion";
 
 /** Hareketsizlik eşiği (ms) — 3 dakika */
@@ -12,11 +13,17 @@ const IDLE_MS = 3 * 60 * 1000;
  * (Apple tvOS aerial tarzı). Marka/logo yok, saf hareket. Herhangi bir giriş
  * kapatır. Hareket kapalıysa (ayar ya da prefers-reduced-motion) hiç
  * devreye girmez — animasyon CSS keyframe ile sürer, JS döngüsü yok.
+ *
+ * Ayarlar'daki "şimdi önizle" butonu `previewing`'i tetikler — idle/hareket
+ * ayarlarından bağımsız, Windows'taki ekran koruyucu Preview düğmesi gibi.
  */
 export function Screensaver() {
   const enabled = useSettings((s) => s.screensaver);
   const motionOn = useMotionEnabled();
+  const previewToken = useUiStore((s) => s.screensaverPreviewToken);
   const [active, setActive] = useState(false);
+  const [previewing, setPreviewing] = useState(false);
+  const firstPreview = useRef(true);
 
   useEffect(() => {
     if (!enabled || !motionOn) {
@@ -37,7 +44,31 @@ export function Screensaver() {
     };
   }, [enabled, motionOn]);
 
-  if (!active) return null;
+  // "şimdi önizle" — ilk mount'ta tetiklenmesin, sadece token artınca.
+  useEffect(() => {
+    if (firstPreview.current) {
+      firstPreview.current = false;
+      return;
+    }
+    setPreviewing(true);
+  }, [previewToken]);
+
+  // önizleme sırasında, tetikleyen tıklamanın kendisi hemen kapatmasın diye
+  // kısa bir gecikmeyle dinleyici kur; sonraki tuş/tık/dokunuş kapatır.
+  useEffect(() => {
+    if (!previewing) return;
+    const dismiss = () => setPreviewing(false);
+    const events = ["pointerdown", "keydown", "touchstart"];
+    const arm = setTimeout(() => {
+      events.forEach((ev) => window.addEventListener(ev, dismiss, { passive: true }));
+    }, 250);
+    return () => {
+      clearTimeout(arm);
+      events.forEach((ev) => window.removeEventListener(ev, dismiss));
+    };
+  }, [previewing]);
+
+  if (!active && !previewing) return null;
 
   return (
     <div

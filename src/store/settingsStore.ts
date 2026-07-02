@@ -36,6 +36,9 @@ const VALID_WALLPAPERS: WallpaperId[] = [
   "testcard",
   "void",
   "photo",
+  "alpenglow",
+  "dolomites",
+  "stormline",
 ];
 
 export const useSettings = create<SettingsState>()(

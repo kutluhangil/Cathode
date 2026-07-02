@@ -2,12 +2,14 @@
 
 import { useState } from "react";
 import { useSettings } from "@/store/settingsStore";
+import { useUiStore } from "@/store/uiStore";
 import { Toggle } from "@/components/ui/Toggle";
 import { Segmented } from "@/components/ui/Segmented";
 import { Icon, type IconName } from "@/components/icons";
 import { cn } from "@/lib/cn";
 import { BOOT_KEY } from "@/lib/layout";
 import type { WallpaperId } from "@/lib/types";
+import { GALLERY_PHOTOS } from "@/data/wallpapers";
 
 /** Ayar kategorileri — gerçek OS ayar paneli düzeni (sol sidebar). */
 type Category = "gorunum" | "efektler" | "duvar" | "sistem";
@@ -85,7 +87,7 @@ export function Settings() {
             <PanelTitle>Efektler</PanelTitle>
             <Row
               title="CRT efektleri"
-              hint="Aperture grille, vinyet, grain ve fosfor parıltı."
+              hint="Vinyet, grain ve fosfor parıltı."
             >
               <Toggle checked={s.crt} onChange={s.setCrt} label="CRT efektleri" />
             </Row>
@@ -99,26 +101,47 @@ export function Settings() {
                 label="monitör modu"
               />
             </Row>
-            <Row
-              title="Ekran koruyucu"
-              hint="3 dk hareketsizlikte fosfor koruyucu."
-            >
-              <Toggle
-                checked={s.screensaver}
-                onChange={s.setScreensaver}
-                label="ekran koruyucu"
-              />
-            </Row>
             <Row title="Arayüz sesleri" hint="Aç/kapa tıkları (varsayılan kapalı).">
               <Toggle checked={s.sound} onChange={s.setSound} label="sesler" />
             </Row>
+
+            {/* Ekran koruyucu — Windows'daki "Screen Saver Settings" düzeni:
+                mini canlı önizleme + tür + bekleme süresi + Önizle düğmesi. */}
+            <div className="border-b border-border-soft py-4">
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <div className="text-sm text-text">Ekran koruyucu</div>
+                  <div className="mt-0.5 text-xs text-text-dim">
+                    3 dk hareketsizlikte akışkan gradient (aerial) devreye girer.
+                  </div>
+                </div>
+                <Toggle
+                  checked={s.screensaver}
+                  onChange={s.setScreensaver}
+                  label="ekran koruyucu"
+                />
+              </div>
+              <div className="mt-3 flex items-center gap-3">
+                <ScreensaverMiniPreview />
+                <div className="flex flex-1 items-center justify-between gap-3">
+                  <span className="font-mono text-[11px] text-text-dim">
+                    tür: aerial
+                  </span>
+                  <PreviewButton />
+                </div>
+              </div>
+            </div>
           </>
         )}
 
         {cat === "duvar" && (
           <>
             <PanelTitle>Duvar kâğıdı</PanelTitle>
-            <div className="grid grid-cols-2 gap-2.5 py-3">
+
+            <p className="pb-1 pt-3 font-mono text-[11px] uppercase tracking-wider text-faint">
+              soyut
+            </p>
+            <div className="grid grid-cols-2 gap-2.5 pb-3">
               {WALLPAPERS.map((w) => (
                 <button
                   key={w.value}
@@ -153,6 +176,44 @@ export function Settings() {
                 </button>
               </Row>
             )}
+
+            <p className="pb-1 pt-3 font-mono text-[11px] uppercase tracking-wider text-faint">
+              fotoğraf
+            </p>
+            <div className="grid grid-cols-2 gap-2.5 pb-3">
+              {GALLERY_PHOTOS.map((p) => (
+                <button
+                  key={p.id}
+                  onClick={() => s.setWallpaper(p.id)}
+                  aria-pressed={s.wallpaper === p.id}
+                  className={cn(
+                    "group overflow-hidden rounded-ui border text-left transition-colors",
+                    s.wallpaper === p.id
+                      ? "border-accent"
+                      : "border-border-soft hover:border-border",
+                  )}
+                >
+                  <span className="relative block h-14 w-full overflow-hidden bg-[#0a0a0d]">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={p.thumb}
+                      alt=""
+                      aria-hidden
+                      className="h-full w-full object-cover"
+                      loading="lazy"
+                    />
+                  </span>
+                  <span
+                    className={cn(
+                      "block px-2.5 py-1.5 text-xs",
+                      s.wallpaper === p.id ? "text-text" : "text-text-dim",
+                    )}
+                  >
+                    {p.name}
+                  </span>
+                </button>
+              ))}
+            </div>
           </>
         )}
 
@@ -220,6 +281,38 @@ function KV({ k, v }: { k: string; v: string }) {
       <span className="text-faint">{k}</span>
       <span className="text-text-dim">{v}</span>
     </div>
+  );
+}
+
+/** Windows'daki ekran koruyucu ayarlarındaki küçük "monitör" önizlemesi. */
+function ScreensaverMiniPreview() {
+  return (
+    <span className="relative block h-12 w-20 shrink-0 overflow-hidden rounded-[3px] border border-border-soft bg-[#030304]">
+      <span
+        className="aerial-blob-mini-1 absolute left-[10%] top-[15%] h-[60%] w-[60%] rounded-full blur-[16px]"
+        style={{ background: "var(--accent)", opacity: 0.5 }}
+      />
+      <span
+        className="aerial-blob-mini-2 absolute right-[5%] top-[5%] h-[50%] w-[50%] rounded-full blur-[14px]"
+        style={{
+          background: "color-mix(in srgb, var(--accent) 30%, #2b6cff 70%)",
+          opacity: 0.45,
+        }}
+      />
+    </span>
+  );
+}
+
+/** Windows'daki "Preview" düğmesi — idle beklemeden ekran koruyucuyu tetikler. */
+function PreviewButton() {
+  const preview = useUiStore((s) => s.previewScreensaver);
+  return (
+    <button
+      onClick={preview}
+      className="flex shrink-0 items-center gap-1.5 rounded-btn border border-border-soft bg-surface-0 px-3 py-1.5 text-xs font-medium text-text-dim transition-colors hover:border-accent hover:text-text"
+    >
+      <Icon name="refresh" size={12} /> şimdi önizle
+    </button>
   );
 }
 

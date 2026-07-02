@@ -1,4 +1,5 @@
 import type { ComponentType } from "react";
+import type { GalleryPhotoId } from "@/data/wallpapers";
 
 /** Kabuk genelinde paylaşılan tipler. */
 
@@ -9,7 +10,8 @@ export type WallpaperId =
   | "blueprint"
   | "testcard"
   | "void"
-  | "photo";
+  | "photo"
+  | GalleryPhotoId;
 
 export type WindowStatus = "normal" | "minimized" | "maximized";
 

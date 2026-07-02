@@ -260,6 +260,21 @@ body {
 .aerial-blob-2 { animation: aerial-drift-2 28s var(--ease-in-out) infinite; }
 .aerial-blob-3 { animation: aerial-drift-3 34s var(--ease-in-out) infinite; }
 
+/* Ayarlar'daki mini "monitör" önizlemesi için — vw yerine % tabanlı,
+   küçük sabit kutu içinde de doğru dolaşsın diye ayrı keyframe seti. */
+@keyframes aerial-drift-mini-1 {
+  0% { transform: translate(-10%, -8%) scale(1); }
+  50% { transform: translate(14%, 10%) scale(1.15); }
+  100% { transform: translate(-10%, -8%) scale(1); }
+}
+@keyframes aerial-drift-mini-2 {
+  0% { transform: translate(12%, -6%) scale(1.05); }
+  50% { transform: translate(-12%, 12%) scale(0.9); }
+  100% { transform: translate(12%, -6%) scale(1.05); }
+}
+.aerial-blob-mini-1 { animation: aerial-drift-mini-1 9s var(--ease-in-out) infinite; }
+.aerial-blob-mini-2 { animation: aerial-drift-mini-2 12s var(--ease-in-out) infinite; }
+
 /* Mobil: monitör çerçevesi daima kapalı, ofsetler sıfırlanır */
 @media (max-width: 640px) {
   .monitor-mask,

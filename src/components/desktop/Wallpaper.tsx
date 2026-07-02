@@ -2,15 +2,18 @@
 
 import { useState } from "react";
 import { useSettings } from "@/store/settingsStore";
+import { getGalleryPhoto } from "@/data/wallpapers";
 
 /**
  * Cathode Workstation duvar kâğıtları (v2) — hepsi kod-çizimi, accent'e duyarlı.
  * phosphor: açık ama boş ekran hissi · blueprint: 5100 teknik çizimi ·
- * testcard: özgün test kartı · void: saf minimal · photo: rastgele 4K.
+ * testcard: özgün test kartı · void: saf minimal · photo: rastgele 4K ·
+ * galeri (alpenglow/dolomites/stormline): yerelde gömülü sabit fotoğraflar.
  */
 export function Wallpaper() {
   const wallpaper = useSettings((s) => s.wallpaper);
   const photoSeed = useSettings((s) => s.photoSeed);
+  const galleryPhoto = getGalleryPhoto(wallpaper);
 
   return (
     // z-0 + DOM'da ilk çocuk: negatif z-index, üst sarmalayıcı (CRT bloom
@@ -21,6 +24,18 @@ export function Wallpaper() {
       {wallpaper === "testcard" && <Testcard />}
       {wallpaper === "void" && <Void />}
       {wallpaper === "photo" && <Photo seed={photoSeed} />}
+      {galleryPhoto && <GalleryWallpaper src={galleryPhoto.src} />}
+    </div>
+  );
+}
+
+/** Sabit galeri fotoğrafı — yerel, anahtarsız statik dosya. */
+function GalleryWallpaper({ src }: { src: string }) {
+  return (
+    <div className="absolute inset-0 bg-[#050507]">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={src} alt="" aria-hidden className="h-full w-full object-cover" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/25 via-transparent to-black/50" />
     </div>
   );
 }
