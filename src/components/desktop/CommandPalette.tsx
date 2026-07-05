@@ -157,6 +157,7 @@ export function CommandPalette() {
               </span>
               <input
                 ref={inputRef}
+                data-testid="command-palette-input"
                 value={q}
                 onChange={(e) => {
                   setQ(e.target.value);

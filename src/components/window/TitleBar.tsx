@@ -11,13 +11,14 @@ import type { WindowInstance } from "@/lib/types";
 interface Props {
   win: WindowInstance;
   active: boolean;
+  mobile?: boolean;
 }
 
 /**
  * Workstation başlık çubuğu: app ikonu + mono başlık + kare makine-butonlar.
  * Aktif pencerede altta 1px fosfor çizgi; pasif tümüyle sönük.
  */
-export function TitleBar({ win, active }: Props) {
+export function TitleBar({ win, active, mobile = false }: Props) {
   const move = useWindowMove(win.id, win.rect);
   const minimize = useWindows((s) => s.minimize);
   const toggleMaximize = useWindows((s) => s.toggleMaximize);
@@ -28,13 +29,14 @@ export function TitleBar({ win, active }: Props) {
   return (
     <div className="shrink-0">
       <div
-        onPointerDown={move.onPointerDown}
-        onPointerMove={move.onPointerMove}
-        onPointerUp={move.onPointerUp}
-        onDoubleClick={() => toggleMaximize(win.id)}
+        data-testid={`titlebar-${win.appId}`}
+        onPointerDown={mobile ? undefined : move.onPointerDown}
+        onPointerMove={mobile ? undefined : move.onPointerMove}
+        onPointerUp={mobile ? undefined : move.onPointerUp}
+        onDoubleClick={mobile ? undefined : () => toggleMaximize(win.id)}
         className={cn(
           "flex h-8 select-none items-center gap-2 px-2.5",
-          "cursor-grab active:cursor-grabbing",
+          mobile ? "cursor-default" : "cursor-grab active:cursor-grabbing",
         )}
       >
         <span className={cn(!active && "opacity-50 saturate-50")} aria-hidden>
@@ -60,6 +62,7 @@ export function TitleBar({ win, active }: Props) {
             label={t("common.close")}
             icon="close"
             onClick={() => close(win.id)}
+            testId={`window-close-${win.appId}`}
             className="hover:bg-danger/90 hover:text-white"
           />
         </div>
@@ -81,16 +84,19 @@ function WinBtn({
   icon,
   onClick,
   className,
+  testId,
 }: {
   label: string;
   icon: IconName;
   onClick: () => void;
   className?: string;
+  testId?: string;
 }) {
   return (
     <button
       aria-label={label}
       title={label}
+      data-testid={testId}
       onClick={onClick}
       onPointerDown={(e) => e.stopPropagation()}
       className={cn(

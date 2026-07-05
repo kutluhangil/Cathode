@@ -64,6 +64,7 @@ export function Dock() {
           return (
             <button
               key={a.id}
+              data-testid={`dock-app-${a.id}`}
               onClick={() => toggleFromDock(a.id, a.name, a.defaultSize)}
               aria-label={t(a.name)}
               title={t(a.name)}

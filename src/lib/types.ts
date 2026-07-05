@@ -44,4 +44,6 @@ export interface AppDefinition {
   minSize?: { w: number; h: number };
   /** dock'a sabitlensin mi */
   pinned?: boolean;
+  /** emülatör gibi klavyeyi ele geçiren app — Esc pencereyi kapatmasın */
+  capturesKeyboard?: boolean;
 }

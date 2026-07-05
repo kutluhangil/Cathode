@@ -26,6 +26,7 @@ export function ResizeHandles({ start, onPointerMove, onPointerUp }: Props) {
       {handles.map((h) => (
         <div
           key={h.dir}
+          data-resize-dir={h.dir}
           className={`absolute z-20 ${h.cls}`}
           onPointerDown={start(h.dir)}
           onPointerMove={onPointerMove}

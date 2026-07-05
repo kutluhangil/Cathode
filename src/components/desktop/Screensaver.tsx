@@ -25,7 +25,7 @@ export function Screensaver() {
   const previewToken = useUiStore((s) => s.screensaverPreviewToken);
   const [active, setActive] = useState(false);
   const [previewing, setPreviewing] = useState(false);
-  const firstPreview = useRef(true);
+  const lastPreviewToken = useRef(previewToken);
 
   useEffect(() => {
     if (!enabled || !motionOn) {
@@ -46,12 +46,12 @@ export function Screensaver() {
     };
   }, [enabled, motionOn]);
 
-  // "şimdi önizle" — ilk mount'ta tetiklenmesin, sadece token artınca.
+  // "şimdi önizle" — yalnız token gerçekten değişince tetiklen. Önceki değerle
+  // karşılaştırma StrictMode'un çift effect çağrısına karşı güvenlidir (ilk
+  // mount'ta yanlışlıkla önizleme açılmaz).
   useEffect(() => {
-    if (firstPreview.current) {
-      firstPreview.current = false;
-      return;
-    }
+    if (lastPreviewToken.current === previewToken) return;
+    lastPreviewToken.current = previewToken;
     setPreviewing(true);
   }, [previewToken]);
 

@@ -36,8 +36,13 @@ export function useWindowMove(id: string, rect: Rect) {
   const onPointerDown = useCallback(
     (e: React.PointerEvent) => {
       if (e.button !== 0) return;
-      (e.target as HTMLElement).setPointerCapture?.(e.pointerId);
+      // state first — pointer capture is best-effort (may throw for synthetic pointers)
       state.current = { startX: e.clientX, startY: e.clientY, rect, moved: false };
+      try {
+        (e.target as HTMLElement).setPointerCapture?.(e.pointerId);
+      } catch {
+        /* capture unavailable — drag still tracked via move handler */
+      }
     },
     [rect],
   );
@@ -61,7 +66,11 @@ export function useWindowMove(id: string, rect: Rect) {
 
   const onPointerUp = useCallback(
     (e: React.PointerEvent) => {
-      (e.target as HTMLElement).releasePointerCapture?.(e.pointerId);
+      try {
+        (e.target as HTMLElement).releasePointerCapture?.(e.pointerId);
+      } catch {
+        /* nothing captured — ignore */
+      }
       const dragged = state.current?.moved ?? false;
       state.current = null;
       if (!dragged) return;
@@ -104,8 +113,13 @@ export function useWindowResize(id: string, rect: Rect) {
     (dir: ResizeDir) => (e: React.PointerEvent) => {
       if (e.button !== 0) return;
       e.stopPropagation();
-      (e.target as HTMLElement).setPointerCapture?.(e.pointerId);
+      // state first — pointer capture is best-effort (may throw for synthetic pointers)
       state.current = { startX: e.clientX, startY: e.clientY, rect, dir };
+      try {
+        (e.target as HTMLElement).setPointerCapture?.(e.pointerId);
+      } catch {
+        /* capture unavailable — resize still tracked via move handler */
+      }
     },
     [rect],
   );
@@ -137,7 +151,11 @@ export function useWindowResize(id: string, rect: Rect) {
   );
 
   const onPointerUp = useCallback((e: React.PointerEvent) => {
-    (e.target as HTMLElement).releasePointerCapture?.(e.pointerId);
+    try {
+      (e.target as HTMLElement).releasePointerCapture?.(e.pointerId);
+    } catch {
+      /* nothing captured — ignore */
+    }
     state.current = null;
   }, []);
 

@@ -19,6 +19,7 @@ const osApps: AppDefinition[] = enabledOs().map((os) => ({
   component: () => LazyEmulator({ os }),
   defaultSize: { w: 760, h: 560 },
   minSize: { w: 480, h: 360 },
+  capturesKeyboard: true,
 }));
 
 /** Etkin DOS oyunları için otomatik uygulama girişleri. */
@@ -30,6 +31,7 @@ const gameApps: AppDefinition[] = enabledGames().map((g) => ({
   component: () => LazyJsDos({ game: g }),
   defaultSize: { w: 720, h: 540 },
   minSize: { w: 480, h: 360 },
+  capturesKeyboard: true,
 }));
 
 /** Uygulama kayıt defteri — masaüstü, dock ve başlat menüsü buradan beslenir. */

@@ -17,6 +17,7 @@ export function DesktopIcon({ app, onOpen }: Props) {
 
   return (
     <button
+      data-testid={`desktop-icon-${app.id}`}
       onClick={onOpen}
       onFocus={() => setSelected(true)}
       onBlur={() => setSelected(false)}
