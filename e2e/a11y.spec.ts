@@ -25,3 +25,26 @@ test("focus stays trapped inside the focused window on Tab", async ({ page }) =>
     expect(inside).toBe(true);
   }
 });
+
+test("dock exposes a toolbar role", async ({ page }) => {
+  await expect(page.getByRole("toolbar")).toBeVisible();
+});
+
+test("Alt+Tab switcher exposes listbox options", async ({ page }) => {
+  await openAppFromDesktop(page, "notepad");
+  await openAppFromDesktop(page, "about");
+  await page.keyboard.down("Alt");
+  await page.keyboard.press("Tab");
+  await expect(page.getByRole("listbox")).toBeVisible();
+  expect(await page.getByRole("option").count()).toBeGreaterThanOrEqual(2);
+  await page.keyboard.up("Alt");
+});
+
+test("focus-visible ring is applied on keyboard focus", async ({ page }) => {
+  await page.keyboard.press("Tab");
+  const outline = await page.evaluate(() => {
+    const el = document.activeElement as HTMLElement | null;
+    return el ? getComputedStyle(el).outlineStyle : "none";
+  });
+  expect(outline).not.toBe("none");
+});

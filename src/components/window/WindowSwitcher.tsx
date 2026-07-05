@@ -75,12 +75,18 @@ export function WindowSwitcher() {
       aria-label={t("windows.switcher")}
       className="pointer-events-none fixed inset-0 z-[6500] flex items-center justify-center"
     >
-      <div className="flex items-center gap-2 rounded-ui bg-surface-2 p-3 shadow-float">
+      <div
+        role="listbox"
+        aria-label={t("windows.switcher")}
+        className="flex items-center gap-2 rounded-ui bg-surface-2 p-3 shadow-float"
+      >
         {order.map((w, i) => {
           const app = getApp(w.appId);
           return (
             <div
               key={w.id}
+              role="option"
+              aria-selected={i === index}
               className={cn(
                 "flex w-24 flex-col items-center gap-2 rounded-btn px-2 py-3 transition-colors",
                 i === index ? "bg-surface-3 ring-1 ring-accent" : "opacity-60",

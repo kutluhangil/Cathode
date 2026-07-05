@@ -32,7 +32,11 @@ export function Dock() {
 
   return (
     <div className="dock-wrap pointer-events-none absolute bottom-4 left-0 right-0 z-[2000] flex items-end justify-center px-4">
-      <div className="pointer-events-auto flex items-center gap-1.5 rounded-ui border border-border-soft bg-glass px-2 py-2 shadow-win">
+      <div
+        role="toolbar"
+        aria-label={t("dock.menu")}
+        className="pointer-events-auto flex items-center gap-1.5 rounded-ui border border-border-soft bg-glass px-2 py-2 shadow-win"
+      >
         {/* Cathode launcher — menü butonun üstüne çıpalanır */}
         <div className="relative">
           <AnimatePresence>

@@ -3,7 +3,7 @@ import type { Page } from "@playwright/test";
 import { bypassBoot, openAppFromDesktop } from "./helpers";
 
 // window geometry must be stable — disable entry animation for these drag/resize tests
-test.use({ reducedMotion: "reduce" });
+test.use({ contextOptions: { reducedMotion: "reduce" } });
 
 test.beforeEach(async ({ page }) => {
   await bypassBoot(page);
