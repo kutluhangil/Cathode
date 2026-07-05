@@ -37,6 +37,9 @@ export function ContextMenu({ x, y, items, onClose }: Props) {
       role="menu"
       style={{ left, top }}
       onContextMenu={(e) => e.preventDefault()}
+      // menü içi pointerdown pencereyi tetiklemesin — yoksa öğe onClick'ten
+      // önce menü kapanıp seçim kayboluyor
+      onPointerDown={(e) => e.stopPropagation()}
       className="fixed z-[5000] w-52 overflow-hidden rounded-ui bg-surface-2 p-1 shadow-float"
     >
       {items.map((it, i) => (
