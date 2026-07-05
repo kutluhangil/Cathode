@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { registerServiceWorker } from "@/lib/pwa";
+import { useT } from "@/lib/i18n/useT";
 import { CathodeMark, Icon } from "@/components/icons";
 
 interface BIPEvent extends Event {
@@ -16,6 +17,7 @@ const DISMISS_KEY = "cathode.installHint.dismissed";
 export function InstallHint() {
   const [evt, setEvt] = useState<BIPEvent | null>(null);
   const [show, setShow] = useState(false);
+  const t = useT();
 
   useEffect(() => {
     registerServiceWorker();
@@ -55,20 +57,20 @@ export function InstallHint() {
             <CathodeMark size={22} />
           </span>
           <div className="flex-1">
-            <p className="text-[13px] text-text">
-              {"Cathode'u uygulama olarak kur"}
+            <p className="text-[13px] text-text">{t("installHint.title")}</p>
+            <p className="text-[11px] text-text-dim">
+              {t("installHint.subtitle")}
             </p>
-            <p className="text-[11px] text-text-dim">masaüstünden tek tıkla aç</p>
           </div>
           <button
             onClick={install}
             className="rounded-btn bg-accent px-2.5 py-1 text-xs font-medium text-accent-ink"
           >
-            Kur
+            {t("installHint.install")}
           </button>
           <button
             onClick={dismiss}
-            aria-label="kapat"
+            aria-label={t("common.close")}
             className="text-text-dim hover:text-text"
           >
             <Icon name="close" size={14} />

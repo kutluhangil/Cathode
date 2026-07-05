@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { APPS } from "@/data/apps";
 import { useWindows } from "@/store/windowsStore";
+import { useT } from "@/lib/i18n/useT";
 import { AppIcon } from "@/components/ui/AppIcon";
 import { Icon } from "@/components/icons";
 import { cn } from "@/lib/cn";
@@ -17,6 +18,7 @@ export function StartMenu({ onClose }: Props) {
   const [q, setQ] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
   const open = useWindows((s) => s.open);
+  const t = useT();
 
   useEffect(() => {
     inputRef.current?.focus();
@@ -30,10 +32,10 @@ export function StartMenu({ onClose }: Props) {
     if (!term) return APPS;
     return APPS.filter(
       (a) =>
-        a.name.toLowerCase().includes(term) ||
-        a.description?.toLowerCase().includes(term),
+        t(a.name).toLowerCase().includes(term) ||
+        (a.description && t(a.description).toLowerCase().includes(term)),
     );
-  }, [q]);
+  }, [q, t]);
 
   const launch = (id: string, name: string, size: { w: number; h: number }) => {
     open(id, name, size);
@@ -59,7 +61,7 @@ export function StartMenu({ onClose }: Props) {
             ref={inputRef}
             value={q}
             onChange={(e) => setQ(e.target.value)}
-            placeholder="uygulama ara…"
+            placeholder={t("startMenu.searchPlaceholder")}
             className="w-full bg-transparent text-sm text-text outline-none placeholder:text-faint"
           />
         </div>
@@ -68,7 +70,7 @@ export function StartMenu({ onClose }: Props) {
       <div className="max-h-72 overflow-y-auto p-2">
         {results.length === 0 && (
           <p className="px-3 py-6 text-center text-xs text-text-dim">
-            sonuç yok
+            {t("startMenu.noResults")}
           </p>
         )}
         {results.map((a) => (
@@ -83,10 +85,10 @@ export function StartMenu({ onClose }: Props) {
           >
             <AppIcon app={a} size={36} />
             <span className="flex flex-col">
-              <span className="text-sm text-text">{a.name}</span>
+              <span className="text-sm text-text">{t(a.name)}</span>
               {a.description && (
                 <span className="text-[11px] text-text-dim">
-                  {a.description}
+                  {t(a.description)}
                 </span>
               )}
             </span>

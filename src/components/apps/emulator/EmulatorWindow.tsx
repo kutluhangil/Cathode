@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { V86Engine, type EmuPhase } from "@/lib/emu/v86Engine";
 import type { OsDefinition } from "@/data/os";
 import { cn } from "@/lib/cn";
+import { useT } from "@/lib/i18n/useT";
 import { Icon } from "@/components/icons";
 import { deleteState, hasState, readState, writeState } from "@/lib/persist";
 
@@ -13,12 +14,8 @@ interface Props {
   override?: ArrayBuffer;
 }
 
-const HINTS: Record<string, string> = {
-  downloading: "imaj indiriliyor…",
-  booting: "sistem başlatılıyor…",
-};
-
 export function EmulatorWindow({ os, override }: Props) {
+  const t = useT();
   const screenRef = useRef<HTMLDivElement>(null);
   const engineRef = useRef<V86Engine | null>(null);
   const [phase, setPhase] = useState<EmuPhase>("idle");
@@ -117,14 +114,14 @@ export function EmulatorWindow({ os, override }: Props) {
           )}
         />
         <div className="ml-auto flex items-center gap-1">
-          <Ctl onClick={reset}>sıfırla</Ctl>
+          <Ctl onClick={reset}>{t("emulator.reset")}</Ctl>
           <Ctl onClick={sleep} disabled={phase !== "ready" || sleeping}>
-            {sleeping ? "uyutuluyor…" : "uyut"}
+            {sleeping ? t("emulator.sleeping") : t("emulator.sleep")}
           </Ctl>
           <Ctl onClick={saveState} disabled={phase !== "ready"}>
-            indir
+            {t("emulator.download")}
           </Ctl>
-          <Ctl onClick={fullscreen}>tam ekran</Ctl>
+          <Ctl onClick={fullscreen}>{t("emulator.fullscreen")}</Ctl>
         </div>
       </div>
 
@@ -158,8 +155,10 @@ export function EmulatorWindow({ os, override }: Props) {
                 <span className="text-danger">
                   <Icon name="close" size={26} />
                 </span>
-                <p className="text-sm text-text">{error ?? "hata"}</p>
-                <Ctl onClick={() => location.reload()}>tekrar dene</Ctl>
+                <p className="text-sm text-text">
+                  {error ? t(error) : t("emulator.error")}
+                </p>
+                <Ctl onClick={() => location.reload()}>{t("common.retry")}</Ctl>
               </>
             ) : (
               <>
@@ -167,7 +166,11 @@ export function EmulatorWindow({ os, override }: Props) {
                   <Icon name="disk" size={30} />
                 </span>
                 <p className="font-mono text-xs text-text-dim">
-                  {HINTS[phase] ?? "hazırlanıyor…"}
+                  {phase === "downloading"
+                    ? t("emulator.hintDownloading")
+                    : phase === "booting"
+                      ? t("emulator.hintBooting")
+                      : t("emulator.preparing")}
                 </p>
                 {phase === "downloading" && (
                   <div className="h-px w-48 overflow-hidden bg-border">
@@ -186,17 +189,17 @@ export function EmulatorWindow({ os, override }: Props) {
         {phase === "ready" && savedSession && (
           <div className="absolute right-3 top-3 flex items-center gap-2 rounded-[10px] border border-accent/50 bg-void/85 px-3 py-2 backdrop-blur">
             <span className="font-mono text-[11px] text-text">
-              kayıtlı oturum var
+              {t("emulator.savedSession")}
             </span>
-            <Ctl onClick={resume}>devam et</Ctl>
-            <Ctl onClick={dropSession}>sil</Ctl>
+            <Ctl onClick={resume}>{t("emulator.resume")}</Ctl>
+            <Ctl onClick={dropSession}>{t("emulator.drop")}</Ctl>
           </div>
         )}
 
         {/* ekranı bırak ipucu */}
         {phase === "ready" && (
           <div className="pointer-events-none absolute bottom-2 left-1/2 -translate-x-1/2 rounded-full border border-border bg-void/70 px-3 py-1 font-mono text-[10px] text-text-dim">
-            tıkla = fareyi yakala · Esc = ekranı bırak
+            {t("emulator.captureHint")}
           </div>
         )}
       </div>

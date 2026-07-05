@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { useWindows } from "@/store/windowsStore";
 import { getApp } from "@/data/apps";
+import { useT } from "@/lib/i18n/useT";
 import { cn } from "@/lib/cn";
 import { windowVariants } from "@/lib/motion";
 import type { WindowInstance } from "@/lib/types";
@@ -19,6 +20,7 @@ interface Props {
 export function Window({ win, active, reduced }: Props) {
   const focus = useWindows((s) => s.focus);
   const resize = useWindowResize(win.id, win.rect);
+  const t = useT();
   const app = getApp(win.appId);
   if (!app) return null;
   const Body = app.component;
@@ -27,7 +29,7 @@ export function Window({ win, active, reduced }: Props) {
   return (
     <motion.div
       role="dialog"
-      aria-label={win.title}
+      aria-label={t(win.title)}
       variants={reduced ? undefined : windowVariants}
       initial={reduced ? false : "hidden"}
       animate="visible"

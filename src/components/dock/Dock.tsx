@@ -4,6 +4,7 @@ import { useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import { APPS } from "@/data/apps";
 import { useWindows } from "@/store/windowsStore";
+import { useT } from "@/lib/i18n/useT";
 import { cn } from "@/lib/cn";
 import { AppIcon } from "@/components/ui/AppIcon";
 import { CathodeMark } from "@/components/icons";
@@ -27,6 +28,7 @@ export function Dock() {
   ];
 
   const activeAppId = windows.find((w) => w.id === focusedId)?.appId;
+  const t = useT();
 
   return (
     <div className="dock-wrap pointer-events-none absolute bottom-4 left-0 right-0 z-[2000] flex items-end justify-center px-4">
@@ -38,7 +40,7 @@ export function Dock() {
           </AnimatePresence>
           <button
             onClick={() => setMenuOpen((v) => !v)}
-            aria-label="Cathode menüsü"
+            aria-label={t("dock.menu")}
             aria-expanded={menuOpen}
             className={cn(
               "flex h-11 w-11 items-center justify-center rounded-btn transition-all duration-150",
@@ -63,8 +65,8 @@ export function Dock() {
             <button
               key={a.id}
               onClick={() => toggleFromDock(a.id, a.name, a.defaultSize)}
-              aria-label={a.name}
-              title={a.name}
+              aria-label={t(a.name)}
+              title={t(a.name)}
               className="group relative flex h-11 w-11 items-center justify-center"
             >
               <span

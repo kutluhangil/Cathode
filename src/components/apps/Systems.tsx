@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { OS_LIST, type OsDefinition, type DiskDrive } from "@/data/os";
 import { useWindows } from "@/store/windowsStore";
+import { useT } from "@/lib/i18n/useT";
 import { cn } from "@/lib/cn";
 import { AppIcon } from "@/components/ui/AppIcon";
 import { Icon } from "@/components/icons";
@@ -17,6 +18,7 @@ interface RunTarget {
 
 export function Systems() {
   const open = useWindows((s) => s.open);
+  const t = useT();
   const [run, setRun] = useState<RunTarget | null>(null);
 
   if (run) {
@@ -26,7 +28,7 @@ export function Systems() {
           onClick={() => setRun(null)}
           className="flex shrink-0 items-center gap-1.5 border-b border-border-soft px-3 py-1.5 text-left font-mono text-[11px] text-text-dim hover:text-text"
         >
-          <Icon name="chevron-left" size={11} /> kataloğa dön
+          <Icon name="chevron-left" size={11} /> {t("systems.back")}
         </button>
         <div className="flex-1">
           <LazyEmulator os={run.os} override={run.buffer} />
@@ -38,17 +40,15 @@ export function Systems() {
   return (
     <div className="h-full overflow-y-auto p-5">
       <h2 className="phosphor mb-1 text-lg font-semibold tracking-tight text-text">
-        Sistemler
+        {t("systems.title")}
       </h2>
-      <p className="mb-5 text-xs text-text-dim">
-        Tarayıcıda, izole çalışır. Emüle sistemler internete bağlı değildir.
-      </p>
+      <p className="mb-5 text-xs text-text-dim">{t("systems.intro")}</p>
 
       {/* Kendi imajını aç — öne çıkan */}
       <ByoiCard onRun={setRun} />
 
       <h3 className="mb-2 mt-6 font-mono text-[11px] uppercase tracking-widest text-text-dim">
-        hazır sistemler
+        {t("systems.readySystems")}
       </h3>
       <div className="grid grid-cols-2 gap-3">
         {OS_LIST.map((os) => (
@@ -66,18 +66,18 @@ export function Systems() {
               <span className="text-sm text-text">{os.name}</span>
               {!os.enabled && (
                 <span className="ml-auto rounded-btn border border-border-soft px-2 py-0.5 font-mono text-[9px] text-text-dim">
-                  {os.byoi ? "kendi imajın" : "yakında"}
+                  {os.byoi ? t("systems.badgeByoi") : t("systems.badgeSoon")}
                 </span>
               )}
             </div>
             <p className="mb-3 h-8 text-[11px] leading-tight text-text-dim">
-              {os.description}
+              {t(os.description)}
             </p>
             {os.byoi ? (
               // Telifli sistem: imaj gömülmez — kullanıcı kendi kopyasını seçer,
               // bu OS'in donanım profiliyle (RAM/VGA/drive) tarayıcıda açılır.
               <label className="block w-full cursor-pointer rounded-btn border border-accent/40 py-1.5 text-center text-xs font-medium text-accent transition-colors hover:bg-accent/10">
-                kendi imajınla aç
+                {t("systems.openWithOwn")}
                 <input
                   type="file"
                   accept=".img,.iso,.bin"
@@ -102,7 +102,7 @@ export function Systems() {
                     : "cursor-not-allowed bg-surface-2 text-faint",
                 )}
               >
-                {os.enabled ? "aç" : "imaj hazırlanıyor"}
+                {os.enabled ? t("systems.open") : t("systems.preparing")}
               </button>
             )}
           </div>
@@ -113,6 +113,7 @@ export function Systems() {
 }
 
 function ByoiCard({ onRun }: { onRun: (t: RunTarget) => void }) {
+  const t = useT();
   const [tab, setTab] = useState<"dosya" | "url">("dosya");
   const [drive, setDrive] = useState<DiskDrive>("hda");
   const [url, setUrl] = useState("");
@@ -124,14 +125,14 @@ function ByoiCard({ onRun }: { onRun: (t: RunTarget) => void }) {
     id: "byoi",
     name,
     glyph: "⊕",
-    description: "kendi imajın",
+    description: t("systems.badgeByoi"),
     engine: "v86",
     drive,
     image,
     memoryMB: 512,
     vgaMB: 32,
     enabled: true,
-    license: "kullanıcı imajı — yalnız bu tarayıcıda",
+    license: t("systems.byoiLicense"),
   });
 
   const runFile = async (file: File) => {
@@ -154,14 +155,14 @@ function ByoiCard({ onRun }: { onRun: (t: RunTarget) => void }) {
       } catch {
         /* HEAD engellenebilir; async'siz tam indirmeye düşeriz */
       }
-      const name = u.split("/").pop() || "uzak imaj";
+      const name = u.split("/").pop() || t("systems.remoteImage");
       const image =
         size > 0
           ? { url: u, async: true as const, size }
           : { url: u };
       onRun({ os: makeOs(name, image) });
     } catch (e) {
-      setErr(e instanceof Error ? e.message : "yüklenemedi");
+      setErr(e instanceof Error ? e.message : t("systems.loadFailed"));
     } finally {
       setBusy(false);
     }
@@ -174,29 +175,30 @@ function ByoiCard({ onRun }: { onRun: (t: RunTarget) => void }) {
           <Icon name="upload" size={16} />
         </span>
         <h3 className="text-sm font-medium text-text">
-          Kendi işletim sistemini aç
+          {t("systems.byoiTitle")}
         </h3>
       </div>
       <p className="mb-3 text-[11px] leading-tight text-text-dim">
-        Windows XP dahil kendi <code>.img/.iso</code> imajın. Sunucuya gitmez,
-        yalnızca senin tarayıcında izole çalışır.
+        {t("systems.byoiDescPre")}
+        <code>.img/.iso</code>
+        {t("systems.byoiDescPost")}
       </p>
 
       {/* sekmeler + disk türü */}
       <div className="mb-3 flex items-center justify-between">
         <div className="flex overflow-hidden rounded-btn border border-border-soft text-[11px]">
-          {(["dosya", "url"] as const).map((t) => (
+          {(["dosya", "url"] as const).map((tabId) => (
             <button
-              key={t}
-              onClick={() => setTab(t)}
+              key={tabId}
+              onClick={() => setTab(tabId)}
               className={cn(
                 "px-3 py-1 font-mono uppercase",
-                tab === t
+                tab === tabId
                   ? "bg-accent text-accent-ink"
                   : "text-text-dim hover:text-text",
               )}
             >
-              {t}
+              {tabId === "dosya" ? t("systems.tabFile") : t("systems.tabUrl")}
             </button>
           ))}
         </div>
@@ -205,7 +207,13 @@ function ByoiCard({ onRun }: { onRun: (t: RunTarget) => void }) {
             <button
               key={d}
               onClick={() => setDrive(d)}
-              title={d === "hda" ? "sabit disk" : d === "fda" ? "disket" : "CD"}
+              title={
+                d === "hda"
+                  ? t("systems.driveHda")
+                  : d === "fda"
+                    ? t("systems.driveFda")
+                    : t("systems.driveCd")
+              }
               className={cn(
                 "px-2 py-1 font-mono uppercase",
                 drive === d
@@ -240,7 +248,7 @@ function ByoiCard({ onRun }: { onRun: (t: RunTarget) => void }) {
           <span className="text-text-dim">
             <Icon name="upload" size={20} />
           </span>
-          <span className="text-xs text-text">.img / .iso sürükle ya da seç</span>
+          <span className="text-xs text-text">{t("systems.dropzone")}</span>
           <input
             type="file"
             accept=".img,.iso,.bin"
@@ -265,14 +273,14 @@ function ByoiCard({ onRun }: { onRun: (t: RunTarget) => void }) {
             disabled={busy || !url.trim()}
             className="rounded-btn bg-accent px-3 py-2 text-xs font-medium text-accent-ink disabled:opacity-40"
           >
-            {busy ? "…" : "aç"}
+            {busy ? "…" : t("systems.open")}
           </button>
         </div>
       )}
 
       {tab === "url" && (
         <p className="mt-2 text-[10px] leading-tight text-text-dim/80">
-          URL, CORS izni veren bir kaynakta olmalı (kendi R2/sunucun gibi).
+          {t("systems.urlNote")}
         </p>
       )}
       {err && <p className="mt-2 text-[11px] text-danger">{err}</p>}

@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { APPS } from "@/data/apps";
 import { useWindows } from "@/store/windowsStore";
 import { useSettings } from "@/store/settingsStore";
+import { useT } from "@/lib/i18n/useT";
 import { stagger, riseItem } from "@/lib/motion";
 import type { WallpaperId } from "@/lib/types";
 import { Wallpaper } from "./Wallpaper";
@@ -31,6 +32,7 @@ export function Desktop() {
   const setWallpaper = useSettings((s) => s.setWallpaper);
   const [menu, setMenu] = useState<{ x: number; y: number } | null>(null);
   const [spin, setSpin] = useState(0); // "yenile" görsel geri bildirimi
+  const t = useT();
 
   const cycleWallpaper = () => {
     const i = WP_ORDER.indexOf(wallpaper);
@@ -43,15 +45,15 @@ export function Desktop() {
   };
 
   const menuItems: MenuItem[] = [
-    { label: "Yenile", icon: "refresh", onClick: () => setSpin((s) => s + 1) },
-    { label: "Duvar kâğıdını değiştir", icon: "image", onClick: cycleWallpaper },
+    { label: t("menu.refresh"), icon: "refresh", onClick: () => setSpin((s) => s + 1) },
+    { label: t("menu.changeWallpaper"), icon: "image", onClick: cycleWallpaper },
     {
-      label: "Ayarlar",
+      label: t("menu.settings"),
       icon: "settings",
       onClick: () => openApp("settings"),
       divider: true,
     },
-    { label: "Hakkında", icon: "info", onClick: () => openApp("about") },
+    { label: t("menu.about"), icon: "info", onClick: () => openApp("about") },
   ];
 
   return (
@@ -84,8 +86,7 @@ export function Desktop() {
         onClick={() => openApp("about")}
         className="desk-disclaimer absolute bottom-5 left-4 z-[1000] max-w-[240px] text-left font-mono text-[10px] leading-tight text-text-dim/70 transition-colors hover:text-text-dim"
       >
-        hobi / arşiv / eğitim projesi · emülasyon açık kaynak · reklam yok ·
-        detay için tıkla
+        {t("menu.disclaimer")}
       </button>
 
       <WindowManager />

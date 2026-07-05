@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { GAME_LIST, type GameDefinition } from "@/data/games";
 import { useWindows } from "@/store/windowsStore";
+import { useT } from "@/lib/i18n/useT";
 import { cn } from "@/lib/cn";
 import { AppIcon } from "@/components/ui/AppIcon";
 import { Icon } from "@/components/icons";
@@ -12,6 +13,7 @@ const SIZE = { w: 720, h: 540 };
 
 export function Games() {
   const open = useWindows((s) => s.open);
+  const t = useT();
   const [byog, setByog] = useState<{
     game: GameDefinition;
     url: string;
@@ -31,7 +33,7 @@ export function Games() {
           onClick={() => setByog(null)}
           className="flex shrink-0 items-center gap-1.5 border-b border-border-soft px-3 py-1.5 text-left font-mono text-[11px] text-text-dim hover:text-text"
         >
-          <Icon name="chevron-left" size={11} /> oyunlara dön
+          <Icon name="chevron-left" size={11} /> {t("games.back")}
         </button>
         <div className="flex-1">
           <LazyJsDos game={byog.game} override={byog.url} />
@@ -49,10 +51,10 @@ export function Games() {
         id: "byog",
         name: file.name,
         glyph: "✦",
-        description: "kendi oyunun",
+        description: t("games.byogDesc"),
         bundle: { url },
         enabled: true,
-        license: "kullanıcı içeriği — yalnız bu tarayıcıda",
+        license: t("games.byogLicense"),
       },
       url,
     });
@@ -61,11 +63,9 @@ export function Games() {
   return (
     <div className="h-full overflow-y-auto p-5">
       <h2 className="phosphor mb-1 text-lg font-semibold tracking-tight text-text">
-        Oyunlar
+        {t("games.title")}
       </h2>
-      <p className="mb-5 text-xs text-text-dim">
-        DOSBox-X üzerinde, tarayıcıda. Yalnızca telifsiz/serbest içerik.
-      </p>
+      <p className="mb-5 text-xs text-text-dim">{t("games.intro")}</p>
 
       <div className="grid grid-cols-2 gap-3">
         {GAME_LIST.map((g) => (
@@ -80,15 +80,15 @@ export function Games() {
           >
             <div className="mb-2 flex items-center gap-2.5">
               <AppIcon app={{ id: `game-${g.id}` }} size={22} />
-              <span className="text-sm text-text">{g.name}</span>
+              <span className="text-sm text-text">{t(g.name)}</span>
               {!g.enabled && (
                 <span className="ml-auto rounded-btn border border-border-soft px-2 py-0.5 font-mono text-[9px] text-text-dim">
-                  yakında
+                  {t("games.badgeSoon")}
                 </span>
               )}
             </div>
             <p className="mb-3 h-8 text-[11px] leading-tight text-text-dim">
-              {g.description}
+              {t(g.description)}
             </p>
             <button
               disabled={!g.enabled}
@@ -100,7 +100,7 @@ export function Games() {
                   : "cursor-not-allowed bg-surface-2 text-faint",
               )}
             >
-              {g.enabled ? "oyna" : "bundle hazırlanıyor"}
+              {g.enabled ? t("games.play") : t("games.preparing")}
             </button>
           </div>
         ))}
@@ -108,16 +108,14 @@ export function Games() {
 
       <div className="mt-5">
         <h3 className="mb-2 font-mono text-[11px] uppercase tracking-widest text-text-dim">
-          kendi oyununu yükle
+          {t("games.byogTitle")}
         </h3>
         <label className="flex cursor-pointer flex-col items-center justify-center gap-1.5 rounded-ui border border-dashed border-border py-6 text-center transition-colors hover:border-accent/50">
           <span className="text-text-dim">
             <Icon name="upload" size={20} />
           </span>
-          <span className="text-xs text-text">.jsdos / .zip seç</span>
-          <span className="text-[10px] text-text-dim">
-            sunucuya gitmez — yalnız senin tarayıcında çalışır
-          </span>
+          <span className="text-xs text-text">{t("games.byogPick")}</span>
+          <span className="text-[10px] text-text-dim">{t("games.byogNote")}</span>
           <input
             type="file"
             accept=".jsdos,.zip"

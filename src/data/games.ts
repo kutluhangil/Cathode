@@ -21,18 +21,19 @@ export interface GameDefinition {
 export const GAME_LIST: GameDefinition[] = [
   {
     id: "freedos-edit",
-    name: "FreeDOS araçları",
+    // name/description i18n anahtarı — görünen yerde useT ile çözülür
+    name: "games.freedosEditName",
     glyph: "▷",
-    description: "Açık kaynak DOS araç seti",
+    description: "games.freedosEditDesc",
     bundle: { url: "https://r2.example/freedos-tools.jsdos" },
     enabled: false,
     license: "açık kaynak (GPL)",
   },
   {
     id: "doom-shareware",
-    name: "Doom (shareware)",
+    name: "games.doomName",
     glyph: "✦",
-    description: "Serbest dağıtılan shareware bölümü",
+    description: "games.doomDesc",
     bundle: { url: "https://r2.example/doom-sw.jsdos" },
     enabled: false,
     license: "shareware — serbest dağıtılır",

@@ -1,6 +1,7 @@
 "use client";
 
 import { useWindows } from "@/store/windowsStore";
+import { useT } from "@/lib/i18n/useT";
 import { cn } from "@/lib/cn";
 import { AppIcon } from "@/components/ui/AppIcon";
 import { Icon, type IconName } from "@/components/icons";
@@ -22,6 +23,7 @@ export function TitleBar({ win, active }: Props) {
   const toggleMaximize = useWindows((s) => s.toggleMaximize);
   const close = useWindows((s) => s.close);
   const maximized = win.status === "maximized";
+  const t = useT();
 
   return (
     <div className="shrink-0">
@@ -44,18 +46,18 @@ export function TitleBar({ win, active }: Props) {
             active ? "text-text" : "text-faint",
           )}
         >
-          {win.title}
+          {t(win.title)}
         </span>
 
         <div className="flex items-center gap-1">
-          <WinBtn label="küçült" icon="minimize" onClick={() => minimize(win.id)} />
+          <WinBtn label={t("common.minimize")} icon="minimize" onClick={() => minimize(win.id)} />
           <WinBtn
-            label={maximized ? "geri yükle" : "büyüt"}
+            label={maximized ? t("common.restore") : t("common.maximize")}
             icon={maximized ? "restore" : "maximize"}
             onClick={() => toggleMaximize(win.id)}
           />
           <WinBtn
-            label="kapat"
+            label={t("common.close")}
             icon="close"
             onClick={() => close(win.id)}
             className="hover:bg-danger/90 hover:text-white"

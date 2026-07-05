@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useWindows } from "@/store/windowsStore";
+import { useT } from "@/lib/i18n/useT";
 import { getApp } from "@/data/apps";
 import { cn } from "@/lib/cn";
 import { AppIcon } from "@/components/ui/AppIcon";
@@ -15,6 +16,7 @@ import type { WindowInstance } from "@/lib/types";
  */
 export function WindowSwitcher() {
   const focus = useWindows((s) => s.focus);
+  const t = useT();
   // açıkken sıralama sabit kalır (MRU: z'ye göre) — her Tab'da kaymasın
   const [order, setOrder] = useState<WindowInstance[] | null>(null);
   const [index, setIndex] = useState(0);
@@ -70,7 +72,7 @@ export function WindowSwitcher() {
   return (
     <div
       role="dialog"
-      aria-label="pencere değiştirici"
+      aria-label={t("windows.switcher")}
       className="pointer-events-none fixed inset-0 z-[6500] flex items-center justify-center"
     >
       <div className="flex items-center gap-2 rounded-ui bg-surface-2 p-3 shadow-float">
@@ -91,7 +93,7 @@ export function WindowSwitcher() {
                   i === index ? "text-text" : "text-text-dim",
                 )}
               >
-                {app?.name ?? w.title}
+                {t(app?.name ?? w.title)}
               </span>
             </div>
           );

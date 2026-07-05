@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { APPS } from "@/data/apps";
 import { useWindows } from "@/store/windowsStore";
 import { useSettings } from "@/store/settingsStore";
+import { useT } from "@/lib/i18n/useT";
 import { cn } from "@/lib/cn";
 import { BOOT_KEY } from "@/lib/layout";
 import { AppIcon } from "@/components/ui/AppIcon";
@@ -28,6 +29,7 @@ export function CommandPalette() {
 
   const openWin = useWindows((s) => s.open);
   const s = useSettings();
+  const t = useT();
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -50,8 +52,8 @@ export function CommandPalette() {
   const entries = useMemo<Entry[]>(() => {
     const apps: Entry[] = APPS.map((a) => ({
       id: `app-${a.id}`,
-      label: a.name,
-      hint: a.description,
+      label: t(a.name),
+      hint: a.description ? t(a.description) : undefined,
       icon: { appId: a.id },
       action: () => openWin(a.id, a.name, a.defaultSize),
     }));
@@ -59,33 +61,38 @@ export function CommandPalette() {
       ["phosphor", "blueprint", "testcard", "void", "photo"] as WallpaperId[]
     ).map((w) => ({
       id: `wp-${w}`,
-      label: `duvar kâğıdı: ${w}`,
+      label: t("commandPalette.wallpaper", { name: w }),
       icon: "image" as IconName,
       action: () => s.setWallpaper(w),
     }));
     const system: Entry[] = [
       {
         id: "crt",
-        label: s.crt ? "CRT efektlerini kapat" : "CRT efektlerini aç",
+        label: s.crt ? t("commandPalette.crtOff") : t("commandPalette.crtOn"),
         icon: "crt",
         action: s.toggleCrt,
       },
       {
         id: "monitor",
-        label: s.monitor ? "monitör modunu kapat" : "monitör modunu aç",
+        label: s.monitor
+          ? t("commandPalette.monitorOff")
+          : t("commandPalette.monitorOn"),
         icon: "monitor",
         action: s.toggleMonitor,
       },
       {
         id: "accent",
-        label: `accent: ${s.accent === "amber" ? "yeşile" : "ambere"} geç`,
+        label:
+          s.accent === "amber"
+            ? t("commandPalette.accentToGreen")
+            : t("commandPalette.accentToAmber"),
         icon: "palette",
         action: s.toggleAccent,
       },
       {
         id: "reboot",
-        label: "yeniden başlat",
-        hint: "boot sekansını tekrar oynat",
+        label: t("commandPalette.reboot"),
+        hint: t("commandPalette.rebootHint"),
         icon: "power",
         action: () => {
           sessionStorage.removeItem(BOOT_KEY);
@@ -94,7 +101,7 @@ export function CommandPalette() {
       },
     ];
     return [...apps, ...system, ...wallpapers];
-  }, [openWin, s]);
+  }, [openWin, s, t]);
 
   const results = useMemo(() => {
     const term = q.trim().toLowerCase();
@@ -141,7 +148,7 @@ export function CommandPalette() {
             transition={{ duration: 0.14, ease: [0.16, 1, 0.3, 1] }}
             onPointerDown={(e) => e.stopPropagation()}
             role="dialog"
-            aria-label="komut paleti"
+            aria-label={t("commandPalette.dialog")}
             className="w-[440px] max-w-[calc(100vw-32px)] overflow-hidden rounded-ui bg-surface-2 shadow-float"
           >
             <div className="flex items-center gap-2 border-b border-border-soft px-3 py-2.5">
@@ -156,7 +163,7 @@ export function CommandPalette() {
                   setIndex(0);
                 }}
                 onKeyDown={onInputKey}
-                placeholder="uygulama ya da komut ara…"
+                placeholder={t("commandPalette.searchPlaceholder")}
                 className="w-full bg-transparent font-mono text-sm text-text outline-none placeholder:text-faint"
               />
               <kbd className="rounded-btn border border-border-soft px-1.5 py-0.5 font-mono text-[9px] text-faint">
@@ -166,7 +173,7 @@ export function CommandPalette() {
             <div className="max-h-72 overflow-y-auto p-1.5">
               {results.length === 0 && (
                 <p className="px-3 py-5 text-center font-mono text-xs text-faint">
-                  sonuç yok
+                  {t("common.noResults")}
                 </p>
               )}
               {results.map((e, i) => (

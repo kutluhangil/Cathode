@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { APPS } from "@/data/apps";
 import { useWindows } from "@/store/windowsStore";
 import { useSettings } from "@/store/settingsStore";
+import { useT } from "@/lib/i18n/useT";
 import { cn } from "@/lib/cn";
 import { BOOT_KEY } from "@/lib/layout";
 import { CathodeMark, Icon, type IconName } from "@/components/icons";
@@ -24,6 +25,9 @@ export function SystemBar() {
   const toggleCrt = useSettings((s) => s.toggleCrt);
   const monitor = useSettings((s) => s.monitor);
   const toggleMonitor = useSettings((s) => s.toggleMonitor);
+  const lang = useSettings((s) => s.lang);
+  const setLang = useSettings((s) => s.setLang);
+  const t = useT();
 
   // dışarı tıklayınca sistem menüsü kapanır
   useEffect(() => {
@@ -52,7 +56,7 @@ export function SystemBar() {
       <div ref={menuRef} className="relative">
         <button
           onClick={() => setMenuOpen((v) => !v)}
-          aria-label="Cathode sistem menüsü"
+          aria-label={t("systemBar.menu")}
           aria-expanded={menuOpen}
           className={cn(
             "flex h-[22px] items-center gap-1.5 rounded-btn px-2 font-mono text-[12px] transition-colors",
@@ -77,14 +81,14 @@ export function SystemBar() {
               role="menu"
               className="absolute left-0 top-full mt-1.5 w-52 overflow-hidden rounded-ui bg-surface-2 p-1 shadow-float"
             >
-              <SysItem icon="info" label="Hakkında" onClick={() => openApp("about")} />
+              <SysItem icon="info" label={t("menu.about")} onClick={() => openApp("about")} />
               <SysItem
                 icon="settings"
-                label="Ayarlar"
+                label={t("menu.settings")}
                 onClick={() => openApp("settings")}
               />
               <div className="my-1 h-px bg-border-soft" />
-              <SysItem icon="power" label="Yeniden başlat" onClick={reboot} />
+              <SysItem icon="power" label={t("systemBar.reboot")} onClick={reboot} />
             </motion.div>
           )}
         </AnimatePresence>
@@ -94,8 +98,8 @@ export function SystemBar() {
       <div className="flex items-center gap-1">
         <button
           onClick={toggleAccent}
-          aria-label="accent rengini değiştir"
-          title="accent"
+          aria-label={t("systemBar.accent")}
+          title={t("systemBar.accentShort")}
           className="flex h-[22px] w-[22px] items-center justify-center rounded-btn transition-colors hover:bg-surface-3"
         >
           <span
@@ -108,16 +112,24 @@ export function SystemBar() {
         </button>
         <TrayToggle
           icon="crt"
-          label="CRT efektlerini aç/kapa"
+          label={t("systemBar.crt")}
           active={crt}
           onClick={toggleCrt}
         />
         <TrayToggle
           icon="monitor"
-          label="monitör modunu aç/kapa"
+          label={t("systemBar.monitor")}
           active={monitor}
           onClick={toggleMonitor}
         />
+        <button
+          onClick={() => setLang(lang === "tr" ? "en" : "tr")}
+          aria-label={t("systemBar.language")}
+          title={t("systemBar.language")}
+          className="flex h-[22px] items-center rounded-btn px-1.5 font-mono text-[11px] text-text-dim transition-colors hover:bg-surface-3 hover:text-text"
+        >
+          {lang === "tr" ? "TR" : "EN"}
+        </button>
         <div className="mx-1.5 h-4 w-px bg-border-soft" />
         <Clock />
       </div>

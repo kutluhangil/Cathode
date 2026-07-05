@@ -78,7 +78,8 @@ export class V86Engine {
     });
     this.vm.add_listener("download-error", () => {
       this.cb.onPhase?.("error");
-      this.cb.onError?.("imaj indirilemedi");
+      // i18n anahtarı — EmulatorWindow t() ile çözer
+      this.cb.onError?.("emulator.downloadFailed");
     });
     // loaded, ready'den sonra da gelebiliyor — hazır fazını geri düşürme
     this.vm.add_listener("emulator-loaded", () => {

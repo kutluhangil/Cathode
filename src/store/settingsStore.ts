@@ -3,8 +3,11 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type { AccentName, WallpaperId } from "@/lib/types";
+import type { Lang } from "@/lib/i18n/types";
 
 interface SettingsState {
+  /** arayüz dili — TR/EN canlı geçiş */
+  lang: Lang;
   accent: AccentName;
   crt: boolean;
   /** fiziksel "Cathode 5100" monitör çerçevesi (bezel + LED) */
@@ -28,6 +31,7 @@ interface SettingsState {
   setWallpaper: (w: WallpaperId) => void;
   /** yeni rastgele fotoğraf çek (photo duvar kâğıdı) */
   shufflePhoto: () => void;
+  setLang: (l: Lang) => void;
 }
 
 const VALID_WALLPAPERS: WallpaperId[] = [
@@ -44,6 +48,7 @@ const VALID_WALLPAPERS: WallpaperId[] = [
 export const useSettings = create<SettingsState>()(
   persist(
     (set) => ({
+      lang: "tr",
       accent: "amber",
       crt: true, // spec §4: CRT varsayılan hafif açık
       monitor: false, // spec v2 §9: monitör modu varsayılan kapalı
@@ -65,10 +70,11 @@ export const useSettings = create<SettingsState>()(
       setWallpaper: (wallpaper) => set({ wallpaper }),
       shufflePhoto: () =>
         set((s) => ({ wallpaper: "photo", photoSeed: s.photoSeed + 1 })),
+      setLang: (lang) => set({ lang }),
     }),
     {
       name: "cathode.settings",
-      version: 2,
+      version: 3,
       // v1 → v2: eski duvar kâğıdı adları (horizon/aurora/grid/monolith) kalktı
       migrate: (persisted) => {
         const s = (persisted ?? {}) as Partial<SettingsState>;
@@ -79,6 +85,8 @@ export const useSettings = create<SettingsState>()(
           s.wallpaper = "phosphor";
         }
         if (typeof s.monitor !== "boolean") s.monitor = false;
+        // v2 → v3: dil alanı eklendi
+        if (s.lang !== "tr" && s.lang !== "en") s.lang = "tr";
         return s as SettingsState;
       },
     },

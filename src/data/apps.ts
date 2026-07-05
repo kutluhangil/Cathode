@@ -36,9 +36,10 @@ const gameApps: AppDefinition[] = enabledGames().map((g) => ({
 const baseApps: AppDefinition[] = [
   {
     id: "about",
-    name: "Hakkında",
+    // name/description i18n anahtarı — görünen yerde useT ile çözülür
+    name: "apps.about",
     glyph: "◈",
-    description: "Cathode nedir, yasal not",
+    description: "apps.aboutDesc",
     component: About,
     defaultSize: { w: 520, h: 460 },
     minSize: { w: 360, h: 320 },
@@ -46,9 +47,9 @@ const baseApps: AppDefinition[] = [
   },
   {
     id: "settings",
-    name: "Ayarlar",
+    name: "apps.settings",
     glyph: "⚙",
-    description: "Tema, CRT, duvar kâğıdı",
+    description: "apps.settingsDesc",
     component: Settings,
     defaultSize: { w: 640, h: 520 },
     minSize: { w: 520, h: 400 },
@@ -56,9 +57,9 @@ const baseApps: AppDefinition[] = [
   },
   {
     id: "notepad",
-    name: "Not defteri",
+    name: "apps.notepad",
     glyph: "▱",
-    description: "Hızlı notlar (kalıcı)",
+    description: "apps.notepadDesc",
     component: Notepad,
     defaultSize: { w: 460, h: 420 },
     minSize: { w: 300, h: 240 },
@@ -66,9 +67,9 @@ const baseApps: AppDefinition[] = [
   },
   {
     id: "terminal",
-    name: "Terminal",
+    name: "apps.terminal",
     glyph: ">_",
-    description: "Cathode shell · komutla yönet",
+    description: "apps.terminalDesc",
     component: Terminal,
     defaultSize: { w: 560, h: 400 },
     minSize: { w: 360, h: 260 },
@@ -76,9 +77,9 @@ const baseApps: AppDefinition[] = [
   },
   {
     id: "systems",
-    name: "Sistemler",
+    name: "apps.systems",
     glyph: "▦",
-    description: "Emülatör · OS kataloğu + kendi imajın",
+    description: "apps.systemsDesc",
     component: Systems,
     defaultSize: { w: 560, h: 560 },
     minSize: { w: 420, h: 400 },
@@ -86,9 +87,9 @@ const baseApps: AppDefinition[] = [
   },
   {
     id: "games",
-    name: "Oyunlar",
+    name: "apps.games",
     glyph: "✦",
-    description: "DOS oyunları · js-dos + kendi bundle'ın",
+    description: "apps.gamesDesc",
     component: Games,
     defaultSize: { w: 560, h: 560 },
     minSize: { w: 420, h: 400 },

@@ -1,7 +1,6 @@
 "use client";
 
-import { useState } from "react";
-import { cn } from "@/lib/cn";
+import { useSettings } from "@/store/settingsStore";
 import { CathodeMark } from "@/components/icons";
 
 const COPY = {
@@ -30,7 +29,7 @@ const SPECS: [string, string][] = [
 ];
 
 export function About() {
-  const [lang, setLang] = useState<"tr" | "en">("tr");
+  const lang = useSettings((s) => s.lang);
   const t = COPY[lang];
 
   return (
@@ -46,22 +45,6 @@ export function About() {
             </h2>
             <p className="mt-1 max-w-sm text-sm text-text-dim">{t.tagline}</p>
           </div>
-        </div>
-        <div className="flex overflow-hidden rounded-btn border border-border-soft text-xs">
-          {(["tr", "en"] as const).map((l) => (
-            <button
-              key={l}
-              onClick={() => setLang(l)}
-              className={cn(
-                "px-2.5 py-1 uppercase transition-colors",
-                lang === l
-                  ? "bg-accent text-accent-ink"
-                  : "text-text-dim hover:text-text",
-              )}
-            >
-              {l}
-            </button>
-          ))}
         </div>
       </div>
 

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { cn } from "@/lib/cn";
+import { useT } from "@/lib/i18n/useT";
 import { AppIcon } from "@/components/ui/AppIcon";
 import type { AppDefinition } from "@/lib/types";
 
@@ -12,6 +13,7 @@ interface Props {
 
 export function DesktopIcon({ app, onOpen }: Props) {
   const [selected, setSelected] = useState(false);
+  const t = useT();
 
   return (
     <button
@@ -21,7 +23,7 @@ export function DesktopIcon({ app, onOpen }: Props) {
       onKeyDown={(e) => {
         if (e.key === "Enter") onOpen();
       }}
-      aria-label={app.name}
+      aria-label={t(app.name)}
       className={cn(
         "group flex w-20 flex-col items-center gap-1.5 rounded-[10px] p-2 text-center outline-none transition-colors",
         selected ? "bg-accent/15" : "hover:bg-white/5",
@@ -39,7 +41,7 @@ export function DesktopIcon({ app, onOpen }: Props) {
         <AppIcon app={app} size={48} />
       </span>
       <span className="line-clamp-2 text-[11px] leading-tight text-text/90 [text-shadow:0_1px_3px_rgba(0,0,0,0.8)]">
-        {app.name}
+        {t(app.name)}
       </span>
     </button>
   );

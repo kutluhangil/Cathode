@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { GameDefinition } from "@/data/games";
+import { useT } from "@/lib/i18n/useT";
 import { Icon } from "@/components/icons";
 
 // js-dos v8 global (npm paketi tip/ESM sağlamaz — global script ile yüklenir).
@@ -38,7 +39,7 @@ function loadJsDos(): Promise<void> {
     s.src = SCRIPT_SRC;
     s.async = true;
     s.onload = () => resolve();
-    s.onerror = () => reject(new Error("js-dos yüklenemedi"));
+    s.onerror = () => reject(new Error("emulator.jsdosLoadFailed"));
     document.head.appendChild(s);
   });
   return scriptPromise;
@@ -51,6 +52,7 @@ interface Props {
 }
 
 export function JsDosScreen({ game, override }: Props) {
+  const t = useT();
   const ref = useRef<HTMLDivElement>(null);
   const [phase, setPhase] = useState<"loading" | "ready" | "error">("loading");
   const [error, setError] = useState<string | null>(null);
@@ -78,7 +80,7 @@ export function JsDosScreen({ game, override }: Props) {
         setTimeout(() => !cancelled && setPhase((p) => (p === "loading" ? "ready" : p)), 1500);
       } catch (e) {
         if (!cancelled) {
-          setError(e instanceof Error ? e.message : "hata");
+          setError(e instanceof Error ? e.message : "emulator.error");
           setPhase("error");
         }
       }
@@ -100,7 +102,7 @@ export function JsDosScreen({ game, override }: Props) {
               <span className="text-danger">
                 <Icon name="close" size={26} />
               </span>
-              <p className="text-sm text-text">{error}</p>
+              <p className="text-sm text-text">{error ? t(error) : ""}</p>
             </>
           ) : (
             <>
@@ -108,7 +110,7 @@ export function JsDosScreen({ game, override }: Props) {
                 <Icon name="gamepad" size={30} />
               </span>
               <p className="font-mono text-xs text-text-dim">
-                DOSBox başlatılıyor…
+                {t("emulator.dosboxStarting")}
               </p>
             </>
           )}

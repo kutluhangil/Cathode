@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useSettings } from "@/store/settingsStore";
 import { useUiStore } from "@/store/uiStore";
+import { useT } from "@/lib/i18n/useT";
 import { useMotionEnabled } from "@/lib/motion";
 
 /** Hareketsizlik eşiği (ms) — 3 dakika */
@@ -20,6 +21,7 @@ const IDLE_MS = 3 * 60 * 1000;
 export function Screensaver() {
   const enabled = useSettings((s) => s.screensaver);
   const motionOn = useMotionEnabled();
+  const t = useT();
   const previewToken = useUiStore((s) => s.screensaverPreviewToken);
   const [active, setActive] = useState(false);
   const [previewing, setPreviewing] = useState(false);
@@ -94,7 +96,7 @@ export function Screensaver() {
         }}
       />
       <span className="absolute bottom-6 left-1/2 -translate-x-1/2 font-mono text-[10px] tracking-widest text-faint">
-        devam etmek için bir tuşa bas
+        {t("screensaver.dismiss")}
       </span>
     </div>
   );

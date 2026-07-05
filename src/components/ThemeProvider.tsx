@@ -12,13 +12,15 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const accent = useSettings((s) => s.accent);
   const crt = useSettings((s) => s.crt);
   const monitor = useSettings((s) => s.monitor);
+  const lang = useSettings((s) => s.lang);
 
   useEffect(() => {
     const root = document.documentElement;
     root.dataset.accent = accent;
     root.dataset.crt = crt ? "on" : "off";
     root.dataset.monitor = monitor ? "on" : "off";
-  }, [accent, crt, monitor]);
+    root.lang = lang;
+  }, [accent, crt, monitor, lang]);
 
   return <>{children}</>;
 }

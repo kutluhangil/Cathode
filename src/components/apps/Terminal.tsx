@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useSettings } from "@/store/settingsStore";
 import { useWindows } from "@/store/windowsStore";
+import { useT } from "@/lib/i18n/useT";
 import { APPS } from "@/data/apps";
 import { BOOT_KEY } from "@/lib/layout";
 import type { AccentName, WallpaperId } from "@/lib/types";
@@ -14,12 +15,6 @@ interface Line {
 }
 
 const PROMPT = "guest@cathode:~$";
-
-const BANNER = [
-  "cathode shell v2.0 — phosphor terminal",
-  'komutlar için "help" yaz.',
-  "",
-];
 
 const WALLPAPERS: WallpaperId[] = [
   "phosphor",
@@ -34,8 +29,13 @@ const WALLPAPERS: WallpaperId[] = [
  * Gerçek emülatör değil; kabuk ayarlarını komutla yöneten retro dokunuş.
  */
 export function Terminal() {
-  const [lines, setLines] = useState<Line[]>(
-    BANNER.map((t) => ({ text: t, kind: "out" })),
+  const t = useT();
+  const lang = useSettings((s) => s.lang);
+  const [lines, setLines] = useState<Line[]>(() =>
+    [t("terminal.bannerTitle"), t("terminal.bannerHelp"), ""].map((text) => ({
+      text,
+      kind: "out" as const,
+    })),
   );
   const [input, setInput] = useState("");
   const [history, setHistory] = useState<string[]>([]);
@@ -63,22 +63,7 @@ export function Terminal() {
 
     switch (name.toLowerCase()) {
       case "help":
-        print(
-          [
-            "help              bu liste",
-            "clear             ekranı temizle",
-            "echo <metin>      metni yaz",
-            "date              tarih/saat",
-            "sysinfo           sistem künyesi",
-            "apps              uygulama listesi",
-            "open <id>         uygulama aç (örn: open notepad)",
-            `wallpaper <ad>    duvar kâğıdı: ${WALLPAPERS.join(" | ")}`,
-            "accent <renk>     amber | green",
-            "crt on|off        CRT efektleri",
-            "monitor on|off    Cathode 5100 çerçevesi",
-            "reboot            boot sekansını tekrar oynat",
-          ].join("\n"),
-        );
+        print(t("terminal.help", { wallpapers: WALLPAPERS.join(" | ") }));
         break;
       case "clear":
         setLines([]);
@@ -87,19 +72,15 @@ export function Terminal() {
         print(arg);
         break;
       case "date":
-        print(new Date().toLocaleString("tr-TR"));
+        print(new Date().toLocaleString(lang === "tr" ? "tr-TR" : "en-US"));
         break;
       case "sysinfo":
         print(
-          [
-            "  ┌─────────────┐",
-            "  │  ▄▄▄▄▄▄▄▄▄  │   cathode systems 5100",
-            "  │  █ ─────█▪█ │   kabuk: workstation v2",
-            "  │  ▀▀▀▀▀▀▀▀▀  │   render: phosphor crt",
-            "  └─────┬─┬─────┘   emülasyon: v86 · js-dos (wasm)",
-            "     ▄▄▄┴─┴▄▄▄      veri: localStorage · OPFS — sunucu yok",
-            `                    accent: ${settings.accent} · crt: ${settings.crt ? "on" : "off"} · monitör: ${settings.monitor ? "on" : "off"}`,
-          ].join("\n"),
+          t("terminal.sysinfo", {
+            accent: settings.accent,
+            crt: settings.crt ? "on" : "off",
+            monitor: settings.monitor ? "on" : "off",
+          }),
         );
         break;
       case "apps":
@@ -108,41 +89,50 @@ export function Terminal() {
       case "open": {
         const app = APPS.find((a) => a.id === arg);
         if (!app) {
-          print(`uygulama yok: ${arg || "(boş)"} — "apps" ile listele`, "err");
+          print(
+            t("terminal.openNotFound", { arg: arg || t("terminal.emptyArg") }),
+            "err",
+          );
           break;
         }
         useWindows.getState().open(app.id, app.name, app.defaultSize);
-        print(`${app.name} açıldı`);
+        print(t("terminal.opened", { name: app.name }));
         break;
       }
       case "wallpaper": {
         if (!WALLPAPERS.includes(arg as WallpaperId)) {
-          print(`geçersiz: ${arg || "(boş)"} — ${WALLPAPERS.join(" | ")}`, "err");
+          print(
+            t("terminal.wpInvalid", {
+              arg: arg || t("terminal.emptyArg"),
+              wallpapers: WALLPAPERS.join(" | "),
+            }),
+            "err",
+          );
           break;
         }
         settings.setWallpaper(arg as WallpaperId);
-        print(`duvar kâğıdı: ${arg}`);
+        print(t("terminal.wpSet", { arg }));
         break;
       }
       case "accent": {
         if (arg !== "amber" && arg !== "green") {
-          print("kullanım: accent amber | green", "err");
+          print(t("terminal.accentUsage"), "err");
           break;
         }
         settings.setAccent(arg as AccentName);
-        print(`accent: ${arg}`);
+        print(t("terminal.accentSet", { arg }));
         break;
       }
       case "crt":
       case "monitor": {
         if (arg !== "on" && arg !== "off") {
-          print(`kullanım: ${name} on | off`, "err");
+          print(t("terminal.onOffUsage", { name }), "err");
           break;
         }
         const v = arg === "on";
         if (name === "crt") settings.setCrt(v);
         else settings.setMonitor(v);
-        print(`${name}: ${arg}`);
+        print(t("terminal.toggleSet", { name, arg }));
         break;
       }
       case "reboot":
@@ -150,7 +140,7 @@ export function Terminal() {
         location.reload();
         break;
       default:
-        print(`komut bulunamadı: ${name} — "help" yaz`, "err");
+        print(t("terminal.notFound", { name }), "err");
     }
   };
 
@@ -203,7 +193,7 @@ export function Terminal() {
             autoFocus
             spellCheck={false}
             autoComplete="off"
-            aria-label="terminal komut girişi"
+            aria-label={t("terminal.inputAria")}
             className="flex-1 bg-transparent text-text caret-[var(--accent)] outline-none"
           />
         </div>

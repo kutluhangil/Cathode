@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { usePrefersReducedMotion } from "@/lib/motion";
+import { useT } from "@/lib/i18n/useT";
 import { CathodeMark } from "@/components/icons";
 
 interface Props {
@@ -28,6 +29,7 @@ const POWERON_MS = 480;
  */
 export function BootScreen({ onDone }: Props) {
   const reduced = usePrefersReducedMotion();
+  const t = useT();
   const [mem, setMem] = useState<number | null>(null); // null = test başlamadı
   const [probeStep, setProbeStep] = useState(0);
   const [showBrand, setShowBrand] = useState(false);
@@ -82,7 +84,7 @@ export function BootScreen({ onDone }: Props) {
       transition={{ duration: 0.35 }}
       onClick={onDone}
       role="button"
-      aria-label="açılışı atla"
+      aria-label={t("boot.skipAria")}
       className="fixed inset-0 z-[8000] flex cursor-pointer flex-col items-center justify-center bg-void"
     >
       {/* marka — POST bitince fosfor ateşlemesiyle parlar (aşırı-parlak → yerleşir) */}
@@ -160,7 +162,7 @@ export function BootScreen({ onDone }: Props) {
       </div>
 
       <span className="mt-6 font-mono text-[10px] tracking-widest text-faint">
-        atlamak için tıkla
+        {t("boot.skip")}
       </span>
 
       {/* CRT tüp ısınması — üst/alt perde flicker'la açılır, altındaki BIOS

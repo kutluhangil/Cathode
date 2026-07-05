@@ -1,11 +1,13 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useT } from "@/lib/i18n/useT";
 
 const KEY = "cathode.notepad";
 
 /** Basit not defteri — içerik localStorage'da kalıcı (privacy-first, sunucu yok). */
 export function Notepad() {
+  const t = useT();
   const [text, setText] = useState("");
   const [saved, setSaved] = useState(true);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -32,13 +34,13 @@ export function Notepad() {
         value={text}
         onChange={(e) => setText(e.target.value)}
         spellCheck={false}
-        placeholder="bir şeyler yaz…"
+        placeholder={t("notepad.placeholder")}
         className="flex-1 resize-none bg-transparent px-5 py-4 font-mono text-sm leading-relaxed text-text outline-none placeholder:text-text-dim/50"
       />
       <div className="flex items-center justify-between border-t border-border-soft bg-surface-0 px-4 py-2 font-mono text-[11px] text-faint">
-        <span>{text.length} karakter</span>
+        <span>{t("notepad.chars", { n: text.length })}</span>
         <span className={saved ? "text-faint" : "text-warn"}>
-          {saved ? "kaydedildi" : "kaydediliyor…"}
+          {saved ? t("notepad.saved") : t("notepad.saving")}
         </span>
       </div>
     </div>
