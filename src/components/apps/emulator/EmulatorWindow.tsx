@@ -132,7 +132,11 @@ export function EmulatorWindow({ os, override }: Props) {
       <div className="relative flex-1 overflow-hidden">
         <div
           ref={screenRef}
-          className="absolute inset-0 flex items-center justify-center bg-black"
+          className={cn(
+            "absolute inset-0 flex items-center justify-center bg-black",
+            // hazırken host imleci gizle — yalnız emüle OS'un kendi imleci görünsün
+            phase === "ready" && "cursor-none",
+          )}
         >
           {/* v86 yapısı: metin modu div + grafik canvas */}
           <div
