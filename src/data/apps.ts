@@ -24,6 +24,7 @@ const osApps: AppDefinition[] = enabledOs().map((os) => ({
   defaultSize: { w: 760, h: 560 },
   minSize: { w: 480, h: 360 },
   capturesKeyboard: true,
+  singleton: true,
 }));
 
 /** Etkin DOS oyunları için otomatik uygulama girişleri. */
@@ -36,6 +37,7 @@ const gameApps: AppDefinition[] = enabledGames().map((g) => ({
   defaultSize: { w: 720, h: 540 },
   minSize: { w: 480, h: 360 },
   capturesKeyboard: true,
+  singleton: true,
 }));
 
 /** Uygulama kayıt defteri — masaüstü, dock ve başlat menüsü buradan beslenir. */

@@ -111,6 +111,9 @@ export const en = {
     save: "Save",
     saveAs: "Save as",
   },
+  easter: {
+    konami: "◆ PHOSPHOR OVERLOAD ◆",
+  },
   viewer: {
     empty: "no image to display",
   },
@@ -210,6 +213,7 @@ export const en = {
     sleeping: "sleeping…",
     resuming: "resuming…",
     newSession: "new session",
+    perfWarning: "Multiple emulators open — performance may drop.",
     download: "download",
     fullscreen: "fullscreen",
     hintDownloading: "downloading image…",

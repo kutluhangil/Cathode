@@ -59,7 +59,11 @@ export const useSettings = create<SettingsState>()(
       photoSeed: 1,
       setAccent: (accent) => set({ accent }),
       toggleAccent: () =>
-        set((s) => ({ accent: s.accent === "amber" ? "green" : "amber" })),
+        set((s) => {
+          const order: AccentName[] = ["amber", "green", "blue", "white"];
+          const i = order.indexOf(s.accent);
+          return { accent: order[(i + 1) % order.length] };
+        }),
       setCrt: (crt) => set({ crt }),
       toggleCrt: () => set((s) => ({ crt: !s.crt })),
       setMonitor: (monitor) => set({ monitor }),

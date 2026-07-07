@@ -27,7 +27,7 @@ export function CommandPalette() {
   const [index, setIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const openWin = useWindows((s) => s.open);
+  const launch = useWindows((s) => s.launch);
   const s = useSettings();
   const t = useT();
 
@@ -55,7 +55,7 @@ export function CommandPalette() {
       label: t(a.name),
       hint: a.description ? t(a.description) : undefined,
       icon: { appId: a.id },
-      action: () => openWin(a.id, a.name, a.defaultSize),
+      action: () => launch(a.id, a.name, a.defaultSize, undefined, a.singleton),
     }));
     const wallpapers: Entry[] = (
       ["phosphor", "blueprint", "testcard", "void", "photo"] as WallpaperId[]
@@ -101,7 +101,7 @@ export function CommandPalette() {
       },
     ];
     return [...apps, ...system, ...wallpapers];
-  }, [openWin, s, t]);
+  }, [launch, s, t]);
 
   const results = useMemo(() => {
     const term = q.trim().toLowerCase();

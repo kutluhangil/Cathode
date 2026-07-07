@@ -70,7 +70,11 @@ Underneath, real legacy systems run in emulated hardware: **v86** boots a genuin
 
 ## 🖼️ Screenshots
 
-> Coming soon — drop images in `docs/screenshots/` and reference them here.
+| Desktop | Apps | Paint |
+|---|---|---|
+| ![desktop](docs/screenshots/desktop.png) | ![apps](docs/screenshots/apps.png) | ![paint](docs/screenshots/paint.png) |
+
+<sub>Regenerate with `CAPTURE=1 npm run test:e2e -- screenshots.spec.ts --project=desktop`.</sub>
 
 ---
 
@@ -201,10 +205,14 @@ user supplies themselves (BYOI) — Cathode just provides the matching hardware 
 | ✅ | js-dos integration for DOS software |
 | ✅ | BYOI / BYOG (bring your own disk image or game bundle) |
 | ✅ | PWA — installable, offline app shell |
-| 🔄 | ReactOS and additional OS images hosted on R2 |
-| 🔄 | Free/shareware DOS game catalog population |
-| ○ | Multi-window emulator instances |
-| ○ | Custom typography + boot sequence polish pass |
+| ✅ | Files app + OPFS virtual filesystem · draggable persistent desktop icons |
+| ✅ | Seamless auto sleep/resume for emulators (save on close, restore on reopen) |
+| ✅ | Mini apps — Calculator, Paint, Image Viewer |
+| ✅ | Multi-window emulator instances (+ performance warning) |
+| ✅ | Playwright e2e suite · mobile single-window mode · a11y baseline |
+| ✅ | Theme variety (amber / green / blue / white) · easter eggs |
+| 🔄 | ReactOS and additional OS images hosted on R2 (external asset hosting) |
+| 🔄 | Free/shareware DOS game catalog population (external bundles) |
 
 <sub>✅ Shipped &nbsp; · &nbsp; 🔄 In progress &nbsp; · &nbsp; ○ Planned</sub>
 

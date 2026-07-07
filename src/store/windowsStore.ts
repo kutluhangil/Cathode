@@ -27,6 +27,14 @@ interface WindowsState {
     title: string,
     size: { w: number; h: number },
   ) => void;
+  /** singleton app zaten açıksa öne getir; değilse aç */
+  launch: (
+    appId: string,
+    title: string,
+    size: { w: number; h: number },
+    props?: Record<string, unknown>,
+    singleton?: boolean,
+  ) => string;
 }
 
 let idSeq = 0;
@@ -195,5 +203,17 @@ export const useWindows = create<WindowsState>((set, get) => ({
     } else {
       focus(existing.id);
     }
+  },
+
+  launch: (appId, title, size, props, singleton) => {
+    const { windows, open, focus } = get();
+    if (singleton) {
+      const existing = windows.find((w) => w.appId === appId);
+      if (existing) {
+        focus(existing.id);
+        return existing.id;
+      }
+    }
+    return open(appId, title, size, props);
   },
 }));

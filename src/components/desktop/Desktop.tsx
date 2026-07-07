@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { APPS } from "@/data/apps";
 import { useWindows } from "@/store/windowsStore";
 import { useFiles } from "@/store/filesStore";
+import { useKonami } from "@/lib/useKonami";
 import { useSettings } from "@/store/settingsStore";
 import { useT } from "@/lib/i18n/useT";
 import { stagger, riseItem } from "@/lib/motion";
@@ -12,6 +13,7 @@ import type { WallpaperId } from "@/lib/types";
 import { Wallpaper } from "./Wallpaper";
 import { DesktopIcon } from "./DesktopIcon";
 import { DesktopFiles } from "./DesktopFiles";
+import { EmuPerfWarning } from "./EmuPerfWarning";
 import { ContextMenu, type MenuItem } from "./ContextMenu";
 import { CommandPalette } from "./CommandPalette";
 import { Screensaver } from "./Screensaver";
@@ -34,7 +36,7 @@ function uniqueName(base: string): string {
 }
 
 export function Desktop() {
-  const open = useWindows((s) => s.open);
+  const launch = useWindows((s) => s.launch);
   const wallpaper = useSettings((s) => s.wallpaper);
   const setWallpaper = useSettings((s) => s.setWallpaper);
   const [menu, setMenu] = useState<{ x: number; y: number } | null>(null);
@@ -48,6 +50,14 @@ export function Desktop() {
     void hydrateFiles();
   }, [hydrateFiles]);
 
+  // easter egg: Konami kodu → kısa "fosfor aşırı yükleme" parıltısı
+  const [konami, setKonami] = useState(false);
+  const onKonami = useCallback(() => {
+    setKonami(true);
+    window.setTimeout(() => setKonami(false), 2500);
+  }, []);
+  useKonami(onKonami);
+
   const cycleWallpaper = () => {
     const i = WP_ORDER.indexOf(wallpaper);
     setWallpaper(WP_ORDER[(i + 1) % WP_ORDER.length]);
@@ -55,7 +65,7 @@ export function Desktop() {
 
   const openApp = (id: string) => {
     const app = APPS.find((a) => a.id === id);
-    if (app) open(app.id, app.name, app.defaultSize);
+    if (app) launch(app.id, app.name, app.defaultSize, undefined, app.singleton);
   };
 
   const menuItems: MenuItem[] = [
@@ -118,6 +128,7 @@ export function Desktop() {
       </button>
 
       <WindowManager />
+      <EmuPerfWarning />
       <WindowSwitcher />
       <CommandPalette />
       <SystemBar />
@@ -131,6 +142,22 @@ export function Desktop() {
           items={menuItems}
           onClose={() => setMenu(null)}
         />
+      )}
+
+      {/* easter egg overlay — Konami kodu */}
+      {konami && (
+        <div
+          data-testid="konami"
+          className="pointer-events-none absolute inset-0 z-[7000] flex items-center justify-center"
+        >
+          <div
+            className="absolute inset-0 animate-pulse"
+            style={{ background: "var(--accent)", opacity: 0.12 }}
+          />
+          <span className="phosphor animate-pulse text-2xl font-semibold tracking-widest text-accent [text-shadow:0_0_20px_var(--accent-glow)]">
+            {t("easter.konami")}
+          </span>
+        </div>
       )}
     </div>
   );

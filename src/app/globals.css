@@ -64,6 +64,22 @@
   --accent-ink: #04140a;
 }
 
+/* Alternatif accent: VGA mavi */
+:root[data-accent="blue"] {
+  --accent: #4aa3ff;
+  --accent-dim: #2b6cc4;
+  --accent-glow: rgba(74, 163, 255, 0.3);
+  --accent-ink: #04101f;
+}
+
+/* Alternatif accent: kâğıt-beyazı fosfor (P4) */
+:root[data-accent="white"] {
+  --accent: #e8ecf0;
+  --accent-dim: #9aa3ad;
+  --accent-glow: rgba(232, 236, 240, 0.26);
+  --accent-ink: #12161b;
+}
+
 /* CRT açıkken efekt katmanları görünür.
    grille kasıtlı olarak 0: aperture-grille crosshatch masaüstünü "noktalı"
    gösteriyordu (Linux masaüstü hissiyle çelişiyordu) — vignette + grain

@@ -111,6 +111,9 @@ export const tr = {
     save: "Kaydet",
     saveAs: "Farklı kaydet",
   },
+  easter: {
+    konami: "◆ FOSFOR AŞIRI YÜKLEME ◆",
+  },
   viewer: {
     empty: "görüntülenecek resim yok",
   },
@@ -208,6 +211,7 @@ export const tr = {
     sleeping: "uyutuluyor…",
     resuming: "devam ediliyor…",
     newSession: "yeni oturum",
+    perfWarning: "Birden fazla emülatör açık — performans düşebilir.",
     download: "indir",
     fullscreen: "tam ekran",
     hintDownloading: "imaj indiriliyor…",

@@ -80,15 +80,30 @@ export function Settings() {
               />
             </Row>
             <Row title={t("settings.accent")} hint={t("settings.accentHint")}>
-              <Segmented
-                ariaLabel={t("settings.accent")}
-                value={s.accent}
-                onChange={s.setAccent}
-                options={[
-                  { value: "amber", label: t("settings.accentAmber") },
-                  { value: "green", label: t("settings.accentGreen") },
-                ]}
-              />
+              <div className="flex items-center gap-2" role="radiogroup" aria-label={t("settings.accent")}>
+                {(
+                  [
+                    ["amber", "#ffb000"],
+                    ["green", "#33e86c"],
+                    ["blue", "#4aa3ff"],
+                    ["white", "#e8ecf0"],
+                  ] as const
+                ).map(([a, color]) => (
+                  <button
+                    key={a}
+                    data-testid={`accent-swatch-${a}`}
+                    role="radio"
+                    aria-checked={s.accent === a}
+                    aria-label={a}
+                    onClick={() => s.setAccent(a)}
+                    className={cn(
+                      "h-7 w-7 rounded-full border-2 transition-transform hover:scale-110",
+                      s.accent === a ? "border-text scale-110" : "border-border-soft",
+                    )}
+                    style={{ background: color }}
+                  />
+                ))}
+              </div>
             </Row>
             <Row title={t("settings.motion")} hint={t("settings.motionHint")}>
               <Toggle

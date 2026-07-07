@@ -3,7 +3,7 @@ import type { GalleryPhotoId } from "@/data/wallpapers";
 
 /** Kabuk genelinde paylaşılan tipler. */
 
-export type AccentName = "amber" | "green";
+export type AccentName = "amber" | "green" | "blue" | "white";
 
 export type WallpaperId =
   | "phosphor"
@@ -48,4 +48,6 @@ export interface AppDefinition {
   pinned?: boolean;
   /** emülatör gibi klavyeyi ele geçiren app — Esc pencereyi kapatmasın */
   capturesKeyboard?: boolean;
+  /** tek örnek — açıkken tekrar açılırsa yeni pencere yerine mevcut öne gelir */
+  singleton?: boolean;
 }

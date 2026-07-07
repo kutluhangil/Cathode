@@ -115,7 +115,8 @@ export function Terminal() {
         break;
       }
       case "accent": {
-        if (arg !== "amber" && arg !== "green") {
+        const accents: AccentName[] = ["amber", "green", "blue", "white"];
+        if (!accents.includes(arg as AccentName)) {
           print(t("terminal.accentUsage"), "err");
           break;
         }
@@ -138,6 +139,36 @@ export function Terminal() {
       case "reboot":
         sessionStorage.removeItem(BOOT_KEY);
         location.reload();
+        break;
+      // gizli komutlar (help'te listelenmez) — easter egg
+      case "xyzzy":
+        print("Nothing happens.");
+        break;
+      case "credits":
+        print(
+          [
+            "Cathode — bespoke retro OS shell",
+            "",
+            "emulation : v86 (copy.sh) · js-dos (DOSBox-X)",
+            "systems   : KolibriOS · FreeDOS · ReactOS",
+            "shell     : Kutluhan",
+            "",
+            "thanks for booting up ♥",
+          ].join("\n"),
+        );
+        break;
+      case "neofetch":
+        print(
+          [
+            "   ▟█▙     guest@cathode",
+            "  ▟███▙    ---------------",
+            " ▟█████▙   os     : Obsidian Cathode",
+            " ▜█████▛   shell  : cathode-sh",
+            "  ▜███▛    accent : " + settings.accent,
+            "   ▜█▛     crt    : " + (settings.crt ? "on" : "off"),
+            "           uptime : ∞ (client-side)",
+          ].join("\n"),
+        );
         break;
       default:
         print(t("terminal.notFound", { name }), "err");
