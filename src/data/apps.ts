@@ -5,6 +5,7 @@ import { Notepad } from "@/components/apps/Notepad";
 import { Terminal } from "@/components/apps/Terminal";
 import { Systems } from "@/components/apps/Systems";
 import { Games } from "@/components/apps/Games";
+import { FileManager } from "@/components/apps/FileManager";
 import { LazyEmulator } from "@/components/apps/emulator/LazyEmulator";
 import { LazyJsDos } from "@/components/apps/emulator/LazyJsDos";
 import { enabledOs } from "@/data/os";
@@ -65,6 +66,16 @@ const baseApps: AppDefinition[] = [
     component: Notepad,
     defaultSize: { w: 460, h: 420 },
     minSize: { w: 300, h: 240 },
+    pinned: true,
+  },
+  {
+    id: "filemanager",
+    name: "apps.files",
+    glyph: "▤",
+    description: "apps.filesDesc",
+    component: FileManager,
+    defaultSize: { w: 620, h: 480 },
+    minSize: { w: 420, h: 320 },
     pinned: true,
   },
   {

@@ -28,7 +28,13 @@ export type IconName =
   | "motion"
   | "sound"
   | "system"
-  | "shield";
+  | "shield"
+  | "folder"
+  | "file"
+  | "folder-plus"
+  | "save"
+  | "trash"
+  | "pencil";
 
 const PATHS: Record<IconName, React.ReactNode> = {
   close: <path d="M7 7l10 10M17 7L7 17" />,
@@ -163,6 +169,17 @@ const PATHS: Record<IconName, React.ReactNode> = {
       <path d="M9 12l2.2 2.2L15.5 9.8" />
     </>
   ),
+  folder: <path d="M4 7h5l2 2h9v9H4z" />,
+  file: <path d="M7 4h7l4 4v12H7zM14 4v4h4" />,
+  "folder-plus": (
+    <>
+      <path d="M4 7h5l2 2h9v9H4z" />
+      <path d="M12 12v4M10 14h4" />
+    </>
+  ),
+  save: <path d="M5 5h11l3 3v11H5zM8 5v5h7V5M8 19v-6h8v6" />,
+  trash: <path d="M5 7h14M9 7V5h6v2M7 7l1 12h8l1-12" />,
+  pencil: <path d="M4 20l4-1L19 8l-3-3L5 16z" />,
 };
 
 interface IconProps {

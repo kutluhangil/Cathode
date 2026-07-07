@@ -31,6 +31,8 @@ export interface WindowInstance {
   prevRect: Rect | null;
   z: number;
   status: WindowStatus;
+  /** açılışta app'e geçen opsiyonel parametreler (ör. Notepad'in açacağı dosya) */
+  props?: Record<string, unknown>;
 }
 
 export interface AppDefinition {
@@ -39,7 +41,7 @@ export interface AppDefinition {
   /** Tek karakter / kısa glyph tabanlı özgün ikon (Windows logosu YOK) */
   glyph: string;
   description?: string;
-  component: ComponentType<{ windowId: string }>;
+  component: ComponentType<{ windowId: string } & Record<string, unknown>>;
   defaultSize: { w: number; h: number };
   minSize?: { w: number; h: number };
   /** dock'a sabitlensin mi */

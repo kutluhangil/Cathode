@@ -84,7 +84,7 @@ export function Window({ win, active, reduced, mobile = false }: Props) {
       <TitleBar win={win} active={active} mobile={mobile} />
 
       <div className="relative flex-1 overflow-hidden">
-        <Body windowId={win.id} />
+        <Body windowId={win.id} {...(win.props ?? {})} />
         <div className="win-noise" aria-hidden />
       </div>
 

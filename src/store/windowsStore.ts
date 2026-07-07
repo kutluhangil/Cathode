@@ -9,7 +9,12 @@ interface WindowsState {
   windows: WindowInstance[];
   focusedId: string | null;
   zCounter: number;
-  open: (appId: string, title: string, size: { w: number; h: number }) => string;
+  open: (
+    appId: string,
+    title: string,
+    size: { w: number; h: number },
+    props?: Record<string, unknown>,
+  ) => string;
   close: (id: string) => void;
   focus: (id: string) => void;
   minimize: (id: string) => void;
@@ -57,7 +62,7 @@ export const useWindows = create<WindowsState>((set, get) => ({
   focusedId: null,
   zCounter: 1,
 
-  open: (appId, title, size) => {
+  open: (appId, title, size, props) => {
     const id = nextId();
     playSound("open");
     set((s) => {
@@ -70,6 +75,7 @@ export const useWindows = create<WindowsState>((set, get) => ({
         prevRect: null,
         z,
         status: "normal",
+        props,
       };
       return { windows: [...s.windows, win], focusedId: id, zCounter: z };
     });

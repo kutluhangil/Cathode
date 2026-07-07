@@ -1,15 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { APPS } from "@/data/apps";
 import { useWindows } from "@/store/windowsStore";
+import { useFiles } from "@/store/filesStore";
 import { useSettings } from "@/store/settingsStore";
 import { useT } from "@/lib/i18n/useT";
 import { stagger, riseItem } from "@/lib/motion";
 import type { WallpaperId } from "@/lib/types";
 import { Wallpaper } from "./Wallpaper";
 import { DesktopIcon } from "./DesktopIcon";
+import { DesktopFiles } from "./DesktopFiles";
 import { ContextMenu, type MenuItem } from "./ContextMenu";
 import { CommandPalette } from "./CommandPalette";
 import { Screensaver } from "./Screensaver";
@@ -26,6 +28,11 @@ const WP_ORDER: WallpaperId[] = [
   "photo",
 ];
 
+/** Masaüstünde çakışmayan benzersiz dosya adı (prompt olmadan hızlı oluşturma). */
+function uniqueName(base: string): string {
+  return `${base}-${Math.floor(performance.now() % 100000)}`;
+}
+
 export function Desktop() {
   const open = useWindows((s) => s.open);
   const wallpaper = useSettings((s) => s.wallpaper);
@@ -33,6 +40,13 @@ export function Desktop() {
   const [menu, setMenu] = useState<{ x: number; y: number } | null>(null);
   const [spin, setSpin] = useState(0); // "yenile" görsel geri bildirimi
   const t = useT();
+
+  const hydrateFiles = useFiles((s) => s.hydrate);
+  const createDir = useFiles((s) => s.createDir);
+  const createFile = useFiles((s) => s.createFile);
+  useEffect(() => {
+    void hydrateFiles();
+  }, [hydrateFiles]);
 
   const cycleWallpaper = () => {
     const i = WP_ORDER.indexOf(wallpaper);
@@ -45,6 +59,17 @@ export function Desktop() {
   };
 
   const menuItems: MenuItem[] = [
+    {
+      label: t("files.newFolder"),
+      icon: "folder-plus",
+      onClick: () => void createDir("/Desktop", uniqueName("folder")),
+    },
+    {
+      label: t("files.newFile"),
+      icon: "file",
+      onClick: () => void createFile("/Desktop", uniqueName("note") + ".txt"),
+      divider: true,
+    },
     { label: t("menu.refresh"), icon: "refresh", onClick: () => setSpin((s) => s + 1) },
     { label: t("menu.changeWallpaper"), icon: "image", onClick: cycleWallpaper },
     {
@@ -80,6 +105,9 @@ export function Desktop() {
           </motion.div>
         ))}
       </motion.div>
+
+      {/* /Desktop klasörü — serbest konumlu kullanıcı ikonları */}
+      <DesktopFiles />
 
       {/* görünür disclaimer (spec §5) — tıkla → Hakkında */}
       <button
