@@ -5,6 +5,7 @@ import { useFiles } from "@/store/filesStore";
 import { useWindows } from "@/store/windowsStore";
 import { useT } from "@/lib/i18n/useT";
 import { segments, join, parent } from "@/lib/fs/path";
+import { openFile } from "@/lib/fs/kind";
 import { cn } from "@/lib/cn";
 import { Icon } from "@/components/icons";
 import { ContextMenu, type MenuItem } from "@/components/desktop/ContextMenu";
@@ -52,11 +53,8 @@ export function FileManager({ path }: Props) {
   const segs = segments(dir);
 
   const onOpenEntry = (e: FsEntry) => {
-    if (e.kind === "dir") {
-      setDir(e.path);
-    } else if (e.name.endsWith(".txt")) {
-      open("notepad", "apps.notepad", { w: 460, h: 420 }, { path: e.path });
-    }
+    if (e.kind === "dir") setDir(e.path);
+    else openFile(open, e);
   };
 
   const submitPrompt = async () => {

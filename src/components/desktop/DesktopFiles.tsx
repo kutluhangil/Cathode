@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import { useFiles } from "@/store/filesStore";
 import { useWindows } from "@/store/windowsStore";
 import { SYSTEM_BAR_H } from "@/lib/layout";
+import { openFile } from "@/lib/fs/kind";
 import { Icon } from "@/components/icons";
 import type { FsEntry } from "@/lib/fs/types";
 
@@ -27,8 +28,7 @@ export function DesktopFiles() {
   const onOpen = (e: FsEntry) => {
     if (e.kind === "dir")
       open("filemanager", "apps.files", { w: 620, h: 480 }, { path: e.path });
-    else if (e.name.endsWith(".txt"))
-      open("notepad", "apps.notepad", { w: 460, h: 420 }, { path: e.path });
+    else openFile(open, e);
   };
 
   return (

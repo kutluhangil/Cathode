@@ -6,6 +6,9 @@ import { Terminal } from "@/components/apps/Terminal";
 import { Systems } from "@/components/apps/Systems";
 import { Games } from "@/components/apps/Games";
 import { FileManager } from "@/components/apps/FileManager";
+import { Calculator } from "@/components/apps/Calculator";
+import { ImageViewer } from "@/components/apps/ImageViewer";
+import { Paint } from "@/components/apps/Paint";
 import { LazyEmulator } from "@/components/apps/emulator/LazyEmulator";
 import { LazyJsDos } from "@/components/apps/emulator/LazyJsDos";
 import { enabledOs } from "@/data/os";
@@ -77,6 +80,35 @@ const baseApps: AppDefinition[] = [
     defaultSize: { w: 620, h: 480 },
     minSize: { w: 420, h: 320 },
     pinned: true,
+  },
+  {
+    id: "calculator",
+    name: "apps.calculator",
+    glyph: "=",
+    description: "apps.calculatorDesc",
+    component: Calculator,
+    defaultSize: { w: 280, h: 400 },
+    minSize: { w: 260, h: 360 },
+    pinned: true,
+  },
+  {
+    id: "paint",
+    name: "apps.paint",
+    glyph: "✎",
+    description: "apps.paintDesc",
+    component: Paint,
+    defaultSize: { w: 560, h: 460 },
+    minSize: { w: 420, h: 360 },
+    pinned: true,
+  },
+  {
+    id: "imageviewer",
+    name: "apps.viewer",
+    glyph: "▨",
+    description: "apps.viewerDesc",
+    component: ImageViewer,
+    defaultSize: { w: 640, h: 480 },
+    minSize: { w: 360, h: 280 },
   },
   {
     id: "terminal",

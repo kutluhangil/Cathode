@@ -41,6 +41,8 @@ test("Alt+Tab switcher exposes listbox options", async ({ page }) => {
 });
 
 test("focus-visible ring is applied on keyboard focus", async ({ page }) => {
+  // wait for hydration so Tab lands on a real focusable, not document.body
+  await expect(page.getByTestId("desktop-icon-about")).toBeVisible();
   await page.keyboard.press("Tab");
   const outline = await page.evaluate(() => {
     const el = document.activeElement as HTMLElement | null;

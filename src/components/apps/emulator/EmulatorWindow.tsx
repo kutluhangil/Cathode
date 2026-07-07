@@ -6,7 +6,12 @@ import type { OsDefinition } from "@/data/os";
 import { cn } from "@/lib/cn";
 import { useT } from "@/lib/i18n/useT";
 import { Icon } from "@/components/icons";
-import { deleteState, hasState, readState, writeState } from "@/lib/persist";
+import {
+  saveSession,
+  resumeSession,
+  hasSession,
+  dropSession,
+} from "@/lib/emu/emuSession";
 
 interface Props {
   os: OsDefinition;
@@ -21,26 +26,55 @@ export function EmulatorWindow({ os, override }: Props) {
   const [phase, setPhase] = useState<EmuPhase>("idle");
   const [progress, setProgress] = useState(0);
   const [error, setError] = useState<string | null>(null);
-  const [savedSession, setSavedSession] = useState(false);
-  const [sleeping, setSleeping] = useState(false);
+  const [resuming, setResuming] = useState(false);
 
   // OPFS anahtarı — BYOI dahil os.id bazlı
   const stateKey = `v86-${os.id}`;
 
-  useEffect(() => {
-    void hasState(stateKey).then(setSavedSession);
+  // otomatik uyku/devam koordinasyonu
+  const reachedReadyRef = useRef(false);
+  const willResumeRef = useRef(false);
+  const resumedRef = useRef(false);
+
+  // ready + kayıtlı oturum ikisi de hazır olunca bir kez geri yükle
+  const maybeResume = useCallback(() => {
+    if (
+      !reachedReadyRef.current ||
+      !willResumeRef.current ||
+      resumedRef.current ||
+      !engineRef.current
+    )
+      return;
+    resumedRef.current = true;
+    setResuming(true);
+    void resumeSession(engineRef.current, stateKey).finally(() =>
+      setResuming(false),
+    );
   }, [stateKey]);
+
+  // mount: kayıtlı oturum var mı?
+  useEffect(() => {
+    void hasSession(stateKey).then((v) => {
+      willResumeRef.current = v;
+      maybeResume();
+    });
+  }, [stateKey, maybeResume]);
 
   useEffect(() => {
     if (!screenRef.current) return;
-    // Start bir tick geciktirilir: React StrictMode'un mount→cleanup→mount
-    // döngüsünde ilk mount'un engine'i hiç kurulmaz — aynı DOM container'da
-    // iki V86 örneğinin yarışması ekranı kilitliyordu.
+    // Start bir tick geciktirilir: React StrictMode mount→cleanup→mount döngüsünde
+    // aynı DOM container'da iki V86 örneğinin yarışmasını önler.
     let engine: V86Engine | null = null;
     const timer = setTimeout(() => {
       if (!screenRef.current) return;
       engine = new V86Engine({
-        onPhase: setPhase,
+        onPhase: (p) => {
+          setPhase(p);
+          if (p === "ready") {
+            reachedReadyRef.current = true;
+            maybeResume();
+          }
+        },
         onError: setError,
         onProgress: (loaded, total) =>
           setProgress(Math.round((loaded / total) * 100)),
@@ -48,21 +82,40 @@ export function EmulatorWindow({ os, override }: Props) {
       engineRef.current = engine;
       engine.start(screenRef.current, os, override);
     }, 60);
+
     return () => {
       clearTimeout(timer);
-      void engine?.destroy();
+      const e = engine;
       engineRef.current = null;
+      // otomatik uyku: kapat/küçült öncesi durumu kaydet, sonra yok et
+      void (async () => {
+        try {
+          if (e && reachedReadyRef.current) {
+            await saveSession(e, stateKey);
+          }
+        } catch {
+          /* teardown best-effort — kayıt başarısız olsa da yıkımı engelleme */
+        }
+        await e?.destroy();
+      })();
     };
     // os.id / override değişince yeniden kur
-  }, [os, override]);
+  }, [os, override, stateKey, maybeResume]);
 
   const reset = () => engineRef.current?.restart();
+
+  const newSession = async () => {
+    willResumeRef.current = false;
+    resumedRef.current = true; // yeni oturumda tekrar resume etme
+    await dropSession(stateKey);
+    engineRef.current?.restart();
+  };
 
   const fullscreen = () => {
     screenRef.current?.requestFullscreen?.().catch(() => {});
   };
 
-  const saveState = async () => {
+  const download = async () => {
     const state = await engineRef.current?.saveState();
     if (!state) return;
     const blob = new Blob([state], { type: "application/octet-stream" });
@@ -73,29 +126,7 @@ export function EmulatorWindow({ os, override }: Props) {
     URL.revokeObjectURL(a.href);
   };
 
-  // OPFS'e uyut: çalışan durumu kalıcı sakla ("uyku/devam" hissi)
-  const sleep = async () => {
-    setSleeping(true);
-    const state = await engineRef.current?.saveState();
-    if (state) {
-      const ok = await writeState(stateKey, state);
-      if (ok) setSavedSession(true);
-    }
-    setSleeping(false);
-  };
-
-  // kaydedilen oturumdan devam et
-  const resume = useCallback(async () => {
-    const state = await readState(stateKey);
-    if (state) await engineRef.current?.restoreState(state);
-  }, [stateKey]);
-
-  const dropSession = async () => {
-    await deleteState(stateKey);
-    setSavedSession(false);
-  };
-
-  const loading = phase === "downloading" || phase === "booting";
+  const loading = phase === "downloading" || phase === "booting" || resuming;
 
   return (
     <div className="flex h-full flex-col bg-black">
@@ -104,6 +135,8 @@ export function EmulatorWindow({ os, override }: Props) {
         <span className="font-mono text-[11px] text-accent">{os.glyph}</span>
         <span className="text-[12px] text-text">{os.name}</span>
         <span
+          data-testid="emu-status"
+          data-phase={phase}
           className={cn(
             "ml-1 h-1.5 w-1.5 rounded-full",
             phase === "ready"
@@ -115,10 +148,10 @@ export function EmulatorWindow({ os, override }: Props) {
         />
         <div className="ml-auto flex items-center gap-1">
           <Ctl onClick={reset}>{t("emulator.reset")}</Ctl>
-          <Ctl onClick={sleep} disabled={phase !== "ready" || sleeping}>
-            {sleeping ? t("emulator.sleeping") : t("emulator.sleep")}
+          <Ctl onClick={newSession} disabled={phase !== "ready"}>
+            {t("emulator.newSession")}
           </Ctl>
-          <Ctl onClick={saveState} disabled={phase !== "ready"}>
+          <Ctl onClick={download} disabled={phase !== "ready"}>
             {t("emulator.download")}
           </Ctl>
           <Ctl onClick={fullscreen}>{t("emulator.fullscreen")}</Ctl>
@@ -131,8 +164,7 @@ export function EmulatorWindow({ os, override }: Props) {
           ref={screenRef}
           className={cn(
             "absolute inset-0 flex items-center justify-center bg-black",
-            // hazırken host imleci gizle — yalnız emüle OS'un kendi imleci görünsün
-            phase === "ready" && "cursor-none",
+            phase === "ready" && !resuming && "cursor-none",
           )}
         >
           {/* v86 yapısı: metin modu div + grafik canvas */}
@@ -166,13 +198,15 @@ export function EmulatorWindow({ os, override }: Props) {
                   <Icon name="disk" size={30} />
                 </span>
                 <p className="font-mono text-xs text-text-dim">
-                  {phase === "downloading"
-                    ? t("emulator.hintDownloading")
-                    : phase === "booting"
-                      ? t("emulator.hintBooting")
-                      : t("emulator.preparing")}
+                  {resuming
+                    ? t("emulator.resuming")
+                    : phase === "downloading"
+                      ? t("emulator.hintDownloading")
+                      : phase === "booting"
+                        ? t("emulator.hintBooting")
+                        : t("emulator.preparing")}
                 </p>
-                {phase === "downloading" && (
+                {phase === "downloading" && !resuming && (
                   <div className="h-px w-48 overflow-hidden bg-border">
                     <div
                       className="h-full bg-accent transition-all"
@@ -185,19 +219,8 @@ export function EmulatorWindow({ os, override }: Props) {
           </div>
         )}
 
-        {/* kayıtlı oturum — uykudan devam */}
-        {phase === "ready" && savedSession && (
-          <div className="absolute right-3 top-3 flex items-center gap-2 rounded-[10px] border border-accent/50 bg-void/85 px-3 py-2 backdrop-blur">
-            <span className="font-mono text-[11px] text-text">
-              {t("emulator.savedSession")}
-            </span>
-            <Ctl onClick={resume}>{t("emulator.resume")}</Ctl>
-            <Ctl onClick={dropSession}>{t("emulator.drop")}</Ctl>
-          </div>
-        )}
-
         {/* ekranı bırak ipucu */}
-        {phase === "ready" && (
+        {phase === "ready" && !resuming && (
           <div className="pointer-events-none absolute bottom-2 left-1/2 -translate-x-1/2 rounded-full border border-border bg-void/70 px-3 py-1 font-mono text-[10px] text-text-dim">
             {t("emulator.captureHint")}
           </div>

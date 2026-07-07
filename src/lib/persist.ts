@@ -75,3 +75,17 @@ export async function deleteState(key: string): Promise<void> {
     /* yok say */
   }
 }
+
+// Test/debug köprüsü — OPFS durum deposunu e2e'den doğrudan sürmek için (client-only).
+if (typeof window !== "undefined") {
+  (
+    window as unknown as {
+      __persist?: {
+        writeState: typeof writeState;
+        readState: typeof readState;
+        hasState: typeof hasState;
+        deleteState: typeof deleteState;
+      };
+    }
+  ).__persist = { writeState, readState, hasState, deleteState };
+}

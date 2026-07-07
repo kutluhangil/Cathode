@@ -56,6 +56,22 @@ export async function readText(path: string): Promise<string> {
   return (await fh.getFile()).text();
 }
 
+export async function writeBlob(
+  path: string,
+  data: Blob | ArrayBuffer,
+): Promise<void> {
+  await dirHandle(parent(path), true); // ensure parents exist
+  const fh = await fileHandle(path, true);
+  const ws = await fh.createWritable();
+  await ws.write(data);
+  await ws.close();
+}
+
+export async function readBlob(path: string): Promise<Blob> {
+  const fh = await fileHandle(path, false);
+  return fh.getFile();
+}
+
 export async function list(path: string): Promise<FsEntry[]> {
   const dir = await dirHandle(path, false);
   const entries: FsEntry[] = [];
@@ -123,7 +139,9 @@ async function copyRec(srcPath: string, destPath: string): Promise<void> {
       await copyRec(child.path, normalize(destPath + "/" + child.name));
     }
   } else {
-    await writeText(destPath, await readText(srcPath)); // text-only for now
+    // byte copy — preserves both text and binary content
+    const bytes = await (await readBlob(srcPath)).arrayBuffer();
+    await writeBlob(destPath, bytes);
   }
 }
 
