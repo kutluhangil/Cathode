@@ -178,7 +178,9 @@ export const tr = {
     systems: "Sistemler",
     systemsDesc: "Emülatör · OS kataloğu + kendi imajın",
     games: "Oyunlar",
-    gamesDesc: "DOS oyunları · js-dos + kendi bundle'ın",
+    gamesDesc: "DOS oyunları · js-dos + kendi paketin",
+    browser: "İnternet",
+    browserDesc: "Web Tarayıcı",
   },
   os: {
     kolibriDesc: "Asm ile yazılmış ultra hafif sistem · serbest (GPL)",

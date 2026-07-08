@@ -181,6 +181,8 @@ export const en = {
     systemsDesc: "Emulator · OS catalog + your own image",
     games: "Games",
     gamesDesc: "DOS games · js-dos + your own bundle",
+    browser: "Browser",
+    browserDesc: "Web Browser",
   },
   os: {
     kolibriDesc: "Ultra-light system written in Asm · free (GPL)",

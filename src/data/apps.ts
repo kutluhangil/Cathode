@@ -9,6 +9,7 @@ import { FileManager } from "@/components/apps/FileManager";
 import { Calculator } from "@/components/apps/Calculator";
 import { ImageViewer } from "@/components/apps/ImageViewer";
 import { Paint } from "@/components/apps/Paint";
+import { Browser } from "@/components/apps/Browser";
 import { LazyEmulator } from "@/components/apps/emulator/LazyEmulator";
 import { LazyJsDos } from "@/components/apps/emulator/LazyJsDos";
 import { enabledOs } from "@/data/os";
@@ -140,6 +141,16 @@ const baseApps: AppDefinition[] = [
     component: Games,
     defaultSize: { w: 560, h: 560 },
     minSize: { w: 420, h: 400 },
+    pinned: true,
+  },
+  {
+    id: "browser",
+    name: "apps.browser",
+    glyph: "🌐",
+    description: "apps.browserDesc",
+    component: Browser,
+    defaultSize: { w: 800, h: 600 },
+    minSize: { w: 400, h: 300 },
     pinned: true,
   },
 ];

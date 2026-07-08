@@ -159,6 +159,7 @@ const APP_TO_ICON: Record<string, string> = {
   imageviewer: "image",
   filemanager: "folder",
   calculator: "crt",
+  browser: "browser",
 };
 
 const AI_ICONS = new Set([
@@ -166,7 +167,7 @@ const AI_ICONS = new Set([
   "maximize", "minimize", "monitor", "power", "refresh", "restore",
   "settings", "terminal", "upload", "search", "chevron-left", "palette",
   "crt", "motion", "sound", "system", "shield", "folder", "file",
-  "folder-plus", "save", "trash", "pencil"
+  "folder-plus", "save", "trash", "pencil", "browser"
 ]);
 
 interface Props {
