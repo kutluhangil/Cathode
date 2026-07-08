@@ -160,7 +160,9 @@ const APP_TO_ICON: Record<string, string> = {
 const AI_ICONS = new Set([
   "bird", "close", "disk", "doc", "gamepad", "image", "info",
   "maximize", "minimize", "monitor", "power", "refresh", "restore",
-  "settings", "terminal", "upload"
+  "settings", "terminal", "upload", "search", "chevron-left", "palette",
+  "crt", "motion", "sound", "system", "shield", "folder", "file",
+  "folder-plus", "save", "trash", "pencil"
 ]);
 
 interface Props {

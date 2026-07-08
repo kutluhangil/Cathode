@@ -194,7 +194,9 @@ interface IconProps {
 const AI_ICONS = new Set([
   "bird", "close", "disk", "doc", "gamepad", "image", "info",
   "maximize", "minimize", "monitor", "power", "refresh", "restore",
-  "settings", "terminal", "upload"
+  "settings", "terminal", "upload", "search", "chevron-left", "palette",
+  "crt", "motion", "sound", "system", "shield", "folder", "file",
+  "folder-plus", "save", "trash", "pencil"
 ]);
 
 export function Icon({ name, size = 16, className, strokeWidth = 2 }: IconProps) {
@@ -241,25 +243,14 @@ export function RetrogradeMark({
   className?: string;
 }) {
   return (
-    <svg
+    <img
+      src="/logo.png"
+      alt="Retrograde logo"
       width={size}
       height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={2}
-      strokeLinecap="square"
-      strokeLinejoin="miter"
       className={className}
+      style={{ imageRendering: "pixelated", objectFit: "contain" }}
       aria-hidden="true"
-    >
-      {/* kalın ekran gövdesi */}
-      <path d="M3 5h18v14H3z" />
-      {/* blok fosfor izi */}
-      <path d="M6 12h5M15 12h3" />
-      <path d="M12 12h.01" strokeWidth={3} />
-      {/* üst/alt scanline izleri */}
-      <path d="M7 8h10M7 16h10" strokeWidth={1} opacity={0.4} />
-    </svg>
+    />
   );
 }
