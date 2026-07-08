@@ -2,7 +2,7 @@
 
 <br />
 
-<img src="https://img.shields.io/badge/Cathode-v0.1.0-f59e0b?style=for-the-badge&logoColor=white" alt="version" />
+<img src="https://img.shields.io/badge/Retrograde-v0.1.0-f59e0b?style=for-the-badge&logoColor=white" alt="version" />
 <img src="https://img.shields.io/badge/Built_with-TypeScript-3178c6?style=for-the-badge&logo=typescript&logoColor=white" alt="typescript" />
 <img src="https://img.shields.io/badge/Next.js-14-000000?style=for-the-badge&logo=next.js&logoColor=white" alt="nextjs" />
 <img src="https://img.shields.io/badge/React-18-61dafb?style=for-the-badge&logo=react&logoColor=black" alt="react" />
@@ -28,7 +28,7 @@
 
 ### **A browser-native retro OS shell** — bespoke desktop chrome meets real x86 emulation, with zero login and zero tracking.
 
-[Report Bug](https://github.com/kutluhangil/Cathode/issues) · [Request Feature](https://github.com/kutluhangil/Cathode/issues)
+[Report Bug](https://github.com/kutluhangil/Retrograde/issues) · [Request Feature](https://github.com/kutluhangil/Retrograde/issues)
 
 </div>
 
@@ -36,13 +36,13 @@
 
 ## 🇹🇷 Türkçe Açıklama
 
-**Cathode**, tarayıcıda çalışan, tamamen özgün tasarımlı bir retro işletim sistemi kabuğudur. İki katmandan oluşur: **kabuk** — boot ekranı, masaüstü, pencere yöneticisi, dock ve dahili uygulamalarla (Terminal, Not Defteri, Ayarlar, Sistemler, Oyunlar) kendine ait "Obsidian Cathode" arayüzü — ve **emülasyon** — WebAssembly tabanlı v86 ile gerçek eski işletim sistemlerini (KolibriOS, FreeDOS, ReactOS) ve js-dos (DOSBox-X) ile klasik DOS oyunlarını bir pencere içinde çalıştırma katmanı. Emüle edilen sistemler internete bağlı değildir ve modern makineye erişemez — tamamen izole sanal donanımda çalışır. Login yok, veritabanı yok, analytics yok, reklam yok; tüm ayarlar (tema, CRT efektleri, duvar kâğıdı, ses) yalnızca tarayıcının `localStorage`'ında tutulur. Progressive Web App olarak offline çalışabilir, telifli sistemler (örn. Windows) sitede barındırılmaz — yalnızca kullanıcının kendi yüklediği imajla (BYOI) açılır.
+**Retrograde**, tarayıcıda çalışan, tamamen özgün tasarımlı bir retro işletim sistemi kabuğudur. İki katmandan oluşur: **kabuk** — boot ekranı, masaüstü, pencere yöneticisi, dock ve dahili uygulamalarla (Terminal, Not Defteri, Ayarlar, Sistemler, Oyunlar) kendine ait "Obsidian Retrograde" arayüzü — ve **emülasyon** — WebAssembly tabanlı v86 ile gerçek eski işletim sistemlerini (KolibriOS, FreeDOS, ReactOS) ve js-dos (DOSBox-X) ile klasik DOS oyunlarını bir pencere içinde çalıştırma katmanı. Emüle edilen sistemler internete bağlı değildir ve modern makineye erişemez — tamamen izole sanal donanımda çalışır. Login yok, veritabanı yok, analytics yok, reklam yok; tüm ayarlar (tema, CRT efektleri, duvar kâğıdı, ses) yalnızca tarayıcının `localStorage`'ında tutulur. Progressive Web App olarak offline çalışabilir, telifli sistemler (örn. Windows) sitede barındırılmaz — yalnızca kullanıcının kendi yüklediği imajla (BYOI) açılır.
 
 ---
 
-## ✦ What is Cathode?
+## ✦ What is Retrograde?
 
-**Cathode** is a fully bespoke retro operating-system shell that runs entirely in your browser. It's not a UI wrapper around someone else's design — the boot sequence, desktop, window manager, dock, and built-in apps are an original interface called **"Obsidian Cathode."**
+**Retrograde** is a fully bespoke retro operating-system shell that runs entirely in your browser. It's not a UI wrapper around someone else's design — the boot sequence, desktop, window manager, dock, and built-in apps are an original interface called **"Obsidian Retrograde."**
 
 Underneath, real legacy systems run in emulated hardware: **v86** boots a genuine x86 machine over WebAssembly (KolibriOS, FreeDOS, ReactOS), and **js-dos** (DOSBox-X) runs classic DOS software — both fully sandboxed, with no network access to the host machine or the internet. No accounts, no server-side state, no analytics. Everything — theme, CRT effects, wallpaper, sound — persists locally via `localStorage`, and the app installs as an offline-capable PWA.
 
@@ -52,11 +52,11 @@ Underneath, real legacy systems run in emulated hardware: **v86** boots a genuin
 
 | Feature | Description |
 |--------|-------------|
-| 🖥️ **Obsidian Cathode Shell** | Original boot screen, desktop, draggable/resizable window manager, dock, and start menu |
+| 🖥️ **Obsidian Retrograde Shell** | Original boot screen, desktop, draggable/resizable window manager, dock, and start menu |
 | ⌨️ **Terminal** | Built-in shell app — control the OS with commands (`open`, `wallpaper`, `accent`, `crt`, `monitor`, `reboot`, ...) |
 | 🔎 **Command Palette** | `Cmd/Ctrl+K` fuzzy search to launch any app or system action instantly |
 | 🪟 **Window Manager** | Drag, resize, snap-to-edge (half-screen), and `Alt+Tab` window switcher |
-| 🎛️ **Live Settings** | Amber ↔ phosphor-green accent, CRT scanline/vignette/grain/glow, physical "Cathode 5100" monitor bezel, motion toggle (`prefers-reduced-motion` aware) |
+| 🎛️ **Live Settings** | Amber ↔ phosphor-green accent, CRT scanline/vignette/grain/glow, physical "Retrograde 5100" monitor bezel, motion toggle (`prefers-reduced-motion` aware) |
 | 🌌 **Screensaver** | Phosphor-style bouncing mark after 3 minutes idle, auto-disabled if animations are off |
 | 🔊 **UI Sound Engine** | WebAudio-synthesized open/close/toggle/error cues — no audio files, generated on the fly |
 | 🧩 **App Suite** | Notepad (persistent notes), Settings, About, Systems catalog, Games catalog — all native windows |
@@ -102,8 +102,8 @@ Deployment   →  Docker (standalone) → Ubuntu → nginx → Cloudflare Tunnel
 
 ```bash
 # Clone the repository
-git clone https://github.com/kutluhangil/Cathode.git
-cd Cathode
+git clone https://github.com/kutluhangil/Retrograde.git
+cd Retrograde
 
 # Install dependencies (postinstall prepares emulator binaries into public/)
 npm install
@@ -130,13 +130,13 @@ from `node_modules` plus free-license image downloads.
 
 ## ☁️ Deployment
 
-Cathode ships as a self-hosted **Docker** image — no serverless platform required
+Retrograde ships as a self-hosted **Docker** image — no serverless platform required
 (the v86 emulator needs `SharedArrayBuffer`, which needs strict cross-origin headers
 that are easiest to guarantee behind your own reverse proxy).
 
 ```bash
-docker build -t cathode .
-docker run -p 3000:3000 cathode
+docker build -t retrograde .
+docker run -p 3000:3000 retrograde
 ```
 
 - `deploy/nginx.conf` — reverse proxy config: WASM MIME type, HTTP range requests
@@ -152,7 +152,7 @@ docker run -p 3000:3000 cathode
 ## 📐 Project Structure
 
 ```
-cathode/
+retrograde/
 ├── src/
 │   ├── app/                       # layout, page (boot → desktop), globals.css, sw.ts
 │   ├── components/
@@ -168,7 +168,7 @@ cathode/
 │   └── data/                       # apps (registry), os (v86 catalog), games (js-dos catalog)
 ├── public/                          # icons, wallpapers, (setup:emu →) v86, js-dos, images
 ├── deploy/                          # nginx.conf, R2.md
-└── CATHODE_BUILD_SPEC.md            # phased build spec this project was implemented against
+└── RETROGRADE_BUILD_SPEC.md            # phased build spec this project was implemented against
 ```
 
 ---
@@ -189,9 +189,9 @@ desktop apps; disabled ones show as "coming soon" until their image is hosted. L
 images stream via HTTP range requests from Cloudflare R2 so the app itself stays light.
 
 ### Legal Boundary
-No copyrighted OS images (e.g. Windows) are ever bundled or hosted by Cathode. Where
+No copyrighted OS images (e.g. Windows) are ever bundled or hosted by Retrograde. Where
 a "Windows-flavored" card exists in the catalog, it only launches using an image the
-user supplies themselves (BYOI) — Cathode just provides the matching hardware profile.
+user supplies themselves (BYOI) — Retrograde just provides the matching hardware profile.
 
 ---
 
@@ -220,7 +220,7 @@ user supplies themselves (BYOI) — Cathode just provides the matching hardware 
 
 ## ⚖️ Legal / Content Policy
 
-Cathode is a hobby / educational / digital-preservation project. All emulation engines
+Retrograde is a hobby / educational / digital-preservation project. All emulation engines
 are open source. Legacy operating systems belong to their respective copyright holders
 and are run **only** for archival/nostalgia purposes, fully sandboxed in the browser.
 Content is removed on request from a rights holder. This site carries no ads and has

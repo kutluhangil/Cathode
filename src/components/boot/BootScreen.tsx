@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { usePrefersReducedMotion } from "@/lib/motion";
 import { useT } from "@/lib/i18n/useT";
-import { CathodeMark } from "@/components/icons";
+import { RetrogradeMark } from "@/components/icons";
 
 interface Props {
   onDone: () => void;
@@ -107,16 +107,16 @@ export function BootScreen({ onDone }: Props) {
         className="mb-8 flex flex-col items-center gap-3"
       >
         <span className="phosphor text-accent">
-          <CathodeMark size={44} />
+          <RetrogradeMark size={44} />
         </span>
         <h1 className="text-2xl font-semibold tracking-tight text-text">
-          Cathode
+          Retrograde
         </h1>
       </motion.div>
 
       {/* POST kolonu */}
       <div className="h-40 w-80 font-mono text-[11px] leading-relaxed text-text-dim">
-        <div className="text-text">Cathode Systems 5100</div>
+        <div className="text-text">Retrograde Systems 5100</div>
         <div className="mb-3 text-faint">phosphor bios v2.0</div>
 
         {mem !== null && (

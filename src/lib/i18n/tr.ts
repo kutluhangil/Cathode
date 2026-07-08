@@ -30,7 +30,7 @@ export const tr = {
   },
   systemBar: {
     language: "dil",
-    menu: "Cathode sistem menüsü",
+    menu: "Retrograde sistem menüsü",
     reboot: "Yeniden başlat",
     accent: "accent rengini değiştir",
     accentShort: "accent",
@@ -46,7 +46,7 @@ export const tr = {
       "hobi / arşiv / eğitim projesi · emülasyon açık kaynak · reklam yok · detay için tıkla",
   },
   dock: {
-    menu: "Cathode menüsü",
+    menu: "Retrograde menüsü",
   },
   startMenu: {
     searchPlaceholder: "uygulama ara…",
@@ -60,7 +60,7 @@ export const tr = {
     skipAria: "açılışı atla",
   },
   terminal: {
-    bannerTitle: "cathode shell v2.0 — phosphor terminal",
+    bannerTitle: "retrograde shell v2.0 — phosphor terminal",
     bannerHelp: 'komutlar için "help" yaz.',
     inputAria: "terminal komut girişi",
     help: [
@@ -74,12 +74,12 @@ export const tr = {
       "wallpaper <ad>    duvar kâğıdı: {wallpapers}",
       "accent <renk>     amber | green",
       "crt on|off        CRT efektleri",
-      "monitor on|off    Cathode 5100 çerçevesi",
+      "monitor on|off    Retrograde 5100 çerçevesi",
       "reboot            boot sekansını tekrar oynat",
     ].join("\n"),
     sysinfo: [
       "  ┌─────────────┐",
-      "  │  ▄▄▄▄▄▄▄▄▄  │   cathode systems 5100",
+      "  │  ▄▄▄▄▄▄▄▄▄  │   retrograde systems 5100",
       "  │  █ ─────█▪█ │   kabuk: workstation v2",
       "  │  ▀▀▀▀▀▀▀▀▀  │   render: phosphor crt",
       "  └─────┬─┬─────┘   emülasyon: v86 · js-dos (wasm)",
@@ -98,7 +98,7 @@ export const tr = {
     notFound: 'komut bulunamadı: {name} — "help" yaz',
   },
   installHint: {
-    title: "Cathode'u uygulama olarak kur",
+    title: "Retrograde'u uygulama olarak kur",
     subtitle: "masaüstünden tek tıkla aç",
     install: "Kur",
   },
@@ -160,7 +160,7 @@ export const tr = {
   },
   apps: {
     about: "Hakkında",
-    aboutDesc: "Cathode nedir, yasal not",
+    aboutDesc: "Retrograde nedir, yasal not",
     settings: "Ayarlar",
     settingsDesc: "Tema, CRT, duvar kâğıdı",
     notepad: "Not defteri",
@@ -174,7 +174,7 @@ export const tr = {
     paint: "Paint",
     paintDesc: "Çiz ve kaydet",
     terminal: "Terminal",
-    terminalDesc: "Cathode shell · komutla yönet",
+    terminalDesc: "Retrograde shell · komutla yönet",
     systems: "Sistemler",
     systemsDesc: "Emülatör · OS kataloğu + kendi imajın",
     games: "Oyunlar",
@@ -247,7 +247,7 @@ export const tr = {
     crt: "CRT efektleri",
     crtHint: "Vinyet, grain ve fosfor parıltı.",
     monitor: "Monitör modu",
-    monitorHint: 'Fiziksel "Cathode 5100" çerçevesi — bezel + güç LED\'i.',
+    monitorHint: 'Fiziksel "Retrograde 5100" çerçevesi — bezel + güç LED\'i.',
     monitorLabel: "monitör modu",
     sound: "Arayüz sesleri",
     soundHint: "Aç/kapa tıkları (varsayılan kapalı).",

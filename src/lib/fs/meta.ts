@@ -6,8 +6,8 @@ export interface FsMeta {
   positions: Record<string, { x: number; y: number }>;
 }
 
-const ROOT_DIR = "cathode-fs";
-const META = ".cathode-meta.json";
+const ROOT_DIR = "retrograde-fs";
+const META = ".retrograde-meta.json";
 
 async function root(): Promise<FileSystemDirectoryHandle> {
   const opfs = await navigator.storage.getDirectory();

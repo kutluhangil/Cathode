@@ -261,7 +261,7 @@ export function Settings() {
           <>
             <PanelTitle>{t("settings.system")}</PanelTitle>
             <div className="space-y-1.5 py-3 font-mono text-[12px]">
-              <KV k={t("settings.sysShell")} v="cathode workstation v2" />
+              <KV k={t("settings.sysShell")} v="retrograde workstation v2" />
               <KV k={t("settings.sysRender")} v="phosphor crt" />
               <KV k={t("settings.sysEmu")} v="v86 · js-dos (wasm)" />
               <KV k={t("settings.sysData")} v={t("settings.sysDataValue")} />

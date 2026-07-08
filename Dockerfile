@@ -1,4 +1,4 @@
-# Cathode — çok aşamalı Docker build (Next.js standalone).
+# Retrograde — çok aşamalı Docker build (Next.js standalone).
 # Emülatör binary'leri build sırasında setup:emu ile hazırlanır (ağ gerekir).
 
 FROM node:22-alpine AS deps

@@ -15,7 +15,7 @@ test("closing a ready emulator auto-saves its session to OPFS", async ({ page })
   await page.evaluate(async () => {
     try {
       const root = await navigator.storage.getDirectory();
-      await root.removeEntry("cathode-states", { recursive: true });
+      await root.removeEntry("retrograde-states", { recursive: true });
     } catch {
       /* none */
     }

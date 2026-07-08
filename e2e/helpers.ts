@@ -4,7 +4,7 @@ import type { Page } from "@playwright/test";
 export async function bypassBoot(page: Page) {
   await page.addInitScript(() => {
     try {
-      sessionStorage.setItem("cathode.booted", "1");
+      sessionStorage.setItem("retrograde.booted", "1");
     } catch {
       /* storage unavailable — ignore */
     }
@@ -27,7 +27,7 @@ export async function resetFs(page: Page) {
   await page.evaluate(async () => {
     try {
       const root = await navigator.storage.getDirectory();
-      await root.removeEntry("cathode-fs", { recursive: true });
+      await root.removeEntry("retrograde-fs", { recursive: true });
     } catch {
       /* nothing to remove */
     }

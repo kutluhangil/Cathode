@@ -10,4 +10,4 @@ export const SYSTEM_BAR_H = 28;
 export const DOCK_RESERVE = 84;
 
 /** Boot "oturum başına bir kez" anahtarı (sessionStorage) */
-export const BOOT_KEY = "cathode.booted";
+export const BOOT_KEY = "retrograde.booted";

@@ -1,6 +1,6 @@
-# Cathode — Master Build Spec
+# Retrograde — Master Build Spec
 
-> **Çalışma adı:** `Cathode` · değiştirmek istersen tüm dosyada `Cathode` (görünen ad) ve `cathode` (paket/slug) token'larını tek seferde değiştir.
+> **Çalışma adı:** `Retrograde` · değiştirmek istersen tüm dosyada `Retrograde` (görünen ad) ve `retrograde` (paket/slug) token'larını tek seferde değiştir.
 > **Tip:** Tarayıcıda çalışan retro işletim sistemi sitesi · Hobby · Login yok · Reklam yok · Para yok
 > **Hedef:** LinkedIn'de keyif amaçlı paylaşım · premium ve özgün tasarım
 > **Yürütme:** VS Code + Claude Code · faz faz · her fazın sonunda Kutluhan inceleyip kendisi commit eder
@@ -9,7 +9,7 @@
 
 ## 0. Konsept (tek paragraf)
 
-Cathode iki katmanlı bir projedir. **Dışarıda** tamamen bize ait, özgün tasarımlı bir "işletim sistemi kabuğu" (shell) vardır: boot ekranı, masaüstü, dock, pencere yöneticisi — hepsi React/TypeScript ile yazılır, bu sitenin asıl markasıdır. **İçeride** ise gerçek eski işletim sistemleri (Windows 95/98/2000, DOS, ReactOS) bir pencere içinde, WebAssembly tabanlı emülatörle (v86 / js-dos) çalışır. Her şey kullanıcının tarayıcısında, client-side ve izole çalışır; sunucuda OS koşmaz. **Faz 1 sadece kabuğu** üretir (emülasyon olmadan, gerçek bir masaüstü gibi gezilebilir). **Faz 2** gerçek emülasyonu ekler.
+Retrograde iki katmanlı bir projedir. **Dışarıda** tamamen bize ait, özgün tasarımlı bir "işletim sistemi kabuğu" (shell) vardır: boot ekranı, masaüstü, dock, pencere yöneticisi — hepsi React/TypeScript ile yazılır, bu sitenin asıl markasıdır. **İçeride** ise gerçek eski işletim sistemleri (Windows 95/98/2000, DOS, ReactOS) bir pencere içinde, WebAssembly tabanlı emülatörle (v86 / js-dos) çalışır. Her şey kullanıcının tarayıcısında, client-side ve izole çalışır; sunucuda OS koşmaz. **Faz 1 sadece kabuğu** üretir (emülasyon olmadan, gerçek bir masaüstü gibi gezilebilir). **Faz 2** gerçek emülasyonu ekler.
 
 ---
 
@@ -18,7 +18,7 @@ Cathode iki katmanlı bir projedir. **Dışarıda** tamamen bize ait, özgün ta
 > Aşağıdaki bloğu projenin kök dizinine `CLAUDE.md` olarak kaydet. Bu kurallar **bağlayıcıdır**.
 
 ```markdown
-# CLAUDE.md — Cathode
+# CLAUDE.md — Retrograde
 
 ## Git / sürüm yönetimi (MUTLAK kurallar)
 - ASLA `git commit` veya `git push` çalıştırma. Tüm commit ve push işlemlerini Kutluhan elle yapar.
@@ -28,7 +28,7 @@ Cathode iki katmanlı bir projedir. **Dışarıda** tamamen bize ait, özgün ta
 - Bir iş bittiğinde: değişiklikleri özetle, hangi dosyaların değiştiğini söyle ve "commit etmeye hazır" de — commit'i Kutluhan'a bırak.
 
 ## Çalışma biçimi
-- Bu spec'i (CATHODE_BUILD_SPEC.md) faz faz uygula. Bir fazı bitirmeden sonrakine geçme.
+- Bu spec'i (RETROGRADE_BUILD_SPEC.md) faz faz uygula. Bir fazı bitirmeden sonrakine geçme.
 - Her fazın sonunda o fazın "Definition of Done" maddelerini kontrol et.
 - Kod açık, tipli (TypeScript strict) ve yorum gerektiren yerlerde kısa yorumlu olsun.
 - Yeni bağımlılık eklemeden önce gerekçesini bir cümleyle belirt.
@@ -75,7 +75,7 @@ Tarayıcı / PWA
 
 **Klasör yapısı:**
 ```
-cathode/
+retrograde/
 ├── CLAUDE.md
 ├── public/
 │   ├── manifest.webmanifest
@@ -104,7 +104,7 @@ cathode/
 
 ---
 
-## 4. Tasarım Sistemi — "Obsidian Cathode"
+## 4. Tasarım Sistemi — "Obsidian Retrograde"
 
 Çizgi: **premium dark minimalist + retro CRT**. 1:1 Windows kopyası YAPMA (klişe + trademark riski). Kendi özgün, fütüristik-retro işletim sistemimizi tasarlıyoruz.
 
@@ -150,11 +150,11 @@ Seçim: **güvenli set gömülü + disclaimer**.
 
 - **Gömülecek güvenli set:** FreeDOS, MS-DOS, Windows 3.x, 95, 98, ME, 2000 ve tamamen açık olanlar (**ReactOS**, TinyCore/Alpine Linux, KolibriOS, Haiku).
 - **XP YOK.** Hem yasal olarak en riskli sürüm (Microsoft XP için takedown gönderiyor), hem v86'da kötü çalışıyor. Faz 2'de istenirse sadece "kendi imajını yükle" (BYOI) deneysel modunda düşünülür, gömülmez.
-- **Windows logosu / Start ikonu kullanma.** Özgün ikonografi tasarla (daedalOS bile yasal sebeple Windows ikonunu kaldırıp π koymuştu). Marka tamamen Cathode.
+- **Windows logosu / Start ikonu kullanma.** Özgün ikonografi tasarla (daedalOS bile yasal sebeple Windows ikonunu kaldırıp π koymuştu). Marka tamamen Retrograde.
 - **Disclaimer** (sitenin altında + "Hakkında" uygulamasında, TR + EN):
 
 ```
-Cathode bir hobi/eğitim/dijital koruma projesidir. Emülasyon motorları açık kaynaktır.
+Retrograde bir hobi/eğitim/dijital koruma projesidir. Emülasyon motorları açık kaynaktır.
 Eski işletim sistemleri telif sahiplerine aittir ve yalnızca arşiv/nostalji amacıyla,
 tarayıcıda izole biçimde çalıştırılır. Telif sahibi talep ederse ilgili içerik kaldırılır.
 Bu site reklam içermez, ticari amaç gütmez.
@@ -168,12 +168,12 @@ Bu site reklam içermez, ticari amaç gütmez.
 
 ### FAZ 0 — Kurulum
 **Görevler**
-- [ ] `create-next-app` (App Router, TS, Tailwind, ESLint) ile `cathode` oluştur.
+- [ ] `create-next-app` (App Router, TS, Tailwind, ESLint) ile `retrograde` oluştur.
 - [ ] TypeScript `strict: true`. Prettier + ESLint yapılandır.
 - [ ] `CLAUDE.md`'yi (Bölüm 1) repo köküne koy.
 - [ ] Tasarım token'larını `globals.css`'e ekle (Bölüm 4). Tailwind'i token'lara bağla.
 - [ ] Zustand kur. `globals.css`'te CRT overlay altyapısını (scanline/vignette katmanları) hazırla, varsayılan kapalı.
-- [ ] `page.tsx`: boş obsidyen ekran + ortada "Cathode" yer tutucu.
+- [ ] `page.tsx`: boş obsidyen ekran + ortada "Retrograde" yer tutucu.
 
 **DoD:** Proje çalışıyor (`npm run dev`), obsidyen ekran + token'lar aktif, lint temiz, `CLAUDE.md` yerinde.
 
@@ -182,7 +182,7 @@ Bu site reklam içermez, ticari amaç gütmez.
 ### FAZ 1 — Premium Shell (v1, ASIL İŞ)
 
 #### 1.1 Boot ekranı
-- [ ] `BootScreen` component'i: özgün Cathode logosu + akıcı animasyon (Framer Motion).
+- [ ] `BootScreen` component'i: özgün Retrograde logosu + akıcı animasyon (Framer Motion).
 - [ ] Sahte ama tatmin edici boot sekansı (kısa ilerleme/parıltı), 1.5–2.5 sn, sonra masaüstüne geçiş.
 - [ ] Boot bir kez gösterilir (oturum başına); "skip" tıklamasıyla atlanır.
 
@@ -199,7 +199,7 @@ Bu site reklam içermez, ticari amaç gütmez.
 
 #### 1.4 Dock / başlat menüsü
 - [ ] `Dock`: açık pencereler + sabitli uygulamalar; hover yumuşak büyüme; tıkla odakla/minimize et.
-- [ ] `StartMenu` (özgün, "Start" yazma — "Cathode" menüsü): uygulama listesi + arama.
+- [ ] `StartMenu` (özgün, "Start" yazma — "Retrograde" menüsü): uygulama listesi + arama.
 - [ ] `Clock`: canlı saat/tarih; tray alanında accent/CRT toggle kısayolu.
 
 #### 1.5 Uygulama sistemi + ilk uygulamalar
@@ -284,7 +284,7 @@ Bu site reklam içermez, ticari amaç gütmez.
 | 2 | **Design System & CRT** | `src/app/globals.css` (token + CRT katmanları), `src/styles/*`, `src/components/ui/*` (button, toggle, slider, glass, icon), `src/lib/motion.ts` | Atomlar çalışıyor, amber↔phosphor tema geçişi sorunsuz, CRT toggle'ları çalışıyor, `prefers-reduced-motion` saygılı |
 | 3 | **Boot & Desktop** | `src/components/boot/*`, `src/components/desktop/*` (Desktop, DesktopIcon, ContextMenu, Wallpaper), `src/app/page.tsx` | CRT boot oynuyor + atlanabiliyor, masaüstü mount oluyor, ikonlar + sağ-tık menüsü çalışıyor |
 | 4 | **Window Manager** | `src/components/window/*` (Window, WindowManager, TitleBar, ResizeHandles), `src/store/windowsStore` | Drag + 8 yön resize + min/max/restore/close, z-index ve odak doğru, ekran sınırına snap |
-| 5 | **Dock & Start** | `src/components/dock/*` (Dock, StartMenu, Clock, TrayIcons) | Dock açık+sabit pencereleri gösteriyor, hover büyüme, Cathode menüsü + arama, canlı saat, tray'de accent/CRT kısayolu |
+| 5 | **Dock & Start** | `src/components/dock/*` (Dock, StartMenu, Clock, TrayIcons) | Dock açık+sabit pencereleri gösteriyor, hover büyüme, Retrograde menüsü + arama, canlı saat, tray'de accent/CRT kısayolu |
 | 6 | **Apps & System UI** | `src/components/apps/*` (About, Settings, mini app), `src/data/apps.ts`, `src/store/settingsStore` | Uygulamalar pencerede açılıyor, ayarlar (tema/CRT/duvar kâğıdı/hareket) `localStorage`'da kalıcı, About'ta disclaimer |
 | 7 | **Emulation Core** *(Faz 2)* | `src/components/apps/emulator/*` (V86Screen, JsDosScreen, EmulatorWindow), `src/lib/emu/*`, `next.config.mjs` COOP/COEP + WASM | v86 ve js-dos pencere içinde boot ediyor; reset, tam ekran, "ekranı bırak" çalışıyor |
 | 8 | **OS Catalog, Images & Persistence** *(Faz 2)* | `src/data/os.ts`, `src/components/apps/emulator/os-loader/*`, `src/lib/persist.ts`, R2 dokümanı (`deploy/`) | Güvenli set kataloğu + R2'den async/range yükleme + ilerleme; OPFS save/restore; BYOI upload (yalnız client) |
@@ -299,11 +299,11 @@ Bu site reklam içermez, ticari amaç gütmez.
 - **Commit/push/branch YOK** (bkz. CLAUDE.md). İş bitince özetle, "commit'e hazır" de, gerisini Kutluhan yapar.
 - Yeni paket eklemeden önce tek cümlelik gerekçe ver.
 - Performans ve erişilebilirlik birinci sınıf vatandaş; `prefers-reduced-motion`/`prefers-color-scheme` daima saygı görür.
-- Tasarımda kararsız kalırsan: daha sade + daha premium olan yönü seç. Cathode klişe değil, özgün hissetmeli.
+- Tasarımda kararsız kalırsan: daha sade + daha premium olan yönü seç. Retrograde klişe değil, özgün hissetmeli.
 
 ---
 
 ## 9. Açık bırakılanlar (Kutluhan onayı bekliyor)
-- Nihai **isim** (çalışma adı `Cathode`).
+- Nihai **isim** (çalışma adı `Retrograde`).
 - Accent rengi: **amber (varsayılan)** mı, phosphor green mi (ikisi de Ayarlar'da var, sadece varsayılan seçilecek).
 - R2 hesabı/bucket kurulumu (Faz 2 başında).

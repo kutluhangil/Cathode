@@ -8,12 +8,12 @@ import { useSettings } from "@/store/settingsStore";
 import { useT } from "@/lib/i18n/useT";
 import { cn } from "@/lib/cn";
 import { BOOT_KEY } from "@/lib/layout";
-import { CathodeMark, Icon, type IconName } from "@/components/icons";
+import { RetrogradeMark, Icon, type IconName } from "@/components/icons";
 import { Clock } from "./Clock";
 
 /**
  * Üst sistem çubuğu — gerçek OS hissinin ana taşıyıcısı.
- * Sol: Cathode sistem menüsü · Sağ: tray (accent, CRT, monitör) + saat.
+ * Sol: Retrograde sistem menüsü · Sağ: tray (accent, CRT, monitör) + saat.
  */
 export function SystemBar() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -66,9 +66,9 @@ export function SystemBar() {
           )}
         >
           <span className={cn("text-accent", crt && "phosphor")}>
-            <CathodeMark size={14} />
+            <RetrogradeMark size={14} />
           </span>
-          Cathode
+          Retrograde
         </button>
 
         <AnimatePresence>

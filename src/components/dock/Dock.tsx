@@ -7,7 +7,7 @@ import { useWindows } from "@/store/windowsStore";
 import { useT } from "@/lib/i18n/useT";
 import { cn } from "@/lib/cn";
 import { AppIcon } from "@/components/ui/AppIcon";
-import { CathodeMark } from "@/components/icons";
+import { RetrogradeMark } from "@/components/icons";
 import { StartMenu } from "./StartMenu";
 
 /**
@@ -37,7 +37,7 @@ export function Dock() {
         aria-label={t("dock.menu")}
         className="pointer-events-auto flex items-center gap-1.5 rounded-ui border border-border-soft bg-glass px-2 py-2 shadow-win"
       >
-        {/* Cathode launcher — menü butonun üstüne çıpalanır */}
+        {/* Retrograde launcher — menü butonun üstüne çıpalanır */}
         <div className="relative">
           <AnimatePresence>
             {menuOpen && <StartMenu onClose={() => setMenuOpen(false)} />}
@@ -54,7 +54,7 @@ export function Dock() {
             )}
           >
             <span className="phosphor">
-              <CathodeMark size={22} />
+              <RetrogradeMark size={22} />
             </span>
           </button>
         </div>

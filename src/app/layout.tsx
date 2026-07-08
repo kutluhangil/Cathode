@@ -16,25 +16,25 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://cathode.local"),
-  title: "Cathode",
+  metadataBase: new URL("https://retrograde.local"),
+  title: "Retrograde",
   description:
-    "Cathode — tarayıcıda çalışan, özgün tasarımlı retro işletim sistemi kabuğu.",
-  applicationName: "Cathode",
+    "Retrograde — tarayıcıda çalışan, özgün tasarımlı retro işletim sistemi kabuğu.",
+  applicationName: "Retrograde",
   manifest: "/manifest.webmanifest",
-  appleWebApp: { capable: true, title: "Cathode", statusBarStyle: "black" },
+  appleWebApp: { capable: true, title: "Retrograde", statusBarStyle: "black" },
   icons: {
     icon: "/icons/icon.svg",
     apple: "/icons/icon.svg",
   },
   openGraph: {
-    title: "Cathode",
+    title: "Retrograde",
     description: "Tarayıcıda çalışan, özgün tasarımlı retro işletim sistemi.",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Cathode",
+    title: "Retrograde",
     description: "Tarayıcıda çalışan, özgün tasarımlı retro işletim sistemi.",
   },
 };
@@ -62,11 +62,11 @@ export default function RootLayout({
         <div className="crt-layer crt-vignette" aria-hidden="true" />
         <div className="crt-layer crt-grain" aria-hidden="true" />
 
-        {/* Cathode 5100 monitör çerçevesi — görünürlük CSS data-monitor'a bağlı */}
+        {/* Retrograde 5100 monitör çerçevesi — görünürlük CSS data-monitor'a bağlı */}
         <div className="monitor-mask" aria-hidden="true" />
         <div className="monitor-glare" aria-hidden="true" />
         <div className="monitor-plate" aria-hidden="true">
-          <span>cathode 5100</span>
+          <span>retrograde 5100</span>
           <span className="monitor-led" />
         </div>
       </body>

@@ -13,7 +13,7 @@ interface Props {
   onClose: () => void;
 }
 
-/** Cathode menüsü — uygulama listesi + arama ("Start" yazmaz). */
+/** Retrograde menüsü — uygulama listesi + arama ("Start" yazmaz). */
 export function StartMenu({ onClose }: Props) {
   const [q, setQ] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);

@@ -3,7 +3,7 @@
 import { normalize, parent, basename, segments } from "./path";
 import type { FsEntry } from "./types";
 
-const ROOT_DIR = "cathode-fs";
+const ROOT_DIR = "retrograde-fs";
 const SEED = ["/Desktop", "/Documents", "/Pictures"];
 
 export function isSupported(): boolean {

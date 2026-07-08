@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 /* ============================================================
-   Cathode — "Cathode Workstation" tasarım dili (v2)
-   Kurgu: Cathode Systems, 1989 — kendi grafik OS'i + 5100 monitörü.
+   Retrograde — "Retrograde Workstation" tasarım dili (v2)
+   Kurgu: Retrograde Systems, 1989 — kendi grafik OS'i + 5100 monitörü.
    İnandırıcı işletim sistemi + fiziksel CRT sunumu.
    ============================================================ */
 
@@ -157,7 +157,7 @@ body {
 }
 
 /* ============================================================
-   Monitör modu — fiziksel "Cathode 5100" çerçevesi
+   Monitör modu — fiziksel "Retrograde 5100" çerçevesi
    Overlay yaklaşımı: konumlama/containing-block değişmez.
    data-monitor="on" iken görünür; mobilde daima kapalı.
    ============================================================ */

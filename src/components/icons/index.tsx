@@ -1,5 +1,5 @@
 /**
- * Cathode ikon sistemi — tek tutarlı dil (spec §4.3).
+ * Retrograde ikon sistemi — tek tutarlı dil (spec §4.3).
  * 24×24 viewBox · 1.5px stroke · kare uçlar (teknik çizim hissi) · currentColor.
  * Metin glif / emoji YOK — tüm sistem ikonları buradan gelir.
  */
@@ -209,10 +209,10 @@ export function Icon({ name, size = 16, className, strokeWidth = 1.5 }: IconProp
 }
 
 /**
- * Cathode markası — özgün çizim: fosfor ekran + tarama ışını.
+ * Retrograde markası — özgün çizim: fosfor ekran + tarama ışını.
  * Eski ◉ glifinin yerini alır (Windows/başka marka çağrışımı yok).
  */
-export function CathodeMark({
+export function RetrogradeMark({
   size = 20,
   className,
 }: {

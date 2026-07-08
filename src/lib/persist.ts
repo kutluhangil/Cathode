@@ -6,7 +6,7 @@
  * Sunucu yok; her şey kullanıcının tarayıcısında kalır.
  */
 
-const DIR = "cathode-states";
+const DIR = "retrograde-states";
 
 function supported(): boolean {
   return (

@@ -30,7 +30,7 @@ export const en = {
   },
   systemBar: {
     language: "language",
-    menu: "Cathode system menu",
+    menu: "Retrograde system menu",
     reboot: "Restart",
     accent: "change accent color",
     accentShort: "accent",
@@ -46,7 +46,7 @@ export const en = {
       "hobby / archive / educational project · emulation open source · no ads · click for details",
   },
   dock: {
-    menu: "Cathode menu",
+    menu: "Retrograde menu",
   },
   startMenu: {
     searchPlaceholder: "search apps…",
@@ -60,7 +60,7 @@ export const en = {
     skipAria: "skip boot",
   },
   terminal: {
-    bannerTitle: "cathode shell v2.0 — phosphor terminal",
+    bannerTitle: "retrograde shell v2.0 — phosphor terminal",
     bannerHelp: 'type "help" for commands.',
     inputAria: "terminal command input",
     help: [
@@ -74,12 +74,12 @@ export const en = {
       "wallpaper <name>  wallpaper: {wallpapers}",
       "accent <color>    amber | green",
       "crt on|off        CRT effects",
-      "monitor on|off    Cathode 5100 frame",
+      "monitor on|off    Retrograde 5100 frame",
       "reboot            replay the boot sequence",
     ].join("\n"),
     sysinfo: [
       "  ┌─────────────┐",
-      "  │  ▄▄▄▄▄▄▄▄▄  │   cathode systems 5100",
+      "  │  ▄▄▄▄▄▄▄▄▄  │   retrograde systems 5100",
       "  │  █ ─────█▪█ │   shell: workstation v2",
       "  │  ▀▀▀▀▀▀▀▀▀  │   render: phosphor crt",
       "  └─────┬─┬─────┘   emulation: v86 · js-dos (wasm)",
@@ -98,7 +98,7 @@ export const en = {
     notFound: 'command not found: {name} — type "help"',
   },
   installHint: {
-    title: "Install Cathode as an app",
+    title: "Install Retrograde as an app",
     subtitle: "open in one click from your desktop",
     install: "Install",
   },
@@ -162,7 +162,7 @@ export const en = {
   },
   apps: {
     about: "About",
-    aboutDesc: "What Cathode is, legal notice",
+    aboutDesc: "What Retrograde is, legal notice",
     settings: "Settings",
     settingsDesc: "Theme, CRT, wallpaper",
     notepad: "Notepad",
@@ -176,7 +176,7 @@ export const en = {
     paint: "Paint",
     paintDesc: "Draw and save",
     terminal: "Terminal",
-    terminalDesc: "Cathode shell · control by command",
+    terminalDesc: "Retrograde shell · control by command",
     systems: "Systems",
     systemsDesc: "Emulator · OS catalog + your own image",
     games: "Games",
@@ -249,7 +249,7 @@ export const en = {
     crt: "CRT effects",
     crtHint: "Vignette, grain and phosphor glow.",
     monitor: "Monitor mode",
-    monitorHint: 'Physical "Cathode 5100" frame — bezel + power LED.',
+    monitorHint: 'Physical "Retrograde 5100" frame — bezel + power LED.',
     monitorLabel: "monitor mode",
     sound: "Interface sounds",
     soundHint: "Toggle clicks (off by default).",

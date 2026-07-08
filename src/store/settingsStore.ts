@@ -10,7 +10,7 @@ interface SettingsState {
   lang: Lang;
   accent: AccentName;
   crt: boolean;
-  /** fiziksel "Cathode 5100" monitör çerçevesi (bezel + LED) */
+  /** fiziksel "Retrograde 5100" monitör çerçevesi (bezel + LED) */
   monitor: boolean;
   motion: boolean; // animasyonlar açık mı (prefers-reduced-motion ile birlikte değerlendirilir)
   sound: boolean;
@@ -77,7 +77,7 @@ export const useSettings = create<SettingsState>()(
       setLang: (lang) => set({ lang }),
     }),
     {
-      name: "cathode.settings",
+      name: "retrograde.settings",
       version: 3,
       // v1 → v2: eski duvar kâğıdı adları (horizon/aurora/grid/monolith) kalktı
       migrate: (persisted) => {

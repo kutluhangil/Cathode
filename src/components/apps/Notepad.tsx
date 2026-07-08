@@ -8,7 +8,7 @@ import { useT } from "@/lib/i18n/useT";
 import { Icon } from "@/components/icons";
 import { FsPicker } from "./fs/FsPicker";
 
-const LEGACY_KEY = "cathode.notepad";
+const LEGACY_KEY = "retrograde.notepad";
 
 interface Props {
   windowId: string;

@@ -14,7 +14,7 @@ interface Line {
   kind: "input" | "out" | "err";
 }
 
-const PROMPT = "guest@cathode:~$";
+const PROMPT = "guest@retrograde:~$";
 
 const WALLPAPERS: WallpaperId[] = [
   "phosphor",
@@ -25,7 +25,7 @@ const WALLPAPERS: WallpaperId[] = [
 ];
 
 /**
- * Cathode Shell — kabuğun kendi terminali.
+ * Retrograde Shell — kabuğun kendi terminali.
  * Gerçek emülatör değil; kabuk ayarlarını komutla yöneten retro dokunuş.
  */
 export function Terminal() {
@@ -147,7 +147,7 @@ export function Terminal() {
       case "credits":
         print(
           [
-            "Cathode — bespoke retro OS shell",
+            "Retrograde — bespoke retro OS shell",
             "",
             "emulation : v86 (copy.sh) · js-dos (DOSBox-X)",
             "systems   : KolibriOS · FreeDOS · ReactOS",
@@ -160,10 +160,10 @@ export function Terminal() {
       case "neofetch":
         print(
           [
-            "   ▟█▙     guest@cathode",
+            "   ▟█▙     guest@retrograde",
             "  ▟███▙    ---------------",
-            " ▟█████▙   os     : Obsidian Cathode",
-            " ▜█████▛   shell  : cathode-sh",
+            " ▟█████▙   os     : Obsidian Retrograde",
+            " ▜█████▛   shell  : retrograde-sh",
             "  ▜███▛    accent : " + settings.accent,
             "   ▜█▛     crt    : " + (settings.crt ? "on" : "off"),
             "           uptime : ∞ (client-side)",

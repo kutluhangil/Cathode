@@ -1,8 +1,8 @@
 import { ImageResponse } from "next/og";
 
-// LinkedIn / sosyal önizleme — Cathode Workstation kartı: monitör çerçevesi + fosfor wordmark.
+// LinkedIn / sosyal önizleme — Retrograde Workstation kartı: monitör çerçevesi + fosfor wordmark.
 export const runtime = "edge";
-export const alt = "Cathode — tarayıcıda çalışan retro işletim sistemi";
+export const alt = "Retrograde — tarayıcıda çalışan retro işletim sistemi";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -67,7 +67,7 @@ export default function Og() {
               textShadow: "0 0 26px rgba(255,176,0,0.5)",
             }}
           >
-            Cathode
+            Retrograde
           </div>
           <div
             style={{
@@ -104,7 +104,7 @@ export default function Og() {
             color: "#55555e",
           }}
         >
-          {"cathode 5100"}
+          {"retrograde 5100"}
           <div
             style={{
               width: 9,

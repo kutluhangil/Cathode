@@ -14,7 +14,7 @@ async function loadEmuChunk(page: import("@playwright/test").Page) {
   await page.evaluate(async () => {
     try {
       const root = await navigator.storage.getDirectory();
-      await root.removeEntry("cathode-states", { recursive: true });
+      await root.removeEntry("retrograde-states", { recursive: true });
     } catch {
       /* nothing to remove */
     }

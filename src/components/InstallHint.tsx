@@ -4,14 +4,14 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { registerServiceWorker } from "@/lib/pwa";
 import { useT } from "@/lib/i18n/useT";
-import { CathodeMark, Icon } from "@/components/icons";
+import { RetrogradeMark, Icon } from "@/components/icons";
 
 interface BIPEvent extends Event {
   prompt: () => Promise<void>;
   userChoice: Promise<{ outcome: string }>;
 }
 
-const DISMISS_KEY = "cathode.installHint.dismissed";
+const DISMISS_KEY = "retrograde.installHint.dismissed";
 
 /** SW kaydı + nazik "uygulama olarak kur" ipucu (kapatılabilir, kalıcı). */
 export function InstallHint() {
@@ -54,7 +54,7 @@ export function InstallHint() {
           className="fixed left-1/2 top-10 z-[6000] flex max-w-xs -translate-x-1/2 items-center gap-3 rounded-ui bg-surface-2 px-4 py-3 shadow-float"
         >
           <span className="phosphor text-accent" aria-hidden>
-            <CathodeMark size={22} />
+            <RetrogradeMark size={22} />
           </span>
           <div className="flex-1">
             <p className="text-[13px] text-text">{t("installHint.title")}</p>

@@ -6,7 +6,7 @@ import { resetFs, openAppFromDesktop } from "./helpers";
 test("save-as writes a file that appears in File Manager and persists", async ({ page }) => {
   await resetFs(page);
   await openAppFromDesktop(page, "notepad");
-  await page.getByTestId("np-textarea").fill("cathode notes");
+  await page.getByTestId("np-textarea").fill("retrograde notes");
   await page.getByTestId("np-save-as").click();
   await page.getByTestId("fs-save-name").fill("memo");
   await page.getByTestId("fs-save-confirm").click();

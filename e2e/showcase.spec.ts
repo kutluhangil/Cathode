@@ -15,7 +15,7 @@ test("terminal 'accent blue' applies and persists the theme", async ({ page }) =
   await input.press("Enter");
   await expect(page.locator("html")).toHaveAttribute("data-accent", "blue");
   const persisted = await page.evaluate(() => {
-    const raw = localStorage.getItem("cathode.settings");
+    const raw = localStorage.getItem("retrograde.settings");
     return raw ? JSON.parse(raw).state.accent : null;
   });
   expect(persisted).toBe("blue");

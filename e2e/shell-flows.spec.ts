@@ -24,7 +24,7 @@ test("terminal 'accent' command persists to localStorage", async ({ page }) => {
   await expect
     .poll(async () =>
       page.evaluate(() => {
-        const raw = localStorage.getItem("cathode.settings");
+        const raw = localStorage.getItem("retrograde.settings");
         return raw ? JSON.parse(raw).state.accent : null;
       }),
     )
@@ -32,7 +32,7 @@ test("terminal 'accent' command persists to localStorage", async ({ page }) => {
   // survives reload
   await page.reload();
   const accent = await page.evaluate(() => {
-    const raw = localStorage.getItem("cathode.settings");
+    const raw = localStorage.getItem("retrograde.settings");
     return raw ? JSON.parse(raw).state.accent : null;
   });
   expect(accent).toBe("green");

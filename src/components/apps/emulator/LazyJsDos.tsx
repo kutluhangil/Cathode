@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 import type { GameDefinition } from "@/data/games";
-import { CathodeMark } from "@/components/icons";
+import { RetrogradeMark } from "@/components/icons";
 
 // js-dos runtime ağırdır — yalnız bir oyun açılınca yüklenir.
 const JsDos = dynamic(
@@ -12,7 +12,7 @@ const JsDos = dynamic(
     loading: () => (
       <div className="flex h-full items-center justify-center bg-black">
         <span className="phosphor animate-pulse text-accent">
-          <CathodeMark size={28} />
+          <RetrogradeMark size={28} />
         </span>
       </div>
     ),

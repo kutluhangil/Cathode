@@ -1,4 +1,4 @@
-# CLAUDE.md — Cathode
+# CLAUDE.md — Retrograde
 
 ## Git / sürüm yönetimi (MUTLAK kurallar)
 - ASLA `git commit` veya `git push` çalıştırma. Tüm commit ve push işlemlerini Kutluhan elle yapar.
@@ -8,7 +8,7 @@
 - Bir iş bittiğinde: değişiklikleri özetle, hangi dosyaların değiştiğini söyle ve "commit etmeye hazır" de — commit'i Kutluhan'a bırak.
 
 ## Çalışma biçimi
-- Bu spec'i (CATHODE_BUILD_SPEC.md) faz faz uygula. Bir fazı bitirmeden sonrakine geçme.
+- Bu spec'i (RETROGRADE_BUILD_SPEC.md) faz faz uygula. Bir fazı bitirmeden sonrakine geçme.
 - Her fazın sonunda o fazın "Definition of Done" maddelerini kontrol et.
 - Kod açık, tipli (TypeScript strict) ve yorum gerektiren yerlerde kısa yorumlu olsun.
 - Yeni bağımlılık eklemeden önce gerekçesini bir cümleyle belirt.
