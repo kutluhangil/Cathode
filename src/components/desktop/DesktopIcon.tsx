@@ -5,6 +5,8 @@ import { cn } from "@/lib/cn";
 import { useT } from "@/lib/i18n/useT";
 import { AppIcon } from "@/components/ui/AppIcon";
 import type { AppDefinition } from "@/lib/types";
+import { useSettings } from "@/store/settingsStore";
+import { useDesktop } from "@/store/desktopStore";
 
 interface Props {
   app: AppDefinition;
@@ -12,23 +14,27 @@ interface Props {
 }
 
 export function DesktopIcon({ app, onOpen }: Props) {
-  const [selected, setSelected] = useState(false);
   const t = useT();
+  const desktopIconSize = useSettings((s) => s.desktopIconSize);
+  const selected = useDesktop((s) => s.selectedIds.has(app.id));
+  const toggleSelection = useDesktop((s) => s.toggleSelection);
 
   return (
     <button
       data-testid={`desktop-icon-${app.id}`}
-      onClick={onOpen}
-      onFocus={() => setSelected(true)}
-      onBlur={() => setSelected(false)}
+      data-desktop-icon="true"
+      data-id={app.id}
+      onDoubleClick={onOpen}
+      onClick={(e) => toggleSelection(app.id, e.shiftKey || e.metaKey || e.ctrlKey)}
       onKeyDown={(e) => {
         if (e.key === "Enter") onOpen();
       }}
       aria-label={t(app.name)}
       className={cn(
-        "group flex w-20 flex-col items-center gap-1.5 rounded-[10px] p-2 text-center outline-none transition-colors",
+        "group flex flex-col items-center gap-1.5 rounded-[10px] p-2 text-center outline-none transition-colors",
         selected ? "bg-accent/15" : "hover:bg-white/5",
       )}
+      style={{ width: desktopIconSize + 32 }}
     >
       <span
         className={cn(
@@ -39,7 +45,7 @@ export function DesktopIcon({ app, onOpen }: Props) {
         )}
         aria-hidden
       >
-        <AppIcon app={app} size={48} />
+        <AppIcon app={app} size={desktopIconSize} />
       </span>
       <span className="line-clamp-2 text-[11px] leading-tight text-text/90 [text-shadow:0_1px_3px_rgba(0,0,0,0.8)]">
         {t(app.name)}

@@ -19,6 +19,7 @@ interface SettingsState {
   wallpaper: WallpaperId;
   /** "photo" duvar kâğıdı için rastgele tohum — her yenilemede yeni 4K görsel */
   photoSeed: number;
+  desktopIconSize: number;
   setAccent: (a: AccentName) => void;
   toggleAccent: () => void;
   setCrt: (v: boolean) => void;
@@ -32,6 +33,7 @@ interface SettingsState {
   /** yeni rastgele fotoğraf çek (photo duvar kâğıdı) */
   shufflePhoto: () => void;
   setLang: (l: Lang) => void;
+  setDesktopIconSize: (size: number) => void;
 }
 
 const VALID_WALLPAPERS: WallpaperId[] = [
@@ -57,6 +59,7 @@ export const useSettings = create<SettingsState>()(
       screensaver: true,
       wallpaper: "phosphor",
       photoSeed: 1,
+      desktopIconSize: 48,
       setAccent: (accent) => set({ accent }),
       toggleAccent: () =>
         set((s) => {
@@ -75,6 +78,7 @@ export const useSettings = create<SettingsState>()(
       shufflePhoto: () =>
         set((s) => ({ wallpaper: "photo", photoSeed: s.photoSeed + 1 })),
       setLang: (lang) => set({ lang }),
+      setDesktopIconSize: (size) => set({ desktopIconSize: size }),
     }),
     {
       name: "retrograde.settings",
@@ -91,6 +95,7 @@ export const useSettings = create<SettingsState>()(
         if (typeof s.monitor !== "boolean") s.monitor = false;
         // v2 → v3: dil alanı eklendi
         if (s.lang !== "tr" && s.lang !== "en") s.lang = "tr";
+        if (typeof s.desktopIconSize !== "number") s.desktopIconSize = 48;
         return s as SettingsState;
       },
     },

@@ -155,6 +155,10 @@ const APP_TO_ICON: Record<string, string> = {
   "os-kolibri": "bird",
   "os-freedos": "terminal",
   terminal: "terminal",
+  paint: "palette",
+  imageviewer: "image",
+  filemanager: "folder",
+  calculator: "crt",
 };
 
 const AI_ICONS = new Set([
@@ -181,6 +185,30 @@ export function AppIcon({ app, size = 44, className }: Props) {
   const isDefaultDisk = !ICONS[app.id] && !app.id.startsWith("os-") && !app.id.startsWith("game-");
   const useAIDefaultDisk = isDefaultDisk && AI_ICONS.has("disk");
 
+  if (useAIIcon || useAIDefaultDisk) {
+    const iconName = useAIIcon ? mappedIcon : "disk";
+    return (
+      <span
+        className={cn(
+          "relative flex shrink-0 items-center justify-center",
+          className,
+        )}
+        style={{
+          width: size,
+          height: size,
+        }}
+      >
+        <img 
+          src={`/icons/${iconName}.png`} 
+          alt={`${iconName} icon`} 
+          width={size} 
+          height={size} 
+          style={{ imageRendering: "pixelated", objectFit: "contain", filter: "drop-shadow(0 4px 6px rgba(0,0,0,0.5))" }} 
+        />
+      </span>
+    );
+  }
+
   return (
     <span
       className={cn(
@@ -192,37 +220,18 @@ export function AppIcon({ app, size = 44, className }: Props) {
         height: size,
         borderRadius: radius,
         background: icon.bg,
-        // makine paneli hissi: parlak gloss yok, üstte ince machined edge
         boxShadow:
           "inset 0 1px 0 var(--edge-light), inset 0 -1px 0 rgba(0,0,0,0.45), 0 0 0 1px rgba(0,0,0,0.35), 0 4px 10px rgba(0,0,0,0.35)",
       }}
     >
-      {useAIIcon ? (
-        <img 
-          src={`/icons/${mappedIcon}.png`} 
-          alt={`${mappedIcon} icon`} 
-          width={size * 0.7} 
-          height={size * 0.7} 
-          style={{ imageRendering: "pixelated", objectFit: "contain" }} 
-        />
-      ) : useAIDefaultDisk ? (
-        <img 
-          src={`/icons/disk.png`} 
-          alt={`disk icon`} 
-          width={size * 0.7} 
-          height={size * 0.7} 
-          style={{ imageRendering: "pixelated", objectFit: "contain" }} 
-        />
-      ) : (
-        <svg
-          width={size * 0.56}
-          height={size * 0.56}
-          viewBox="0 0 24 24"
-          style={{ color: icon.fg }}
-        >
-          {icon.svg}
-        </svg>
-      )}
+      <svg
+        width={size * 0.56}
+        height={size * 0.56}
+        viewBox="0 0 24 24"
+        style={{ color: icon.fg }}
+      >
+        {icon.svg}
+      </svg>
     </span>
   );
 }
