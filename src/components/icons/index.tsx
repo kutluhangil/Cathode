@@ -1,7 +1,6 @@
 /**
- * Retrograde ikon sistemi — tek tutarlı dil (spec §4.3).
- * 24×24 viewBox · 1.5px stroke · kare uçlar (teknik çizim hissi) · currentColor.
- * Metin glif / emoji YOK — tüm sistem ikonları buradan gelir.
+ * Retrograde ikon sistemi — kalın, bloklu (chunky) ve tam bir DOS/retro hissiyatı.
+ * 24×24 viewBox · 2px stroke · kare uçlar · currentColor.
  */
 
 export type IconName =
@@ -37,149 +36,152 @@ export type IconName =
   | "pencil";
 
 const PATHS: Record<IconName, React.ReactNode> = {
-  close: <path d="M7 7l10 10M17 7L7 17" />,
-  minimize: <path d="M6 16.5h12" />,
-  maximize: <rect x="6.5" y="6.5" width="11" height="11" />,
+  close: <path d="M6 6l12 12M18 6L6 18" />,
+  minimize: <path d="M5 18h14" />,
+  maximize: <path d="M4 4h16v16H4z" />,
   restore: (
     <>
-      <path d="M9.5 9.5v-3h8v8h-3" />
-      <rect x="6.5" y="9.5" width="8" height="8" />
+      <path d="M8 4h12v12h-3V7H8z" />
+      <path d="M4 8h12v12H4z" />
     </>
   ),
   settings: (
     <>
-      <circle cx="12" cy="12" r="3.2" />
-      <path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5 5l2.1 2.1M16.9 16.9L19 19M19 5l-2.1 2.1M7.1 16.9L5 19" />
+      <path d="M10 10h4v4h-4z" />
+      <path d="M12 2v4M12 18v4M2 12h4M18 12h4M5 5l3 3M16 16l3 3M19 5l-3 3M8 16l-3 3" />
     </>
   ),
   info: (
     <>
-      <circle cx="12" cy="12" r="8.5" />
-      <path d="M12 11v5" />
-      <circle cx="12" cy="7.8" r="0.4" fill="currentColor" />
+      <path d="M10 3h4l3 3v8l-3 3h-4l-3-3V6z" />
+      <path d="M12 10v4" />
+      <path d="M12 7v1" />
     </>
   ),
   doc: (
     <>
-      <path d="M7 3.5h6l4 4V20a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4.5a1 1 0 0 1 1-1Z" />
-      <path d="M13 3.5V8h4M9 12h6M9 15.5h6M9 8.5h2" />
+      <path d="M6 3h8l5 5v13H6z" />
+      <path d="M14 3v5h5" />
+      <path d="M9 12h6M9 16h6" />
     </>
   ),
   monitor: (
     <>
-      <rect x="3" y="4" width="18" height="12" rx="1.5" />
-      <path d="M9 20h6M12 16v4" />
+      <path d="M3 4h18v12H3z" />
+      <path d="M8 20h8M12 16v4" />
     </>
   ),
   gamepad: (
     <>
-      <path d="M7 8.5h10a4 4 0 0 1 4 4l-.5 3.2A2.4 2.4 0 0 1 16.4 17l-1.4-1.6H9L7.6 17A2.4 2.4 0 0 1 3.5 15.7L3 12.5a4 4 0 0 1 4-4Z" />
-      <path d="M7 12.2h2.4M8.2 11v2.4" />
-      <circle cx="15.5" cy="11.8" r="0.9" fill="currentColor" stroke="none" />
-      <circle cx="17.3" cy="13.4" r="0.9" fill="currentColor" stroke="none" />
+      <path d="M4 14v-6h16v6l-2 4H6z" />
+      <path d="M7 11h4M9 9v4" />
+      <path d="M15 11h.01M17 11h.01" />
     </>
   ),
   disk: (
     <>
-      <rect x="4" y="4" width="16" height="16" rx="1.5" />
-      <path d="M8 4v6h8V4M14 6.2v1.6" />
-      <rect x="8.5" y="13" width="7" height="4" />
+      <path d="M4 4h12l4 4v12H4z" />
+      <path d="M7 4v5h7V4" />
+      <path d="M8 14h8v6H8z" />
     </>
   ),
   terminal: (
     <>
-      <rect x="3" y="4.5" width="18" height="15" rx="1.5" />
-      <path d="M7 9.5l3 2.5-3 2.5M12.5 15h4.5" />
+      <path d="M3 4h18v15H3z" />
+      <path d="M7 8l3 3-3 3" />
+      <path d="M12 14h4" />
     </>
   ),
   bird: (
     <>
-      <path d="M4 15c4 .5 6-1 7.5-3.2C13 9.6 15 7 19.5 6.5c-.3 3-1.8 5-4 6" />
-      <path d="M11.5 11.8C11 15 9 18 5.5 19M19.5 6.5l.8-2" />
+      <path d="M4 14l4-2 3-5 5-2c2 0 3 2 3 2l-3 4-4 2M8 12l2 6-4 2" />
     </>
   ),
   upload: (
     <>
-      <path d="M4 15v4.5h16V15" />
-      <path d="M12 14.5V4M8 8l4-4 4 4" />
+      <path d="M5 18h14" />
+      <path d="M12 14V4M8 8l4-4 4 4" />
     </>
   ),
   refresh: (
     <>
-      <path d="M19.5 12a7.5 7.5 0 1 1-2.2-5.3" />
-      <path d="M19.5 3.5v3.4h-3.4" />
+      <path d="M12 4v4h-4" />
+      <path d="M12 4h4l3 3v8l-3 3h-8l-3-3V9" />
     </>
   ),
   image: (
     <>
-      <rect x="3.5" y="5" width="17" height="14" rx="1.5" />
-      <path d="M3.5 15.5l4.5-4 4 3.5 3-2.5 5.5 4" />
-      <circle cx="9" cy="9.2" r="1.1" fill="currentColor" stroke="none" />
+      <path d="M3 4h18v16H3z" />
+      <path d="M3 16l5-5 4 4 3-3 6 6" />
+      <path d="M8 9h.01" />
     </>
   ),
   power: (
     <>
-      <path d="M12 3.5V11" />
-      <path d="M7.5 6.2a8 8 0 1 0 9 0" />
+      <path d="M12 3v8" />
+      <path d="M8 5l-2 2v8l2 2h8l2-2V7l-2-2" />
     </>
   ),
   search: (
     <>
-      <circle cx="10.5" cy="10.5" r="6" />
-      <path d="M15 15l5.5 5.5" />
+      <path d="M9 3h4l3 3v4l-3 3H9l-3-3V6z" />
+      <path d="M14 14l6 6" />
     </>
   ),
-  "chevron-left": <path d="M14.5 6L8.5 12l6 6" />,
+  "chevron-left": <path d="M15 5l-7 7 7 7" />,
   palette: (
     <>
-      <rect x="4" y="4" width="7" height="7" />
-      <rect x="13" y="4" width="7" height="7" />
-      <rect x="4" y="13" width="7" height="7" />
-      <path d="M13 16.5h7M16.5 13v7" />
+      <path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4z" />
+      <path d="M14 17h6M17 14v6" />
     </>
   ),
   crt: (
     <>
-      <rect x="3" y="4.5" width="18" height="14" rx="2" />
-      <path d="M6.5 8.5h11M6.5 11.5h11M6.5 14.5h7" strokeWidth={1.1} />
+      <path d="M3 5h18v14H3z" />
+      <path d="M6 9h12M6 13h12" />
     </>
   ),
   motion: (
     <>
-      <path d="M4 7.5h9M4 12h13M4 16.5h7" />
-      <path d="M17.5 6l3 1.5-3 1.5" strokeWidth={1.2} />
+      <path d="M4 8h10M4 12h14M4 16h6" />
+      <path d="M17 5l3 3-3 3" />
     </>
   ),
   sound: (
     <>
-      <path d="M5 9.5v5h3.5L13 19V5L8.5 9.5H5Z" />
-      <path d="M16 9.5a4 4 0 0 1 0 5M18.3 7.5a7 7 0 0 1 0 9" />
+      <path d="M6 10v4h3l4 4V6l-4 4z" />
+      <path d="M16 9v6" />
+      <path d="M19 7v10" />
     </>
   ),
   system: (
     <>
-      <rect x="7" y="7" width="10" height="10" />
-      <path d="M10 3.5V7M14 3.5V7M10 17v3.5M14 17v3.5M3.5 10H7M3.5 14H7M17 10h3.5M17 14h3.5" />
-      <rect x="10.5" y="10.5" width="3" height="3" strokeWidth={1.1} />
+      <path d="M8 8h8v8H8z" />
+      <path d="M12 3v5M12 16v5M3 12h5M16 12h5" />
     </>
   ),
   shield: (
     <>
-      <path d="M12 3.5l7 2.5v5.5c0 4.4-3 7.7-7 9-4-1.3-7-4.6-7-9V6l7-2.5Z" />
-      <path d="M9 12l2.2 2.2L15.5 9.8" />
+      <path d="M12 3l8 3v6l-2 5-6 4-6-4-2-5V6z" />
+      <path d="M9 12l2 2 4-4" />
     </>
   ),
-  folder: <path d="M4 7h5l2 2h9v9H4z" />,
-  file: <path d="M7 4h7l4 4v12H7zM14 4v4h4" />,
+  folder: <path d="M3 6h5l2 3h11v9H3z" />,
+  file: <path d="M6 3h8l5 5v13H6zM14 3v5h5" />,
   "folder-plus": (
     <>
-      <path d="M4 7h5l2 2h9v9H4z" />
-      <path d="M12 12v4M10 14h4" />
+      <path d="M3 6h5l2 3h11v9H3z" />
+      <path d="M12 12v6M9 15h6" />
     </>
   ),
-  save: <path d="M5 5h11l3 3v11H5zM8 5v5h7V5M8 19v-6h8v6" />,
-  trash: <path d="M5 7h14M9 7V5h6v2M7 7l1 12h8l1-12" />,
-  pencil: <path d="M4 20l4-1L19 8l-3-3L5 16z" />,
+  save: <path d="M4 4h12l4 4v12H4zM8 4v5h8V4M8 14h8v6H8z" />,
+  trash: (
+    <>
+      <path d="M4 7h16M9 7V4h6v3M6 7v13h12V7" />
+      <path d="M10 11v5M14 11v5" />
+    </>
+  ),
+  pencil: <path d="M5 19h3L18 9l-3-3L5 16z" />,
 };
 
 interface IconProps {
@@ -189,7 +191,7 @@ interface IconProps {
   strokeWidth?: number;
 }
 
-export function Icon({ name, size = 16, className, strokeWidth = 1.5 }: IconProps) {
+export function Icon({ name, size = 16, className, strokeWidth = 2 }: IconProps) {
   return (
     <svg
       width={size}
@@ -209,8 +211,7 @@ export function Icon({ name, size = 16, className, strokeWidth = 1.5 }: IconProp
 }
 
 /**
- * Retrograde markası — özgün çizim: fosfor ekran + tarama ışını.
- * Eski ◉ glifinin yerini alır (Windows/başka marka çağrışımı yok).
+ * Retrograde markası — kalın fosfor ekran, retro bloklu.
  */
 export function RetrogradeMark({
   size = 20,
@@ -226,19 +227,19 @@ export function RetrogradeMark({
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth={1.5}
+      strokeWidth={2}
       strokeLinecap="square"
       strokeLinejoin="miter"
       className={className}
       aria-hidden="true"
     >
-      {/* ekran gövdesi */}
-      <rect x="3" y="4.5" width="18" height="15" rx="2.5" />
-      {/* tarama ışını + fosfor noktası */}
-      <path d="M6 12h4.2M13.8 12H18" strokeWidth={1.2} />
-      <circle cx="12" cy="12" r="1.7" fill="currentColor" stroke="none" />
-      {/* üst scanline izleri */}
-      <path d="M6.5 8.2h11M6.5 15.8h11" strokeWidth={0.9} opacity={0.55} />
+      {/* kalın ekran gövdesi */}
+      <path d="M3 5h18v14H3z" />
+      {/* blok fosfor izi */}
+      <path d="M6 12h5M15 12h3" />
+      <path d="M12 12h.01" strokeWidth={3} />
+      {/* üst/alt scanline izleri */}
+      <path d="M7 8h10M7 16h10" strokeWidth={1} opacity={0.4} />
     </svg>
   );
 }
