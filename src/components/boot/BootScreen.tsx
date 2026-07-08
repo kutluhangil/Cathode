@@ -85,70 +85,73 @@ export function BootScreen({ onDone }: Props) {
       onClick={onDone}
       role="button"
       aria-label={t("boot.skipAria")}
-      className="fixed inset-0 z-[8000] flex cursor-pointer flex-col items-center justify-center bg-void"
+      className="fixed inset-0 z-[8000] cursor-pointer bg-void p-6 md:p-12 flex flex-col"
     >
-      {/* marka — POST bitince fosfor ateşlemesiyle parlar (aşırı-parlak → yerleşir) */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0.92, filter: "brightness(1)" }}
-        animate={
-          showBrand
-            ? {
-                opacity: 1,
-                scale: 1,
-                filter: ["brightness(1)", "brightness(2.4)", "brightness(1)"],
-              }
-            : { opacity: 0, scale: 0.92, filter: "brightness(1)" }
-        }
-        transition={{
-          duration: 0.55,
-          ease: [0.16, 1, 0.3, 1],
-          filter: { duration: 0.55, times: [0, 0.35, 1] },
-        }}
-        className="mb-8 flex flex-col items-center gap-3"
-      >
-        <span className="phosphor text-accent">
-          <RetrogradeMark size={44} />
-        </span>
-        <h1 className="text-2xl font-semibold tracking-tight text-text">
-          Retrograde
-        </h1>
-      </motion.div>
+      <div className="flex w-full justify-between items-start">
+        {/* POST kolonu (sol üst) */}
+        <div className="font-mono text-[13px] md:text-sm leading-relaxed text-text-dim w-full max-w-2xl">
+          <div className="text-text font-semibold text-base mb-1">Retrograde Systems 5100</div>
+          <div className="mb-6 text-faint">phosphor bios v2.0</div>
 
-      {/* POST kolonu */}
-      <div className="h-40 w-80 font-mono text-[11px] leading-relaxed text-text-dim">
-        <div className="text-text">Retrograde Systems 5100</div>
-        <div className="mb-3 text-faint">phosphor bios v2.0</div>
+          {mem !== null && (
+            <div className="flex justify-between tabular-nums w-full max-w-sm">
+              <span>
+                memory test: {mem} K{memDone ? "" : " …"}
+              </span>
+              {memDone && <span className="text-accent">ok</span>}
+            </div>
+          )}
 
-        {mem !== null && (
-          <div className="flex justify-between tabular-nums">
-            <span>
-              memory test: {mem} K{memDone ? "" : " …"}
-            </span>
-            {memDone && <span className="text-accent">ok</span>}
-          </div>
-        )}
+          {PROBES.slice(0, probeStep).map((l) => (
+            <motion.div
+              key={l}
+              initial={{ opacity: 0, x: -4 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="flex justify-between w-full max-w-sm"
+            >
+              <span>{l.split("..........")[0]}</span>
+              <span className="text-accent">ok</span>
+            </motion.div>
+          ))}
 
-        {PROBES.slice(0, probeStep).map((l) => (
-          <motion.div
-            key={l}
-            initial={{ opacity: 0, x: -4 }}
-            animate={{ opacity: 1, x: 0 }}
-          >
-            {l}
-          </motion.div>
-        ))}
+          {/* blink cursor */}
+          <span
+            className="mt-2 inline-block h-4 w-2.5 bg-text-dim align-middle"
+            style={{ animation: "boot-blink 1s steps(1) infinite" }}
+            aria-hidden
+          />
+          <style>{`@keyframes boot-blink { 0%, 49% { opacity: 1 } 50%, 100% { opacity: 0 } }`}</style>
+        </div>
 
-        {/* blink cursor */}
-        <span
-          className="mt-1 inline-block h-3.5 w-2 bg-text-dim align-middle"
-          style={{ animation: "boot-blink 1s steps(1) infinite" }}
-          aria-hidden
-        />
-        <style>{`@keyframes boot-blink { 0%, 49% { opacity: 1 } 50%, 100% { opacity: 0 } }`}</style>
+        {/* marka — sağ üst */}
+        <motion.div
+          initial={{ opacity: 0, filter: "brightness(1)" }}
+          animate={
+            showBrand
+              ? {
+                  opacity: 1,
+                  filter: ["brightness(1)", "brightness(2.4)", "brightness(1)"],
+                }
+              : { opacity: 0, filter: "brightness(1)" }
+          }
+          transition={{
+            duration: 0.55,
+            ease: [0.16, 1, 0.3, 1],
+            filter: { duration: 0.55, times: [0, 0.35, 1] },
+          }}
+          className="hidden sm:flex flex-col items-end gap-3"
+        >
+          <span className="phosphor text-accent">
+            <RetrogradeMark size={56} />
+          </span>
+          <h1 className="text-xl font-semibold tracking-widest text-text uppercase">
+            Retrograde
+          </h1>
+        </motion.div>
       </div>
 
-      {/* ilerleme çizgisi */}
-      <div className="mt-2 h-px w-80 overflow-hidden bg-border-soft">
+      {/* ilerleme çizgisi (en alt tam genişlik) */}
+      <div className="absolute bottom-0 left-0 right-0 h-1 bg-border-soft">
         <motion.div
           className="h-full bg-accent"
           initial={{ width: "0%" }}
@@ -161,9 +164,9 @@ export function BootScreen({ onDone }: Props) {
         />
       </div>
 
-      <span className="mt-6 font-mono text-[10px] tracking-widest text-faint">
+      <div className="absolute bottom-6 right-6 font-mono text-[10px] tracking-widest text-faint">
         {t("boot.skip")}
-      </span>
+      </div>
 
       {/* CRT tüp ısınması — üst/alt perde flicker'la açılır, altındaki BIOS
           içeriği zaten render olmuştur, perde çekilince ortaya çıkar. */}

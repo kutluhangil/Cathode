@@ -191,7 +191,27 @@ interface IconProps {
   strokeWidth?: number;
 }
 
+const AI_ICONS = new Set([
+  "bird", "close", "disk", "doc", "gamepad", "image", "info",
+  "maximize", "minimize", "monitor", "power", "refresh", "restore",
+  "settings", "terminal", "upload"
+]);
+
 export function Icon({ name, size = 16, className, strokeWidth = 2 }: IconProps) {
+  if (AI_ICONS.has(name)) {
+    return (
+      <img
+        src={`/icons/${name}.png`}
+        alt={`${name} icon`}
+        width={size}
+        height={size}
+        className={className}
+        style={{ imageRendering: "pixelated", objectFit: "contain" }}
+        aria-hidden="true"
+      />
+    );
+  }
+
   return (
     <svg
       width={size}

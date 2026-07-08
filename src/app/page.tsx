@@ -22,6 +22,15 @@ export default function Page() {
     setReady(true);
   }, []);
 
+  useEffect(() => {
+    if (booting) {
+      document.body.classList.add("is-booting");
+    } else {
+      document.body.classList.remove("is-booting");
+    }
+    return () => document.body.classList.remove("is-booting");
+  }, [booting]);
+
   const finishBoot = () => {
     sessionStorage.setItem(BOOT_KEY, "1");
     setBooting(false);

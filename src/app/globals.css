@@ -240,6 +240,12 @@ body {
   display: flex;
 }
 
+body.is-booting .monitor-mask,
+body.is-booting .monitor-glare,
+body.is-booting .monitor-plate {
+  display: none !important;
+}
+
 /* Monitör açıkken kabuk öğeleri bezel içine çekilir */
 :root[data-monitor="on"] .system-bar {
   top: 8px;
