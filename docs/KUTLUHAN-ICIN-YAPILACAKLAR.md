@@ -4,9 +4,11 @@ Bu dosya, kodun tamamlandığı yerden sonra **yalnızca senin yapabileceğin** 
 adım adım anlatır. Kod tarafı bitti; kalanlar commit, dış asset barındırma (Cloudflare
 R2) ve yayına alma gibi kimlik/hesap/ikili-dosya gerektiren işlerdir.
 
-> **Durum özeti:** Altı geliştirme fazının (E, A, B, C, D, F) hepsi kodlandı ve test edildi
-> — 51 e2e testi geçiyor, TypeScript ve lint temiz. Aşağıdaki işler kodla ilgili değil;
-> senin hesaplarınla/dosyalarınla yapılacak operasyon işleridir.
+> **Durum özeti (2026-10-24):** Önceki altı faza ek olarak altı fazlık bir geliştirme turu
+> daha bitti — güvenlik (tarayıcı proxy'si), terminal dosya komutları, dosya yükleme/indirme,
+> DOOM shareware, `?open=` linkleri, yedekleme, `/Floppy ⇄ B:` disket köprüsü ve medya
+> oynatıcı. Tüm e2e testleri geçiyor, `tsc`, `lint` ve `npm run build` temiz. Aşağıdaki
+> işler kodla ilgili değil; senin hesaplarınla/kararlarınla yapılacak işlerdir.
 
 ---
 
@@ -19,6 +21,8 @@ R2) ve yayına alma gibi kimlik/hesap/ikili-dosya gerektiren işlerdir.
 | 3 | **R2**'ye OS imajları + DOS oyunları yükle | İsteğe bağlı* | 1–3 saat |
 | 4 | **Production**'a deploy (Docker → nginx → Cloudflare Tunnel) | Yayınlayacaksan | 1–2 saat |
 | 5 | Son **doğrulama** | Evet | 15 dk |
+| 6 | **İsim** kararı: repo `Cathode`, uygulama `Retrograde` | Önerilir | 5 dk |
+| 7 | **Docker** imajını yerelde bir kez dene (`docker build`) | Önerilir | 10 dk |
 
 \* Site R2 olmadan da çalışır: KolibriOS + FreeDOS yerelde gömülü. R2 sadece daha fazla
 sistem (ReactOS vb.) ve DOS oyun kataloğu içindir.
@@ -164,11 +168,16 @@ enabled: true,
   hazır (512MB RAM, 32MB VGA, hda).
 
 ### 3.6 DOS oyunları — `src/data/games.ts`
-Aynı mantık: bir `.jsdos` (ya da `.zip`) bundle'ı R2'ye yükle, `bundle.url`'ü gerçek URL
-yap, `enabled: true`. js-dos bunları DOSBox-X ile açar.
+İki seçenek var:
+
+- **Hazır `.jsdos` bundle:** R2'ye yükle, `bundle: { url }` ver.
+- **Orijinal dağıtım zip'i (önerilen, lisans açısından en temizi):** zip'i değiştirmeden
+  sun, çalıştırılacak dosyayı söyle — `dosbox.conf` çalışma anında üretilir. DOOM shareware
+  bu şekilde geliyor (`setup:emu` sha256 doğrulamasıyla `public/games/` altına indirir).
 
 ```ts
-bundle: { url: "https://images.senin-domain.com/oyun.jsdos" },
+bundle: { url: "https://images.senin-domain.com/oyun.jsdos" },   // ya da:
+bundle: { zip: "/games/oyun.zip", exec: "OYUN.EXE" },
 enabled: true,
 ```
 
@@ -223,8 +232,14 @@ HTTPS zorunlu (SharedArrayBuffer secure-context ister) — Cloudflare Tunnel bun
 
 ## 6. Yayın öncesi doğrulama kontrol listesi
 
-- [ ] `npm run test:e2e` → tümü yeşil (51 test; 3 screenshot testi CAPTURE olmadan atlanır).
-- [ ] `npx tsc --noEmit` ve `npm run lint` → temiz.
+- [ ] `npm run test:e2e` → tümü yeşil (3 screenshot testi CAPTURE olmadan atlanır; tarayıcı testi
+      example.com'a erişir — çevrimdışıysan `OFFLINE=1 npm run test:e2e`).
+- [ ] `npx tsc --noEmit`, `npm run lint` ve `npm run build` → temiz.
+- [ ] İnternet uygulaması: bir sayfa aç, linke tıkla → adres çubuğu güncelleniyor.
+      `/api/proxy?url=http://192.168.1.1/` → 403 dönmeli (iç ağ koruması).
+- [ ] Ayarlar → Sistem → "yedeği indir", sonra "yedek seç" ile geri yükle → dosyalar duruyor.
+- [ ] FreeDOS: `/Floppy`'ye dosya koy → "B: disketi tak" → DOS'ta `dir b:` → "B: kaydet + çıkar".
+- [ ] Oyunlar → DOOM açılıyor (ses için pencereye bir kez tıkla).
 - [ ] Yerelde: boot → masaüstü → app'ler açılıyor, pencere sürükle/boyutlandır çalışıyor.
 - [ ] Dosya sistemi: dosya oluştur → reload → duruyor (OPFS kalıcı).
 - [ ] Emülatör: KolibriOS aç → kapat → tekrar aç → kaldığı yerden devam ediyor.

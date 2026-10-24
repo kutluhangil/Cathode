@@ -6,6 +6,7 @@ import { useWindows } from "@/store/windowsStore";
 import { SYSTEM_BAR_H } from "@/lib/layout";
 import { Icon } from "@/components/icons";
 import type { FsEntry } from "@/lib/fs/types";
+import { openFile } from "@/lib/fs/kind";
 import { useSettings } from "@/store/settingsStore";
 import { useDesktop } from "@/store/desktopStore";
 

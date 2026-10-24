@@ -45,6 +45,7 @@ next-env.d.ts
 /public/v86/
 /public/jsdos/
 /public/images/
+/public/games/
 # serwist tarafından üretilen service worker
 /public/sw.js
 /public/sw.js.map

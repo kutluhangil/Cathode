@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useFiles } from "@/store/filesStore";
 import { useWindows } from "@/store/windowsStore";
 import { useT } from "@/lib/i18n/useT";
 import { segments, join, parent } from "@/lib/fs/path";
 import { openFile } from "@/lib/fs/kind";
+import { download } from "@/lib/fs/vfs";
 import { cn } from "@/lib/cn";
 import { Icon } from "@/components/icons";
 import { ContextMenu, type MenuItem } from "@/components/desktop/ContextMenu";
@@ -35,6 +36,7 @@ export function FileManager({ path }: Props) {
   const rename = useFiles((s) => s.rename);
   const remove = useFiles((s) => s.remove);
   const move = useFiles((s) => s.move);
+  const importFiles = useFiles((s) => s.importFiles);
   const open = useWindows((s) => s.open);
 
   const [dir, setDir] = useState(path ?? "/");
@@ -43,6 +45,8 @@ export function FileManager({ path }: Props) {
   const [menu, setMenu] = useState<{ x: number; y: number; entry: FsEntry } | null>(
     null,
   );
+  const [dragOver, setDragOver] = useState(false);
+  const uploadRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     void refresh(dir);
@@ -135,6 +139,27 @@ export function FileManager({ path }: Props) {
         >
           <Icon name="file" size={14} />
         </button>
+        <button
+          data-testid="fm-upload"
+          aria-label={t("files.upload")}
+          title={t("files.upload")}
+          onClick={() => uploadRef.current?.click()}
+          className="flex h-7 w-7 items-center justify-center rounded-btn text-text-dim hover:bg-surface-3 hover:text-text"
+        >
+          <Icon name="upload" size={14} />
+        </button>
+        <input
+          ref={uploadRef}
+          data-testid="fm-upload-input"
+          type="file"
+          multiple
+          hidden
+          onChange={(e) => {
+            const picked = Array.from(e.target.files ?? []);
+            e.target.value = ""; // aynı dosya tekrar seçilebilsin
+            if (picked.length) void importFiles(dir, picked);
+          }}
+        />
       </div>
 
       {/* create / rename prompt */}
@@ -161,7 +186,31 @@ export function FileManager({ path }: Props) {
       )}
 
       {/* entries */}
-      <div className="grid flex-1 auto-rows-min grid-cols-[repeat(auto-fill,minmax(84px,1fr))] gap-1 overflow-y-auto p-3">
+      <div
+        data-testid="fm-dropzone"
+        onDragOver={(ev) => {
+          if (!ev.dataTransfer.types.includes("Files")) return;
+          ev.preventDefault();
+          setDragOver(true);
+        }}
+        onDragLeave={() => setDragOver(false)}
+        onDrop={(ev) => {
+          ev.preventDefault();
+          ev.stopPropagation(); // masaüstü de /Desktop'a yazmasın
+          setDragOver(false);
+          const dropped = Array.from(ev.dataTransfer.files);
+          if (dropped.length) void importFiles(dir, dropped);
+        }}
+        className={cn(
+          "relative grid flex-1 auto-rows-min grid-cols-[repeat(auto-fill,minmax(84px,1fr))] gap-1 overflow-y-auto p-3",
+          dragOver && "outline-dashed outline-2 -outline-offset-4 outline-accent/60",
+        )}
+      >
+        {dragOver && (
+          <p className="pointer-events-none absolute inset-x-0 bottom-3 text-center font-mono text-[11px] text-accent">
+            {t("files.dropHint")}
+          </p>
+        )}
         {entries.length === 0 && (
           <p className="col-span-full py-8 text-center font-mono text-xs text-faint">
             {t("files.empty")}
@@ -205,6 +254,15 @@ export function FileManager({ path }: Props) {
                 setDraft(menu.entry.name);
               },
             },
+            ...(menu.entry.kind === "file"
+              ? [
+                  {
+                    label: t("files.download"),
+                    icon: "save",
+                    onClick: () => void download(menu.entry.path),
+                  } satisfies MenuItem,
+                ]
+              : []),
             {
               label: t("files.delete"),
               icon: "trash",

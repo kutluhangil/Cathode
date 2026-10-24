@@ -118,6 +118,29 @@ export async function exists(path: string): Promise<boolean> {
   }
 }
 
+/** path doluysa "ad (2).uzantı", "ad (3).uzantı"… ile ilk boş yolu döndür. */
+export async function freePath(path: string): Promise<string> {
+  if (!(await exists(path))) return path;
+  const dir = parent(path);
+  const name = basename(path);
+  const dot = name.lastIndexOf(".");
+  const [stem, ext] = dot > 0 ? [name.slice(0, dot), name.slice(dot)] : [name, ""];
+  for (let i = 2; ; i++) {
+    const candidate = normalize(`${dir}/${stem} (${i})${ext}`);
+    if (!(await exists(candidate))) return candidate;
+  }
+}
+
+/** VFS dosyasını cihaza indir (tarayıcı indirme diyaloğu). */
+export async function download(path: string): Promise<void> {
+  const url = URL.createObjectURL(await readBlob(path));
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = basename(path);
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
 export async function stat(path: string): Promise<FsEntry | null> {
   const p = normalize(path);
   const items = await list(parent(p)).catch(() => [] as FsEntry[]);

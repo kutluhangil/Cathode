@@ -2,6 +2,9 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useSettings } from "@/store/settingsStore";
+import { useFiles } from "@/store/filesStore";
+import * as vfs from "@/lib/fs/vfs";
+import { normalize, parent, basename } from "@/lib/fs/path";
 import { useWindows } from "@/store/windowsStore";
 import { useT } from "@/lib/i18n/useT";
 import { APPS } from "@/data/apps";
@@ -14,7 +17,10 @@ interface Line {
   kind: "input" | "out" | "err";
 }
 
-const PROMPT = "guest@retrograde:~$";
+/** Ev klasörü VFS kökü — istemde "~" olarak görünür. */
+const promptFor = (cwd: string) => `guest@retrograde:~${cwd === "/" ? "" : cwd}$`;
+
+const FS_COMMANDS = new Set(["pwd", "ls", "cd", "cat", "mkdir", "touch", "rm"]);
 
 const WALLPAPERS: WallpaperId[] = [
   "phosphor",
@@ -40,6 +46,15 @@ export function Terminal() {
   const [input, setInput] = useState("");
   const [history, setHistory] = useState<string[]>([]);
   const [histIdx, setHistIdx] = useState(-1);
+  const [cwd, setCwdState] = useState("/");
+  const prompt = promptFor(cwd);
+  // fs komutları sırayla çalışır (mkdir bitmeden cd başlamasın); güncel klasör ref'ten okunur
+  const cwdRef = useRef("/");
+  const fsQueue = useRef<Promise<void>>(Promise.resolve());
+  const setCwd = (dir: string) => {
+    cwdRef.current = dir;
+    setCwdState(dir);
+  };
   const inputRef = useRef<HTMLInputElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -52,7 +67,7 @@ export function Terminal() {
 
   const run = (raw: string) => {
     const cmd = raw.trim();
-    setLines((ls) => [...ls, { text: `${PROMPT} ${raw}`, kind: "input" }]);
+    setLines((ls) => [...ls, { text: `${prompt} ${raw}`, kind: "input" }]);
     if (!cmd) return;
     setHistory((h) => [cmd, ...h].slice(0, 50));
     setHistIdx(-1);
@@ -60,6 +75,12 @@ export function Terminal() {
     const [name, ...args] = cmd.split(/\s+/);
     const arg = args.join(" ");
     const settings = useSettings.getState();
+
+    if (FS_COMMANDS.has(name.toLowerCase())) {
+      const cmdName = name.toLowerCase();
+      fsQueue.current = fsQueue.current.then(() => runFs(cmdName, arg));
+      return;
+    }
 
     switch (name.toLowerCase()) {
       case "help":
@@ -175,6 +196,83 @@ export function Terminal() {
     }
   };
 
+  /** VFS komutları — useFiles üzerinden yazar, böylece masaüstü/Dosyalar da güncellenir. */
+  const runFs = async (name: string, arg: string) => {
+    const files = useFiles.getState();
+    const cwd = cwdRef.current;
+    if (!files.supported) return print(t("terminal.fsUnsupported"), "err");
+    const target = normalize(arg.startsWith("/") ? arg : `${cwd}/${arg}`);
+    const needArg = () => {
+      if (arg) return false;
+      print(t("terminal.fsUsage", { name }), "err");
+      return true;
+    };
+    try {
+      switch (name) {
+        case "pwd":
+          print(cwd);
+          break;
+        case "ls": {
+          const st = target === "/" ? null : await vfs.stat(target);
+          if (target !== "/" && !st) return print(t("terminal.fsNoSuch", { arg }), "err");
+          if (st?.kind === "file") return print(st.name);
+          const items = await vfs.list(target);
+          print(
+            items.length
+              ? items
+                  .map((e) => (e.kind === "dir" ? `${e.name}/` : `${e.name.padEnd(24)} ${e.size} B`))
+                  .join("\n")
+              : t("terminal.fsEmpty"),
+          );
+          break;
+        }
+        case "cd": {
+          const dest = arg ? target : "/";
+          if (dest !== "/") {
+            const st = await vfs.stat(dest);
+            if (!st) return print(t("terminal.fsNoSuch", { arg }), "err");
+            if (st.kind !== "dir") return print(t("terminal.fsNotDir", { arg }), "err");
+          }
+          setCwd(dest);
+          break;
+        }
+        case "cat": {
+          if (needArg()) return;
+          const st = await vfs.stat(target);
+          if (!st) return print(t("terminal.fsNoSuch", { arg }), "err");
+          if (st.kind === "dir") return print(t("terminal.fsIsDir", { arg }), "err");
+          const bytes = new Uint8Array(await (await vfs.readBlob(target)).arrayBuffer());
+          // NUL byte → ikili dosya (png, img…) — ekrana çöp basma
+          if (bytes.subarray(0, 1024).includes(0))
+            return print(t("terminal.fsBinary", { size: bytes.length }), "err");
+          print(new TextDecoder().decode(bytes));
+          break;
+        }
+        case "mkdir":
+        case "touch": {
+          if (needArg()) return;
+          if (target === "/" || (await vfs.exists(target)))
+            return print(t("terminal.fsExists", { arg }), "err");
+          if (name === "mkdir") await files.createDir(parent(target), basename(target));
+          else await files.createFile(parent(target), basename(target));
+          break;
+        }
+        case "rm": {
+          if (needArg()) return;
+          if (target === "/") return print(t("terminal.fsRoot"), "err");
+          if (!(await vfs.exists(target))) return print(t("terminal.fsNoSuch", { arg }), "err");
+          await files.remove(target);
+          // silinen klasörün içindeysek köke dön
+          if (cwd === target || cwd.startsWith(target + "/")) setCwd(parent(target));
+          print(t("terminal.fsRemoved", { arg: target }));
+          break;
+        }
+      }
+    } catch (e) {
+      print(e instanceof Error ? e.message : String(e), "err");
+    }
+  };
+
   const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       run(input);
@@ -215,7 +313,7 @@ export function Terminal() {
           </div>
         ))}
         <div className="flex items-center gap-2">
-          <span className="phosphor text-accent">{PROMPT}</span>
+          <span data-testid="terminal-prompt" className="phosphor text-accent">{prompt}</span>
           <input
             ref={inputRef}
             value={input}

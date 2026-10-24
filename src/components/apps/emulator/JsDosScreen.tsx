@@ -45,6 +45,36 @@ function loadJsDos(): Promise<void> {
   return scriptPromise;
 }
 
+/** Düz zip oyunlar için minimal DOSBox config — zip kök dizine açılır, C: olarak bağlanır. */
+function dosboxConf(exec: string): string {
+  return [
+    "[sdl]",
+    "autolock=false",
+    "[dosbox]",
+    "machine=svga_s3",
+    "memsize=16",
+    "[cpu]",
+    "core=auto",
+    "cycles=max",
+    "[autoexec]",
+    "mount c .",
+    "c:",
+    exec,
+  ].join("\n");
+}
+
+/** Bundle türüne göre js-dos seçenekleri: hazır .jsdos URL'i ya da zip + üretilen config. */
+async function bundleOptions(game: GameDefinition, override?: string) {
+  if (override) return { url: override };
+  if ("url" in game.bundle) return { url: game.bundle.url };
+  const res = await fetch(game.bundle.zip);
+  if (!res.ok) throw new Error("emulator.downloadFailed");
+  return {
+    dosboxConf: dosboxConf(game.bundle.exec),
+    initFs: [new Uint8Array(await res.arrayBuffer())],
+  };
+}
+
 interface Props {
   game: GameDefinition;
   /** BYOG: kullanıcının yüklediği .jsdos/.zip için blob URL */
@@ -66,7 +96,7 @@ export function JsDosScreen({ game, override }: Props) {
         await loadJsDos();
         if (cancelled || !ref.current || !window.Dos) return;
         props = window.Dos(ref.current, {
-          url: override ?? game.bundle.url,
+          ...(await bundleOptions(game, override)),
           pathPrefix: PATH_PREFIX,
           backend: "dosboxX",
           noCloud: true, // bulut/sosyal kapalı — privacy-first

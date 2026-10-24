@@ -15,6 +15,8 @@ interface FilesState {
   refresh: (dir: string) => Promise<void>;
   createFile: (dir: string, name: string, content?: string) => Promise<string>;
   writeBlob: (dir: string, name: string, data: Blob) => Promise<string>;
+  /** Cihazdan gelen dosyaları dir'e yaz; çakışan adlara " (2)" eki verir. */
+  importFiles: (dir: string, files: File[]) => Promise<string[]>;
   createDir: (dir: string, name: string) => Promise<string>;
   rename: (path: string, newName: string) => Promise<string>;
   remove: (path: string) => Promise<void>;
@@ -68,6 +70,17 @@ export const useFiles = create<FilesState>((set, get) => ({
     await vfs.writeBlob(path, data);
     await get().refresh(dir);
     return path;
+  },
+
+  importFiles: async (dir, files) => {
+    const written: string[] = [];
+    for (const file of files) {
+      const path = await vfs.freePath(normalize(dir + "/" + file.name));
+      await vfs.writeBlob(path, file);
+      written.push(path);
+    }
+    await get().refresh(dir);
+    return written;
   },
 
   createDir: async (dir, name) => {

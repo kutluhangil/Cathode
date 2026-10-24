@@ -31,6 +31,9 @@ const WP_ORDER: WallpaperId[] = [
   "photo",
 ];
 
+/** ?open= linki sayfa yüklemesi başına bir kez işlenir. */
+let deepLinkHandled = false;
+
 /** Masaüstünde çakışmayan benzersiz dosya adı (prompt olmadan hızlı oluşturma). */
 function uniqueName(base: string): string {
   return `${base}-${Math.floor(performance.now() % 100000)}`;
@@ -54,9 +57,24 @@ export function Desktop() {
   const hydrateFiles = useFiles((s) => s.hydrate);
   const createDir = useFiles((s) => s.createDir);
   const createFile = useFiles((s) => s.createFile);
+  const importFiles = useFiles((s) => s.importFiles);
   useEffect(() => {
     void hydrateFiles();
   }, [hydrateFiles]);
+
+  // paylaşılabilir link: ?open=kolibri  ya da  ?open=terminal,notepad
+  useEffect(() => {
+    if (deepLinkHandled) return; // strict mode efekti iki kez çalıştırır — tek sefer aç
+    deepLinkHandled = true;
+    const ids = new URLSearchParams(window.location.search).get("open");
+    for (const id of ids?.split(",") ?? []) {
+      const key = id.trim().toLowerCase();
+      const app =
+        APPS.find((a) => a.id === key) ??
+        APPS.find((a) => a.id === `os-${key}` || a.id === `game-${key}`);
+      if (app) launch(app.id, app.name, app.defaultSize, undefined, app.singleton);
+    }
+  }, [launch]);
 
   // shift+wheel zoom
   useEffect(() => {
@@ -180,11 +198,16 @@ export function Desktop() {
         e.preventDefault();
         setMenu({ x: e.clientX, y: e.clientY });
       }}
-      onClick={(e) => {
-        // Only clear if it was a quick click without much movement.
-        // We handle selection clearing in onPointerDown. If we didn't drag,
-        // onPointerDown already cleared it. If we did drag, we don't want
-        // this onClick to clear what we just selected.
+      // cihazdan masaüstüne bırakılan dosyalar /Desktop'a — pencerelerin kendi drop alanları önceliklidir
+      onDragOver={(e) => {
+        if ((e.target as HTMLElement).closest(".window-frame")) return;
+        if (e.dataTransfer.types.includes("Files")) e.preventDefault();
+      }}
+      onDrop={(e) => {
+        if ((e.target as HTMLElement).closest(".window-frame")) return;
+        e.preventDefault();
+        const dropped = Array.from(e.dataTransfer.files);
+        if (dropped.length) void importFiles("/Desktop", dropped);
       }}
     >
       <Wallpaper key={`${wallpaper}-${spin}`} />

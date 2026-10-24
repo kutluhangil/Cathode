@@ -104,6 +104,22 @@ export class V86Engine {
     await this.vm?.restore_state(state);
   }
 
+  /** B: sürücüsüne disket imajı tak (çalışma anında, disket değiştirir gibi). */
+  async insertFloppyB(image: Uint8Array) {
+    await this.vm?.set_fdb({ buffer: image.buffer as ArrayBuffer });
+  }
+
+  /** B: içeriğinin kopyası (misafir OS yazmış olabilir); disket yoksa null. */
+  readFloppyB(): Uint8Array | null {
+    // get_disk_fdb runtime'da var, v86.d.ts'de tanımlı değil
+    const vm = this.vm as unknown as { get_disk_fdb?: () => Uint8Array | null } | null;
+    return vm?.get_disk_fdb?.()?.slice() ?? null;
+  }
+
+  ejectFloppyB() {
+    this.vm?.eject_fdb();
+  }
+
   async destroy() {
     try {
       await this.vm?.destroy();

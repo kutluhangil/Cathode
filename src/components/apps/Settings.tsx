@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useSettings } from "@/store/settingsStore";
 import { useUiStore } from "@/store/uiStore";
 import { useT } from "@/lib/i18n/useT";
@@ -10,6 +10,7 @@ import { Segmented } from "@/components/ui/Segmented";
 import { Icon, type IconName } from "@/components/icons";
 import { cn } from "@/lib/cn";
 import { BOOT_KEY } from "@/lib/layout";
+import { createBackup, restoreBackup } from "@/lib/backup/backup";
 import type { WallpaperId } from "@/lib/types";
 import { GALLERY_PHOTOS } from "@/data/wallpapers";
 
@@ -280,10 +281,80 @@ export function Settings() {
                 <Icon name="power" size={12} /> {t("settings.rebootBtn")}
               </button>
             </Row>
+            <BackupRows />
           </>
         )}
       </div>
     </div>
+  );
+}
+
+/** Yerel verinin tamamını .zip olarak indir / geri yükle (Faz 3). */
+function BackupRows() {
+  const t = useT();
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const restoreRef = useRef<HTMLInputElement>(null);
+  const btn =
+    "flex items-center gap-1.5 rounded-btn border border-border-soft bg-surface-0 px-3 py-1.5 text-xs font-medium text-text-dim transition-colors hover:border-accent hover:text-text disabled:opacity-40";
+
+  const onBackup = async () => {
+    setBusy(true);
+    try {
+      const url = URL.createObjectURL(await createBackup());
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `retrograde-backup-${new Date().toISOString().slice(0, 10)}.zip`;
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const onRestore = async (file: File) => {
+    if (!window.confirm(t("settings.restoreConfirm"))) return;
+    setBusy(true);
+    setError(null);
+    try {
+      await restoreBackup(file);
+      location.reload();
+    } catch {
+      setError(t("settings.restoreFailed"));
+      setBusy(false);
+    }
+  };
+
+  return (
+    <>
+      <Row title={t("settings.backup")} hint={t("settings.backupHint")}>
+        <button data-testid="backup-download" disabled={busy} onClick={() => void onBackup()} className={btn}>
+          <Icon name="save" size={12} /> {busy ? t("settings.working") : t("settings.backupBtn")}
+        </button>
+      </Row>
+      <Row title={t("settings.restore")} hint={t("settings.restoreHint")}>
+        <button disabled={busy} onClick={() => restoreRef.current?.click()} className={btn}>
+          <Icon name="upload" size={12} /> {t("settings.restoreBtn")}
+        </button>
+        <input
+          ref={restoreRef}
+          data-testid="backup-restore-input"
+          type="file"
+          accept=".zip,application/zip"
+          hidden
+          onChange={(e) => {
+            const f = e.target.files?.[0];
+            e.target.value = "";
+            if (f) void onRestore(f);
+          }}
+        />
+      </Row>
+      {error && (
+        <p role="alert" className="pt-1 font-mono text-[11px] text-danger">
+          {error}
+        </p>
+      )}
+    </>
   );
 }
 

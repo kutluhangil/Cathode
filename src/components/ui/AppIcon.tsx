@@ -160,6 +160,7 @@ const APP_TO_ICON: Record<string, string> = {
   filemanager: "folder",
   calculator: "crt",
   browser: "browser",
+  mediaplayer: "sound",
 };
 
 const AI_ICONS = new Set([

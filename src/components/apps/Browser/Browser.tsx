@@ -1,8 +1,17 @@
 import { useState, useEffect, useRef } from "react";
-import { useT } from "@/lib/i18n/useT";
 import { Icon } from "@/components/icons";
 
 const HOME_URL = "retro://home";
+
+// <marquee> React tiplerinde yok — retro başlangıç sayfası için bilerek kullanılıyor
+declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
+  namespace JSX {
+    interface IntrinsicElements {
+      marquee: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
+    }
+  }
+}
 
 function StartPage({ onNavigate }: { onNavigate: (url: string) => void }) {
   const [searchTerm, setSearchTerm] = useState("");
@@ -97,7 +106,6 @@ export function Browser() {
   const [input, setInput] = useState(HOME_URL);
   const [isLoading, setIsLoading] = useState(false);
   const iframeRef = useRef<HTMLIFrameElement>(null);
-  const t = useT();
 
   const currentUrl = history[historyIdx];
 
@@ -168,26 +176,21 @@ export function Browser() {
     }
   };
 
-  const handleIframeLoad = () => {
-    setIsLoading(false);
-    try {
-      if (iframeRef.current?.contentWindow) {
-        const iframeUrl = iframeRef.current.contentWindow.location.href;
-        if (iframeUrl.includes("/api/proxy?url=")) {
-          const urlParams = new URL(iframeUrl).searchParams;
-          const actualUrl = urlParams.get("url");
-          if (actualUrl && actualUrl !== currentUrl) {
-            const newHistory = history.slice(0, historyIdx + 1);
-            newHistory.push(actualUrl);
-            setHistory(newHistory);
-            setHistoryIdx(newHistory.length - 1);
-          }
-        }
-      }
-    } catch (e) {
-      // Ignore cross-origin errors if any
-    }
-  };
+  // Sandbox'lı sayfa (opak origin) location okuyamayız; proxy'nin köprü script'i
+  // link/form gezinmesini ve yönlendirme sonrası son URL'yi postMessage ile bildirir.
+  useEffect(() => {
+    const onMessage = (e: MessageEvent) => {
+      if (!iframeRef.current || e.source !== iframeRef.current.contentWindow) return;
+      const data = e.data as { type?: unknown; url?: unknown } | null;
+      if (typeof data?.url !== "string" || !/^https?:\/\//i.test(data.url)) return;
+      if (data.type === "retro-open") navigateTo(data.url);
+      else if (data.type === "retro-nav") setInput(data.url);
+    };
+    window.addEventListener("message", onMessage);
+    return () => window.removeEventListener("message", onMessage);
+  });
+
+  const handleIframeLoad = () => setIsLoading(false);
 
   const isHome = currentUrl === HOME_URL;
 
@@ -274,12 +277,13 @@ export function Browser() {
         {isHome ? (
           <StartPage onNavigate={navigateTo} />
         ) : (
+          // allow-same-origin YOK: proxy sayfası uygulamanın origin'ine (localStorage/OPFS) erişemez
           <iframe
             ref={iframeRef}
             src={`/api/proxy?url=${encodeURIComponent(currentUrl)}`}
             onLoad={handleIframeLoad}
             className="absolute inset-0 h-full w-full border-none bg-white"
-            sandbox="allow-same-origin allow-scripts allow-forms allow-popups"
+            sandbox="allow-scripts allow-forms"
             title="Browser Viewport"
           />
         )}

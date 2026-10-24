@@ -74,7 +74,8 @@ export function Window({ win, active, reduced, mobile = false }: Props) {
       }
       className={cn(
         // opak workstation gövdesi — cam yok (spec §4.4)
-        "pointer-events-auto absolute flex flex-col overflow-hidden bg-surface",
+        // window-frame: masaüstü seçim kutusu ve dosya bırakma bu sınıfla pencereleri ayırt eder
+        "window-frame pointer-events-auto absolute flex flex-col overflow-hidden bg-surface",
         mobile || maximized ? "rounded-none" : "rounded-win",
         active
           ? "shadow-win ring-1 ring-border"

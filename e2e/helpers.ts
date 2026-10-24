@@ -11,9 +11,9 @@ export async function bypassBoot(page: Page) {
   });
 }
 
-/** Open an app by clicking its desktop icon (single click opens). */
+/** Open an app from its desktop icon (single click selects, double click opens). */
 export async function openAppFromDesktop(page: Page, appId: string) {
-  await page.getByTestId(`desktop-icon-${appId}`).click();
+  await page.getByTestId(`desktop-icon-${appId}`).dblclick();
 }
 
 /**

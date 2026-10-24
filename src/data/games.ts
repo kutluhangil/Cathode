@@ -4,9 +4,10 @@
  * hazır olana dek "yakında". Kullanıcı kendi .jsdos/.zip'ini de yükleyebilir (BYOG).
  */
 
-export interface GameBundle {
-  url: string; // .jsdos veya .zip
-}
+export type GameBundle =
+  | { url: string } // hazır .jsdos bundle
+  /** orijinal dağıtım zip'i (değiştirilmeden) + çalıştırılacak dosya; dosbox.conf üretilir */
+  | { zip: string; exec: string };
 
 export interface GameDefinition {
   id: string;
@@ -34,9 +35,10 @@ export const GAME_LIST: GameDefinition[] = [
     name: "games.doomName",
     glyph: "✦",
     description: "games.doomDesc",
-    bundle: { url: "https://r2.example/doom-sw.jsdos" },
-    enabled: false,
-    license: "shareware — serbest dağıtılır",
+    // id Software DOOM v1.9 shareware — setup:emu indirir (sha256 doğrulamalı), git'e girmez
+    bundle: { zip: "/games/doom-sw-1.9.zip", exec: "DOOM.EXE" },
+    enabled: true,
+    license: "shareware — değiştirilmeden serbest dağıtılır",
   },
 ];
 

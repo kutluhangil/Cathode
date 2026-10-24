@@ -30,10 +30,10 @@
 
 **Retrograde**, tarayıcıda çalışan, tamamen özgün tasarımlı bir retro işletim sistemi kabuğudur. İki katmandan oluşur:
 
-- **Kabuk** — boot ekranı, masaüstü, pencere yöneticisi, dock ve dahili uygulamalarla (Terminal, Dosyalar, Not Defteri, Paint, Hesap Makinesi, Tarayıcı…) kendine ait *Obsidian Retrograde* arayüzü.
-- **Emülasyon** — WebAssembly tabanlı **v86** ile gerçek eski işletim sistemleri (KolibriOS, FreeDOS) ve **js-dos** (DOSBox-X) ile DOS yazılımları, izole bir pencerede.
+- **Kabuk** — boot ekranı, masaüstü, pencere yöneticisi, dock ve dahili uygulamalarla (Terminal, Dosyalar, Not Defteri, Paint, Hesap Makinesi, Medya Oynatıcı, Tarayıcı…) kendine ait *Obsidian Retrograde* arayüzü.
+- **Emülasyon** — WebAssembly tabanlı **v86** ile gerçek eski işletim sistemleri (KolibriOS, FreeDOS) ve **js-dos** (DOSBox-X) ile DOS yazılımları (DOOM shareware dahil), izole bir pencerede. `/Floppy` klasöründeki dosyalar **B: disketi** olarak emüle DOS'a takılır, DOS'ta yapılan değişiklikler geri yazılır.
 
-Emüle edilen sistemler internete bağlı değildir, modern makineye erişemez. Login, veritabanı, analytics, reklam yok; ayarlar `localStorage`'da, dosyalar tarayıcının OPFS'inde durur. Arayüz **Türkçe / İngilizce**, PWA olarak offline çalışır. Telifli sistemler (örn. Windows) sitede barındırılmaz — yalnızca kullanıcının kendi imajıyla (BYOI) açılır.
+Emüle edilen sistemler internete bağlı değildir, modern makineye erişemez. Login, veritabanı, analytics, reklam yok; ayarlar `localStorage`'da, dosyalar tarayıcının OPFS'inde durur ve tek tıkla `.zip` yedeği alınıp geri yüklenebilir. Tek sunucu bileşeni İnternet uygulamasının durumsuz, sandbox'lı proxy'sidir. Arayüz **Türkçe / İngilizce**, PWA olarak offline çalışır. Telifli sistemler (örn. Windows) sitede barındırılmaz — yalnızca kullanıcının kendi imajıyla (BYOI) açılır.
 
 <img src="docs/readme/divider.svg" width="100%" alt="" />
 
@@ -62,6 +62,8 @@ Underneath, real legacy systems boot on emulated hardware: **v86** runs a genuin
 - **Command Palette** — `Cmd/Ctrl+K` fuzzy launcher for every app and action
 - **Desktop** — draggable, persistent icons, right-click context menu, multi-select
 - **Dock + Start menu + system bar** — one store drives every entry point
+- **Deep links** — `?open=kolibri` or `?open=terminal,notepad` launches apps on load
+- **Drag & drop** — drop files from your computer onto the desktop or into Files
 - **Screensaver** — phosphor bouncing mark after 3 min idle
 - **Mobile mode** — single-window layout on small screens
 
@@ -73,6 +75,8 @@ Underneath, real legacy systems boot on emulated hardware: **v86** runs a genuin
 - **js-dos (DOSBox-X)** — classic, freely-licensed DOS software
 - **Auto sleep / resume** — state saved on close, restored on reopen
 - **Multi-instance** — several machines at once, with a perf warning
+- **B: floppy bridge** — files in `/Floppy` become a FAT12 disk in FreeDOS / KolibriOS; eject writes changes back
+- **DOOM shareware** — id's v1.9 shareware episode, served unmodified
 - **BYOI / BYOG** — bring your own disk image or `.jsdos` bundle
 - Large images stream via **HTTP range requests** from Cloudflare R2
 
@@ -84,11 +88,12 @@ Underneath, real legacy systems boot on emulated hardware: **v86** runs a genuin
 #### 🧩 The apps
 | | |
 |---|---|
-| `>_` **Terminal** | `open`, `wallpaper`, `accent`, `crt`, `neofetch`, `reboot`… |
-| `▤` **Files** | OPFS virtual filesystem, text + binary |
+| `>_` **Terminal** | `ls`, `cd`, `cat`, `mkdir`, `rm`, `open`, `accent`, `neofetch`… |
+| `▤` **Files** | OPFS virtual filesystem — upload, download, drag & drop |
 | `▱` **Notepad** | persistent notes, saved to the VFS |
 | `✎` **Paint** · `▨` **Image Viewer** · `=` **Calculator** | mini apps |
-| `🌐` **Browser** | retro web via a stateless `/api/proxy` |
+| `♪` **Media Player** | `/Music` playlist + phosphor oscilloscope |
+| `🌐` **Browser** | retro web via a sandboxed, stateless `/api/proxy` |
 | `▦` **Systems** · `✦` **Games** | OS + DOS catalogs |
 
 </td>
@@ -101,6 +106,7 @@ Underneath, real legacy systems boot on emulated hardware: **v86** runs a genuin
 - **Motion-aware** — honours `prefers-reduced-motion`
 - **TR / EN** i18n · a11y baseline · focus traps
 - **Installable PWA** — offline app shell via Serwist
+- **Backup & restore** — every file, emulator save and setting as one `.zip`
 - Easter eggs — try `↑↑↓↓←→←→BA`, or `xyzzy` in the terminal 👀
 
 </td>
@@ -172,6 +178,9 @@ docker run -p 3000:3000 retrograde
 - `deploy/nginx.conf` — WASM MIME type, HTTP range requests, COOP/COEP preserved
 - `deploy/R2.md` — hosting large disk images on Cloudflare R2
 
+> [!NOTE]
+> The Browser app's `/api/proxy` only fetches public `http(s)` URLs on ports 80/443 — private, loopback and link-local addresses (your LAN, `localhost`, cloud metadata) are refused at every redirect hop. Proxied pages run in a sandboxed iframe with an opaque origin, so they can never read Retrograde's `localStorage` or files.
+
 > [!IMPORTANT]
 > The emulator requires `Cross-Origin-Opener-Policy: same-origin` and `Cross-Origin-Embedder-Policy: credentialless` over HTTPS. They are set in `next.config.mjs` — any proxy in front of the app must not strip them.
 
@@ -191,6 +200,7 @@ flowchart LR
     Emu --> DOS[js-dos · DOSBox-X]
     Apps <--> FS[(OPFS VFS)]
     V86 -. save / resume .-> FS
+    FS <-->|/Floppy ⇄ B: FAT12| V86
     Set[(settingsStore)] -. localStorage .-> Desk
 ```
 
@@ -212,11 +222,11 @@ Cathode/
 │   │   ├── desktop/          # Desktop, Wallpaper, CommandPalette, Screensaver, ContextMenu
 │   │   ├── window/           # Window, WindowManager, TitleBar, ResizeHandles, WindowSwitcher
 │   │   ├── dock/             # Dock, StartMenu, SystemBar, Clock
-│   │   ├── apps/             # Terminal, FileManager, Notepad, Paint, Calculator, Browser…
+│   │   ├── apps/             # Terminal, FileManager, Notepad, Paint, MediaPlayer, Browser…
 │   │   │   └── emulator/     # LazyEmulator (v86), LazyJsDos, EmulatorWindow
 │   │   └── ui/               # Button, Toggle, Segmented, AppIcon
 │   ├── store/                # windows, desktop, files, settings, ui (Zustand)
-│   ├── lib/                  # emu/ (v86 engine, sessions), fs/ (OPFS), i18n/, sound, pwa
+│   ├── lib/                  # emu/ (v86, sessions, fat12), fs/ (OPFS), backup/ (zip), i18n/, sound
 │   └── data/                 # apps registry, os catalog, games catalog, wallpapers
 ├── e2e/                      # Playwright specs (boot, fs, emu, a11y, mobile…)
 ├── public/                   # icons, wallpapers, (setup:emu →) v86, js-dos, images
@@ -235,11 +245,15 @@ Cathode/
 | ✅ | v86 (KolibriOS + FreeDOS) and js-dos integration · BYOI / BYOG |
 | ✅ | Files app + OPFS VFS · draggable persistent desktop icons |
 | ✅ | Emulator auto sleep / resume · multi-instance |
-| ✅ | Calculator, Paint, Image Viewer, Browser |
+| ✅ | Calculator, Paint, Image Viewer, Browser, Media Player |
+| ✅ | Hardened Browser proxy (SSRF guard + sandboxed iframe) |
+| ✅ | Terminal filesystem commands · Files upload / download / drag & drop |
+| ✅ | `/Floppy` ⇄ B: floppy bridge for emulated DOS · DOOM shareware |
+| ✅ | Full local backup & restore (.zip) · `?open=` deep links |
 | ✅ | Playwright e2e · mobile mode · a11y · TR / EN |
 | ✅ | 4 phosphor themes · easter eggs · installable PWA |
 | 🔄 | ReactOS and more OS images hosted on R2 |
-| 🔄 | Free / shareware DOS game catalog |
+| 🔄 | More free / shareware DOS titles |
 
 <img src="docs/readme/divider.svg" width="100%" alt="" />
 

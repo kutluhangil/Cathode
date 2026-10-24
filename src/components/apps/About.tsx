@@ -6,14 +6,14 @@ import { RetrogradeMark } from "@/components/icons";
 const COPY = {
   tr: {
     tagline: "Tarayıcıda çalışan, özgün tasarımlı retro işletim sistemi.",
-    body: "Retrograde iki katmanlı bir projedir. Dışarıda tamamen bize ait, özgün tasarımlı bir işletim sistemi kabuğu vardır. İçeride ise gerçek eski işletim sistemleri bir pencere içinde, tarayıcıda izole çalışacaktır. Her şey senin tarayıcında çalışır; sunucuda işletim sistemi koşmaz.",
+    body: "Retrograde iki katmanlı bir projedir. Dışarıda tamamen bize ait, özgün tasarımlı bir işletim sistemi kabuğu vardır. İçeride ise gerçek eski işletim sistemleri bir pencere içinde, tarayıcıda izole çalışacaktır. Her şey senin tarayıcında çalışır; sunucuda işletim sistemi koşmaz. Tek istisna İnternet uygulamasıdır: açtığın sayfalar, iframe engellerini aşmak için sunucumuzdaki durumsuz bir proxy üzerinden getirilir; sayfa içerikleri saklanmaz.",
     discTitle: "Yasal not",
     disclaimer:
       "Retrograde bir hobi/eğitim/dijital koruma projesidir. Emülasyon motorları açık kaynaktır. Eski işletim sistemleri telif sahiplerine aittir ve yalnızca arşiv/nostalji amacıyla, tarayıcıda izole biçimde çalıştırılır. Telif sahibi talep ederse ilgili içerik kaldırılır. Bu site reklam içermez, ticari amaç gütmez.",
   },
   en: {
     tagline: "A browser-native retro operating system with an original design.",
-    body: "Retrograde is a two-layer project. On the outside is an entirely original operating-system shell that is our own brand. On the inside, real legacy operating systems will run inside a window, isolated in your browser. Everything runs in your browser; no OS runs on a server.",
+    body: "Retrograde is a two-layer project. On the outside is an entirely original operating-system shell that is our own brand. On the inside, real legacy operating systems will run inside a window, isolated in your browser. Everything runs in your browser; no OS runs on a server. The one exception is the Internet app: pages you open are fetched through a stateless proxy on our server to get around iframe blocking; page contents are never stored.",
     discTitle: "Legal notice",
     disclaimer:
       "Retrograde is a hobby/education/digital-preservation project. The emulation engines are open source. Legacy operating systems belong to their copyright holders and are run only for archival/nostalgia purposes, isolated inside the browser. Content is removed on a rights holder's request. This site has no ads and no commercial intent.",
@@ -26,6 +26,7 @@ const SPECS: [string, string][] = [
   ["render", "phosphor crt"],
   ["emulation", "v86 · js-dos (wasm)"],
   ["data", "localStorage · OPFS — no server"],
+  ["network", "stateless proxy (Internet app only)"],
 ];
 
 export function About() {

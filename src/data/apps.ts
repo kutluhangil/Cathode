@@ -10,6 +10,7 @@ import { Calculator } from "@/components/apps/Calculator";
 import { ImageViewer } from "@/components/apps/ImageViewer";
 import { Paint } from "@/components/apps/Paint";
 import { Browser } from "@/components/apps/Browser";
+import { MediaPlayer } from "@/components/apps/MediaPlayer";
 import { LazyEmulator } from "@/components/apps/emulator/LazyEmulator";
 import { LazyJsDos } from "@/components/apps/emulator/LazyJsDos";
 import { enabledOs } from "@/data/os";
@@ -151,6 +152,16 @@ const baseApps: AppDefinition[] = [
     component: Browser,
     defaultSize: { w: 800, h: 600 },
     minSize: { w: 400, h: 300 },
+    pinned: true,
+  },
+  {
+    id: "mediaplayer",
+    name: "apps.player",
+    glyph: "♪",
+    description: "apps.playerDesc",
+    component: MediaPlayer,
+    defaultSize: { w: 560, h: 440 },
+    minSize: { w: 420, h: 320 },
     pinned: true,
   },
 ];

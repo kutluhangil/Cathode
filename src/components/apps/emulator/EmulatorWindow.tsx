@@ -12,6 +12,22 @@ import {
   hasSession,
   dropSession,
 } from "@/lib/emu/emuSession";
+import { buildFloppy, readFloppy } from "@/lib/emu/fat12";
+import * as vfs from "@/lib/fs/vfs";
+import { useFiles } from "@/store/filesStore";
+
+/** VFS ↔ misafir OS köprüsü: bu klasördeki dosyalar B: disketine yazılır. */
+const FLOPPY_DIR = "/Floppy";
+
+/** B: içeriğini /Floppy'ye geri yaz (kısa adlar mümkünse orijinal uzun adlarına döner). */
+async function syncFloppyBack(engine: V86Engine, names: Map<string, string>): Promise<number> {
+  const img = engine.readFloppyB();
+  if (!img) return 0;
+  const files = readFloppy(img);
+  for (const f of files) await vfs.writeBlob(`${FLOPPY_DIR}/${names.get(f.name) ?? f.name}`, new Blob([f.data as Uint8Array<ArrayBuffer>]));
+  await useFiles.getState().refresh(FLOPPY_DIR);
+  return files.length;
+}
 
 interface Props {
   os: OsDefinition;
@@ -27,6 +43,10 @@ export function EmulatorWindow({ os, override }: Props) {
   const [progress, setProgress] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [resuming, setResuming] = useState(false);
+  const [floppyIn, setFloppyIn] = useState(false);
+  const [floppyNote, setFloppyNote] = useState<{ text: string; error?: boolean } | null>(null);
+  const floppyInRef = useRef(false);
+  const floppyNamesRef = useRef(new Map<string, string>());
 
   // OPFS anahtarı — BYOI dahil os.id bazlı
   const stateKey = `v86-${os.id}`;
@@ -90,6 +110,8 @@ export function EmulatorWindow({ os, override }: Props) {
       // otomatik uyku: kapat/küçült öncesi durumu kaydet, sonra yok et
       void (async () => {
         try {
+          // takılı disketteki değişiklikler kaybolmasın
+          if (e && floppyInRef.current) await syncFloppyBack(e, floppyNamesRef.current);
           if (e && reachedReadyRef.current) {
             await saveSession(e, stateKey);
           }
@@ -126,6 +148,55 @@ export function EmulatorWindow({ os, override }: Props) {
     URL.revokeObjectURL(a.href);
   };
 
+  const floppyError = (err: unknown) => {
+    const key = err instanceof Error && err.message.startsWith("floppy.") ? err.message : "";
+    const map: Record<string, string> = {
+      "floppy.full": "emulator.floppyFull",
+      "floppy.tooMany": "emulator.floppyTooMany",
+      "floppy.unformatted": "emulator.floppyUnformatted",
+    };
+    setFloppyNote({ text: map[key] ? t(map[key]) : t("emulator.error"), error: true });
+  };
+
+  const insertFloppy = async () => {
+    const engine = engineRef.current;
+    if (!engine) return;
+    try {
+      await vfs.mkdir(FLOPPY_DIR);
+      const entries = (await vfs.list(FLOPPY_DIR)).filter((e) => e.kind === "file");
+      const files = await Promise.all(
+        entries.map(async (e) => ({
+          name: e.name,
+          data: new Uint8Array(await (await vfs.readBlob(e.path)).arrayBuffer()),
+        })),
+      );
+      const { image, names } = buildFloppy(files);
+      await engine.insertFloppyB(image);
+      floppyNamesRef.current = names;
+      floppyInRef.current = true;
+      setFloppyIn(true);
+      setFloppyNote({ text: t("emulator.floppyInserted", { n: files.length }) });
+      await useFiles.getState().refresh("/");
+    } catch (err) {
+      floppyError(err);
+    }
+  };
+
+  const ejectFloppy = async () => {
+    const engine = engineRef.current;
+    if (!engine) return;
+    try {
+      const n = await syncFloppyBack(engine, floppyNamesRef.current);
+      setFloppyNote({ text: t("emulator.floppySaved", { n }) });
+    } catch (err) {
+      floppyError(err);
+    } finally {
+      engine.ejectFloppyB();
+      floppyInRef.current = false;
+      setFloppyIn(false);
+    }
+  };
+
   const loading = phase === "downloading" || phase === "booting" || resuming;
 
   return (
@@ -147,6 +218,13 @@ export function EmulatorWindow({ os, override }: Props) {
           )}
         />
         <div className="ml-auto flex items-center gap-1">
+          <Ctl
+            testId="emu-floppy"
+            onClick={() => void (floppyIn ? ejectFloppy() : insertFloppy())}
+            disabled={phase !== "ready"}
+          >
+            {floppyIn ? t("emulator.floppyEject") : t("emulator.floppyInsert")}
+          </Ctl>
           <Ctl onClick={reset}>{t("emulator.reset")}</Ctl>
           <Ctl onClick={newSession} disabled={phase !== "ready"}>
             {t("emulator.newSession")}
@@ -219,6 +297,19 @@ export function EmulatorWindow({ os, override }: Props) {
           </div>
         )}
 
+        {floppyNote && (
+          <div
+            data-testid="emu-floppy-note"
+            role="status"
+            className={cn(
+              "absolute right-2 top-2 rounded-[6px] border bg-void/85 px-2.5 py-1 font-mono text-[10px]",
+              floppyNote.error ? "border-danger text-danger" : "border-border text-text-dim",
+            )}
+          >
+            {floppyNote.text}
+          </div>
+        )}
+
         {/* ekranı bırak ipucu */}
         {phase === "ready" && !resuming && (
           <div className="pointer-events-none absolute bottom-2 left-1/2 -translate-x-1/2 rounded-full border border-border bg-void/70 px-3 py-1 font-mono text-[10px] text-text-dim">
@@ -234,13 +325,16 @@ function Ctl({
   children,
   onClick,
   disabled,
+  testId,
 }: {
   children: React.ReactNode;
   onClick: () => void;
   disabled?: boolean;
+  testId?: string;
 }) {
   return (
     <button
+      data-testid={testId}
       onClick={onClick}
       disabled={disabled}
       className="rounded-[6px] border border-border px-2 py-1 font-mono text-[10px] text-text-dim transition-colors hover:border-accent hover:text-accent disabled:opacity-40 disabled:hover:border-border disabled:hover:text-text-dim"

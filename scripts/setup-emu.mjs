@@ -2,6 +2,7 @@
 // v86 + js-dos node_modules'tan kopyalanır; BIOS + KolibriOS ağdan indirilir.
 import { existsSync, mkdirSync, cpSync, copyFileSync } from "node:fs";
 import { writeFile } from "node:fs/promises";
+import { createHash } from "node:crypto";
 
 const log = (m) => console.log(`[setup-emu] ${m}`);
 
@@ -9,7 +10,7 @@ function ensureDir(p) {
   if (!existsSync(p)) mkdirSync(p, { recursive: true });
 }
 
-async function download(url, dest) {
+async function download(url, dest, sha256) {
   if (existsSync(dest)) {
     log(`atlandı (var): ${dest}`);
     return;
@@ -18,6 +19,10 @@ async function download(url, dest) {
   const res = await fetch(url);
   if (!res.ok) throw new Error(`indirme başarısız ${res.status}: ${url}`);
   const buf = Buffer.from(await res.arrayBuffer());
+  if (sha256) {
+    const got = createHash("sha256").update(buf).digest("hex");
+    if (got !== sha256) throw new Error(`sha256 uyuşmuyor: ${url} (${got})`);
+  }
   await writeFile(dest, buf);
   log(`yazıldı: ${dest} (${buf.length} byte)`);
 }
@@ -71,6 +76,15 @@ async function main() {
   await download(
     "https://copy.sh/v86/images/freedos722.img",
     "public/images/freedos722.img",
+  );
+
+  // DOOM v1.9 shareware — id Software'in serbest dağıtım izni (değiştirilmeden).
+  // Orijinal zip olduğu gibi sunulur; js-dos dosbox.conf'u çalışma anında üretir.
+  ensureDir("public/games");
+  await download(
+    "https://archive.org/download/DoomsharewareEpisode/DoomV1.9sw1995idSoftwareInc.action.zip",
+    "public/games/doom-sw-1.9.zip",
+    "63ad7609f2e951fb2198f682e1226f003946c75c00b9785fa967ffb12c6745f7",
   );
 
   log("tamam.");

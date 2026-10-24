@@ -6,6 +6,12 @@ export function isImage(name: string): boolean {
   return IMAGE_EXT.test(name);
 }
 
+const AUDIO_EXT = /\.(mp3|wav|ogg|oga|opus|m4a|aac|flac|weba)$/i;
+
+export function isAudio(name: string): boolean {
+  return AUDIO_EXT.test(name);
+}
+
 export function isText(name: string): boolean {
   return /\.txt$/i.test(name);
 }
@@ -22,6 +28,8 @@ export function openFile(open: OpenFn, entry: FsEntry): void {
   if (entry.kind !== "file") return;
   if (isImage(entry.name))
     open("imageviewer", "apps.viewer", { w: 640, h: 480 }, { path: entry.path });
+  else if (isAudio(entry.name))
+    open("mediaplayer", "apps.player", { w: 560, h: 440 }, { path: entry.path });
   else if (isText(entry.name))
     open("notepad", "apps.notepad", { w: 460, h: 420 }, { path: entry.path });
 }
