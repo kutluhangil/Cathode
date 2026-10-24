@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="860" height="400" viewBox="0 0 860 400" role="img" aria-label="Retrograde POST boot sequence ending with: open kolibri">
+  <title>Retrograde boot sequence</title>
+  <defs>
+    <style>
+      .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace; }
+      .ok { fill: #ffb000; }
+      .cursor { animation: blink 1s steps(1) infinite; }
+      @keyframes blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+      @media (prefers-reduced-motion: reduce) {
+        .cursor { animation: none; }
+        .reveal { clip-path: none; }
+      }
+    </style>
+    <pattern id="scan" width="3" height="3" patternUnits="userSpaceOnUse">
+      <rect width="3" height="1" fill="#000" fill-opacity=".35" />
+    </pattern>
+    <filter id="phosphor" x="-5%" y="-5%" width="110%" height="110%">
+      <feGaussianBlur stdDeviation="1.6" result="b" />
+      <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
+    </filter>
+    <!-- 12 sn döngü: satırlar POST zamanlamasıyla düşer (BootScreen.tsx ile aynı sıra) -->
+    <clipPath id="lines">
+      <rect x="0" y="54" width="860" height="0">
+        <animate attributeName="height" calcMode="discrete" dur="12s" repeatCount="indefinite"
+          values="0;26;50;74;98;122;146;170;194;218;242;266;290;314;0"
+          keyTimes="0;.0333;.0583;.0833;.0917;.2083;.2333;.2583;.2833;.3083;.3333;.3583;.375;.6;.95" />
+      </rect>
+    </clipPath>
+    <clipPath id="typed">
+      <rect x="196" y="320" height="22" width="0">
+        <animate attributeName="width" calcMode="discrete" dur="12s" repeatCount="indefinite"
+          values="0;8.4;16.8;25.2;33.6;42;50.4;58.8;67.2;75.6;84;92.4;100.8;0"
+          keyTimes="0;.4267;.4367;.4467;.4567;.4667;.4767;.4867;.4967;.5067;.5167;.5267;.5367;.95" />
+      </rect>
+    </clipPath>
+  </defs>
+
+  <!-- pencere -->
+  <rect x=".5" y=".5" width="859" height="399" rx="14" fill="#0a0a0d" stroke="#ffffff" stroke-opacity=".09" />
+  <path d="M14.5 .5h831a14 14 0 0 1 14 14V36H.5V14.5a14 14 0 0 1 14-14z" fill="#111116" />
+  <line x1="0" y1="36" x2="860" y2="36" stroke="#ffffff" stroke-opacity=".06" />
+  <circle cx="22" cy="18" r="5.5" fill="#ff5f57" />
+  <circle cx="40" cy="18" r="5.5" fill="#febc2e" />
+  <circle cx="58" cy="18" r="5.5" fill="#28c840" />
+  <text class="mono" x="430" y="22" font-size="12" text-anchor="middle" fill="#6b6a66">retrograde — tty0</text>
+
+  <g class="mono reveal" font-size="14" fill="#a8a49a" clip-path="url(#lines)" filter="url(#phosphor)">
+    <text x="28" y="72" fill="#ece8de" font-weight="700">Retrograde Systems 5100</text>
+    <text x="28" y="96" fill="#5a5850">phosphor bios v2.0</text>
+
+    <text x="28" y="144">memory test</text>
+    <rect x="140" y="134" width="220" height="12" rx="2" fill="none" stroke="#ffffff" stroke-opacity=".15" />
+    <rect x="142" y="136" width="0" height="8" rx="1" fill="#ffb000">
+      <animate attributeName="width" dur="12s" repeatCount="indefinite" values="0;0;216;216" keyTimes="0;.0917;.1917;1" />
+    </rect>
+    <text x="376" y="144" opacity="0">8192 K  <tspan class="ok">ok</tspan>
+      <animate attributeName="opacity" calcMode="discrete" dur="12s" repeatCount="indefinite" values="0;1;0" keyTimes="0;.1917;.95" />
+    </text>
+
+    <text x="28" y="168">phosphor display ........... <tspan class="ok">ok</tspan></text>
+    <text x="28" y="192">window manager ............. <tspan class="ok">ok</tspan></text>
+    <text x="28" y="216">mounting shell ............. <tspan class="ok">ok</tspan></text>
+    <text x="28" y="240">v86 · x86 core (wasm) ...... <tspan class="ok">ok</tspan></text>
+    <text x="28" y="264">js-dos · dosbox-x .......... <tspan class="ok">ok</tspan></text>
+    <text x="28" y="288">opfs virtual filesystem .... <tspan class="ok">ok</tspan></text>
+
+    <text x="28" y="336" textLength="159.6"><tspan class="ok">guest@retrograde</tspan><tspan fill="#5a5850">:~$</tspan></text>
+    <text x="196" y="336" fill="#ece8de" textLength="100.8" clip-path="url(#typed)">open kolibri</text>
+    <rect class="cursor" y="322" width="8.4" height="17" fill="#ece8de">
+      <animate attributeName="x" calcMode="discrete" dur="12s" repeatCount="indefinite"
+        values="196;204.4;212.8;221.2;229.6;238;246.4;254.8;263.2;271.6;280;288.4;296.8;196"
+        keyTimes="0;.4267;.4367;.4467;.4567;.4667;.4767;.4867;.4967;.5067;.5167;.5267;.5367;.95" />
+    </rect>
+
+    <text x="28" y="360" fill="#5a5850">▸ booting <tspan fill="#ece8de">KolibriOS</tspan> on v86 · sandboxed · no network</text>
+  </g>
+
+  <rect x="1" y="37" width="858" height="362" fill="url(#scan)" />
+</svg>

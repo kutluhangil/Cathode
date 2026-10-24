@@ -1,262 +1,268 @@
 <div align="center">
 
+<img src="docs/readme/hero.svg" alt="Retrograde — a browser-native retro OS shell" width="100%" />
+
 <br />
 
-<img src="https://img.shields.io/badge/Retrograde-v0.1.0-f59e0b?style=for-the-badge&logoColor=white" alt="version" />
-<img src="https://img.shields.io/badge/Built_with-TypeScript-3178c6?style=for-the-badge&logo=typescript&logoColor=white" alt="typescript" />
-<img src="https://img.shields.io/badge/Next.js-14-000000?style=for-the-badge&logo=next.js&logoColor=white" alt="nextjs" />
-<img src="https://img.shields.io/badge/React-18-61dafb?style=for-the-badge&logo=react&logoColor=black" alt="react" />
-<img src="https://img.shields.io/badge/TailwindCSS-3-38bdf8?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="tailwind" />
-<img src="https://img.shields.io/badge/Zustand-state-443e38?style=for-the-badge&logoColor=white" alt="zustand" />
-<img src="https://img.shields.io/badge/v86-WASM_x86-6e40c9?style=for-the-badge&logoColor=white" alt="v86" />
-<img src="https://img.shields.io/badge/js--dos-DOSBox--X-2a75bb?style=for-the-badge&logoColor=white" alt="js-dos" />
-<img src="https://img.shields.io/badge/PWA-offline_ready-5a0fc8?style=for-the-badge&logo=pwa&logoColor=white" alt="pwa" />
-<img src="https://img.shields.io/badge/Privacy--First-no_login_no_tracking-22c55e?style=for-the-badge&logoColor=white" alt="privacy" />
+<img src="https://img.shields.io/badge/version-0.1.0-ffb000?style=for-the-badge&labelColor=0a0a0d" alt="version" />
+<img src="https://img.shields.io/badge/Next.js-14-ece8de?style=for-the-badge&logo=next.js&logoColor=ece8de&labelColor=0a0a0d" alt="Next.js" />
+<img src="https://img.shields.io/badge/TypeScript-strict-4aa3ff?style=for-the-badge&logo=typescript&logoColor=4aa3ff&labelColor=0a0a0d" alt="TypeScript" />
+<img src="https://img.shields.io/badge/v86-WASM_x86-33e86c?style=for-the-badge&logo=webassembly&logoColor=33e86c&labelColor=0a0a0d" alt="v86" />
+<img src="https://img.shields.io/badge/js--dos-DOSBox--X-ffb000?style=for-the-badge&labelColor=0a0a0d" alt="js-dos" />
+<img src="https://img.shields.io/badge/PWA-offline-e8ecf0?style=for-the-badge&logo=pwa&logoColor=e8ecf0&labelColor=0a0a0d" alt="PWA" />
+<img src="https://img.shields.io/badge/privacy-no_login_·_no_tracking-33e86c?style=for-the-badge&labelColor=0a0a0d" alt="privacy-first" />
 
 <br /><br />
 
-```
-   ▄████████    ▄████████     ███        ▄█    █▄     ▄██████▄  ████████▄     ▄████████
-  ███    ███   ███    ███ ▀█████████▄   ███    ███   ███    ███ ███   ▀███   ███    ███
-  ███    █▀    ███    ███    ▀███▀▀██   ███    ███   ███    ███ ███    ███   ███    █▀
- ▄███▄▄▄       ███    ███     ███   ▀  ▄███▄▄▄▄███▄▄ ███    ███ ███    ███   ███
-▀▀███▀▀▀     ▀███████████     ███     ▀▀███▀▀▀▀███▀  ███    ███ ███    ███ ▀███████████
-  ███    █▄    ███    ███     ███       ███    ███   ███    ███ ███    ███          ███
-  ███    ███   ███    ███     ███       ███    ███   ███    ███ ███   ▄███    ▄█    ███
-  ██████████   ███    █▀     ▄████▀     ███    █▀     ▀██████▀  ████████▀   ▄████████▀
-```
+**Bespoke desktop chrome meets real x86 emulation — entirely in your browser.**
+<br />
+<sub>No account. No database. No analytics. Every byte of state stays on your machine.</sub>
 
-### **A browser-native retro OS shell** — bespoke desktop chrome meets real x86 emulation, with zero login and zero tracking.
+<br /><br />
 
-[Report Bug](https://github.com/kutluhangil/Retrograde/issues) · [Request Feature](https://github.com/kutluhangil/Retrograde/issues)
+[**Features**](#-features) · [**Quick start**](#-quick-start) · [**How it works**](#-how-it-works) · [**Deploy**](#%EF%B8%8F-deployment) · [**Report a bug**](https://github.com/kutluhangil/Cathode/issues)
 
 </div>
 
----
+<img src="docs/readme/divider.svg" width="100%" alt="" />
 
-## 🇹🇷 Türkçe Açıklama
+## 🇹🇷 Kısaca
 
-**Retrograde**, tarayıcıda çalışan, tamamen özgün tasarımlı bir retro işletim sistemi kabuğudur. İki katmandan oluşur: **kabuk** — boot ekranı, masaüstü, pencere yöneticisi, dock ve dahili uygulamalarla (Terminal, Not Defteri, Ayarlar, Sistemler, Oyunlar) kendine ait "Obsidian Retrograde" arayüzü — ve **emülasyon** — WebAssembly tabanlı v86 ile gerçek eski işletim sistemlerini (KolibriOS, FreeDOS, ReactOS) ve js-dos (DOSBox-X) ile klasik DOS oyunlarını bir pencere içinde çalıştırma katmanı. Emüle edilen sistemler internete bağlı değildir ve modern makineye erişemez — tamamen izole sanal donanımda çalışır. Login yok, veritabanı yok, analytics yok, reklam yok; tüm ayarlar (tema, CRT efektleri, duvar kâğıdı, ses) yalnızca tarayıcının `localStorage`'ında tutulur. Progressive Web App olarak offline çalışabilir, telifli sistemler (örn. Windows) sitede barındırılmaz — yalnızca kullanıcının kendi yüklediği imajla (BYOI) açılır.
+**Retrograde**, tarayıcıda çalışan, tamamen özgün tasarımlı bir retro işletim sistemi kabuğudur. İki katmandan oluşur:
 
----
+- **Kabuk** — boot ekranı, masaüstü, pencere yöneticisi, dock ve dahili uygulamalarla (Terminal, Dosyalar, Not Defteri, Paint, Hesap Makinesi, Tarayıcı…) kendine ait *Obsidian Retrograde* arayüzü.
+- **Emülasyon** — WebAssembly tabanlı **v86** ile gerçek eski işletim sistemleri (KolibriOS, FreeDOS) ve **js-dos** (DOSBox-X) ile DOS yazılımları, izole bir pencerede.
+
+Emüle edilen sistemler internete bağlı değildir, modern makineye erişemez. Login, veritabanı, analytics, reklam yok; ayarlar `localStorage`'da, dosyalar tarayıcının OPFS'inde durur. Arayüz **Türkçe / İngilizce**, PWA olarak offline çalışır. Telifli sistemler (örn. Windows) sitede barındırılmaz — yalnızca kullanıcının kendi imajıyla (BYOI) açılır.
+
+<img src="docs/readme/divider.svg" width="100%" alt="" />
 
 ## ✦ What is Retrograde?
 
-**Retrograde** is a fully bespoke retro operating-system shell that runs entirely in your browser. It's not a UI wrapper around someone else's design — the boot sequence, desktop, window manager, dock, and built-in apps are an original interface called **"Obsidian Retrograde."**
+Retrograde is **not** a skin over someone else's OS. The boot sequence, desktop, window manager, dock and every built-in app are an original interface called **Obsidian Retrograde** — amber phosphor, CRT scanlines, a physical *Retrograde 5100* monitor bezel.
 
-Underneath, real legacy systems run in emulated hardware: **v86** boots a genuine x86 machine over WebAssembly (KolibriOS, FreeDOS, ReactOS), and **js-dos** (DOSBox-X) runs classic DOS software — both fully sandboxed, with no network access to the host machine or the internet. No accounts, no server-side state, no analytics. Everything — theme, CRT effects, wallpaper, sound — persists locally via `localStorage`, and the app installs as an offline-capable PWA.
+Underneath, real legacy systems boot on emulated hardware: **v86** runs a genuine x86 machine over WebAssembly, **js-dos** runs classic DOS software. Both are sandboxed — no network, no access to the host.
 
----
+<div align="center">
+<br />
+<img src="docs/readme/boot.svg" alt="Retrograde POST boot sequence" width="760" />
+<br />
+<sub>The real boot sequence — CRT warm-up → POST → device probes → phosphor bloom → desktop.</sub>
+<br /><br />
+</div>
 
 ## ⚡ Features
 
-| Feature | Description |
-|--------|-------------|
-| 🖥️ **Obsidian Retrograde Shell** | Original boot screen, desktop, draggable/resizable window manager, dock, and start menu |
-| ⌨️ **Terminal** | Built-in shell app — control the OS with commands (`open`, `wallpaper`, `accent`, `crt`, `monitor`, `reboot`, ...) |
-| 🔎 **Command Palette** | `Cmd/Ctrl+K` fuzzy search to launch any app or system action instantly |
-| 🪟 **Window Manager** | Drag, resize, snap-to-edge (half-screen), and `Alt+Tab` window switcher |
-| 🎛️ **Live Settings** | Amber ↔ phosphor-green accent, CRT scanline/vignette/grain/glow, physical "Retrograde 5100" monitor bezel, motion toggle (`prefers-reduced-motion` aware) |
-| 🌌 **Screensaver** | Phosphor-style bouncing mark after 3 minutes idle, auto-disabled if animations are off |
-| 🔊 **UI Sound Engine** | WebAudio-synthesized open/close/toggle/error cues — no audio files, generated on the fly |
-| 🧩 **App Suite** | Notepad (persistent notes), Settings, About, Systems catalog, Games catalog — all native windows |
-| 💾 **Real x86 Emulation** | v86 (WASM) boots KolibriOS and FreeDOS out of the box; ReactOS and others ship "coming soon" pending image hosting |
-| 🕹️ **DOS Gaming (js-dos)** | DOSBox-X in the browser for classic, freely-licensed DOS software and games |
-| 📦 **BYOI / BYOG** | Bring Your Own Image — load your own disk image or `.jsdos` bundle; copyrighted systems (e.g. Windows) are never bundled |
-| 📱 **Installable PWA** | Offline app shell via `@serwist/next` service worker — install to home screen or desktop |
-| 🔒 **Privacy-First** | No login, no database, no payments, no analytics — every byte of state stays in your browser |
+<table>
+<tr>
+<td width="50%" valign="top">
 
----
+#### 🖥️ The shell
+- **Window manager** — drag, resize from any edge, snap to half-screen, `Alt+Tab` switcher
+- **Command Palette** — `Cmd/Ctrl+K` fuzzy launcher for every app and action
+- **Desktop** — draggable, persistent icons, right-click context menu, multi-select
+- **Dock + Start menu + system bar** — one store drives every entry point
+- **Screensaver** — phosphor bouncing mark after 3 min idle
+- **Mobile mode** — single-window layout on small screens
+
+</td>
+<td width="50%" valign="top">
+
+#### 💾 The emulators
+- **v86 (WASM x86)** — KolibriOS and FreeDOS boot out of the box
+- **js-dos (DOSBox-X)** — classic, freely-licensed DOS software
+- **Auto sleep / resume** — state saved on close, restored on reopen
+- **Multi-instance** — several machines at once, with a perf warning
+- **BYOI / BYOG** — bring your own disk image or `.jsdos` bundle
+- Large images stream via **HTTP range requests** from Cloudflare R2
+
+</td>
+</tr>
+<tr>
+<td width="50%" valign="top">
+
+#### 🧩 The apps
+| | |
+|---|---|
+| `>_` **Terminal** | `open`, `wallpaper`, `accent`, `crt`, `neofetch`, `reboot`… |
+| `▤` **Files** | OPFS virtual filesystem, text + binary |
+| `▱` **Notepad** | persistent notes, saved to the VFS |
+| `✎` **Paint** · `▨` **Image Viewer** · `=` **Calculator** | mini apps |
+| `🌐` **Browser** | retro web via a stateless `/api/proxy` |
+| `▦` **Systems** · `✦` **Games** | OS + DOS catalogs |
+
+</td>
+<td width="50%" valign="top">
+
+#### 🎛️ The feel
+- **4 phosphor themes** — amber · green · blue · white
+- **CRT stack** — scanlines, vignette, grain, glow, monitor bezel
+- **UI sound engine** — Web Audio synthesis, zero audio files
+- **Motion-aware** — honours `prefers-reduced-motion`
+- **TR / EN** i18n · a11y baseline · focus traps
+- **Installable PWA** — offline app shell via Serwist
+- Easter eggs — try `↑↑↓↓←→←→BA`, or `xyzzy` in the terminal 👀
+
+</td>
+</tr>
+</table>
+
+<img src="docs/readme/divider.svg" width="100%" alt="" />
 
 ## 🖼️ Screenshots
 
+<div align="center">
+
 | Desktop | Apps | Paint |
-|---|---|---|
-| ![desktop](docs/screenshots/desktop.png) | ![apps](docs/screenshots/apps.png) | ![paint](docs/screenshots/paint.png) |
+|:-:|:-:|:-:|
+| <img src="docs/screenshots/desktop.png" alt="desktop" /> | <img src="docs/screenshots/apps.png" alt="apps" /> | <img src="docs/screenshots/paint.png" alt="paint" /> |
 
-<sub>Regenerate with `CAPTURE=1 npm run test:e2e -- screenshots.spec.ts --project=desktop`.</sub>
+<sub>Regenerate with `CAPTURE=1 npm run test:e2e -- screenshots.spec.ts --project=desktop`</sub>
 
----
+</div>
 
-## 🛠️ Tech Stack
+## 🛠️ Tech stack
 
-```
+```text
 Shell        →  Next.js 14 (App Router) · TypeScript (strict) · Tailwind CSS · Framer Motion
-State        →  Zustand (localStorage-persisted settings + window state)
+State        →  Zustand — windows, desktop, files, settings, ui (localStorage-persisted)
 Emulation    →  v86 (WASM x86) · js-dos 8 (DOSBox-X)
-Audio        →  Web Audio API — synthesized UI sound effects, no audio assets
-PWA          →  @serwist/next (Serwist) — offline app shell, installable
-Persistence  →  Browser-only — localStorage + OPFS, zero server-side state
-Deployment   →  Docker (standalone) → Ubuntu → nginx → Cloudflare Tunnel · large images on R2
+Filesystem   →  OPFS virtual filesystem — text + binary, metadata sidecar
+Audio        →  Web Audio API — synthesized UI cues, no audio assets
+PWA          →  @serwist/next — offline app shell, installable
+i18n         →  Typed TR / EN dictionaries + useT() hook
+Testing      →  Playwright e2e — desktop + mobile projects
+Deployment   →  Docker (standalone) → nginx → Cloudflare Tunnel · large images on R2
 ```
 
----
+<img src="docs/readme/divider.svg" width="100%" alt="" />
 
-## 🚀 Getting Started
+## 🚀 Quick start
 
-### Prerequisites
-
-- Node.js `>= 18`
-
-### Local Development
+> Requires **Node.js ≥ 18**.
 
 ```bash
-# Clone the repository
-git clone https://github.com/kutluhangil/Retrograde.git
-cd Retrograde
+git clone https://github.com/kutluhangil/Cathode.git
+cd Cathode
 
-# Install dependencies (postinstall prepares emulator binaries into public/)
-npm install
-
-# Start the dev server (runs on http://localhost:3000)
-npm run dev
+npm install      # postinstall prepares emulator binaries into public/
+npm run dev      # → http://localhost:3000
 ```
 
-Emulator binaries (v86 WASM, BIOS, js-dos, KolibriOS) are **not committed to git** —
-`npm run setup:emu` (run automatically via `postinstall`) generates them idempotently
-from `node_modules` plus free-license image downloads.
+Emulator binaries (v86 WASM, BIOS, js-dos, KolibriOS) are **not committed** — `npm run setup:emu` (run automatically on `postinstall`) generates them idempotently from `node_modules` plus free-license downloads.
 
-### Available Scripts
-
-| Script | Description |
-|--------|-------------|
-| `npm run dev` | Start the Next.js dev server on `localhost:3000` |
+| Script | What it does |
+|---|---|
+| `npm run dev` | Dev server on `localhost:3000` |
 | `npm run build` | Production build (`output: standalone`) |
 | `npm run start` | Serve the production build |
-| `npm run lint` | Lint the codebase with ESLint |
-| `npm run setup:emu` | Regenerate emulator binaries into `public/` (idempotent) |
-
----
+| `npm run lint` | ESLint |
+| `npm run setup:emu` | Regenerate emulator binaries into `public/` |
+| `npm run test:e2e` | Playwright suite (`test:e2e:ui` for the UI runner) |
 
 ## ☁️ Deployment
 
-Retrograde ships as a self-hosted **Docker** image — no serverless platform required
-(the v86 emulator needs `SharedArrayBuffer`, which needs strict cross-origin headers
-that are easiest to guarantee behind your own reverse proxy).
+Retrograde ships as a self-hosted **Docker** image. The v86 emulator needs `SharedArrayBuffer`, which needs strict cross-origin headers — easiest to guarantee behind your own reverse proxy.
 
 ```bash
 docker build -t retrograde .
 docker run -p 3000:3000 retrograde
 ```
 
-- `deploy/nginx.conf` — reverse proxy config: WASM MIME type, HTTP range requests
-  (for streamed disk images), and COOP/COEP headers preserved.
-- `deploy/R2.md` — hosting large disk images on Cloudflare R2 + registry updates.
+- `deploy/nginx.conf` — WASM MIME type, HTTP range requests, COOP/COEP preserved
+- `deploy/R2.md` — hosting large disk images on Cloudflare R2
 
-> **Important:** the emulator requires `Cross-Origin-Opener-Policy: same-origin` and
-> `Cross-Origin-Embedder-Policy: credentialless` to be served over HTTPS. These are
-> set in `next.config.mjs` — any proxy in front of the app must not strip them.
+> [!IMPORTANT]
+> The emulator requires `Cross-Origin-Opener-Policy: same-origin` and `Cross-Origin-Embedder-Policy: credentialless` over HTTPS. They are set in `next.config.mjs` — any proxy in front of the app must not strip them.
 
----
+<img src="docs/readme/divider.svg" width="100%" alt="" />
 
-## 📐 Project Structure
+## 📊 How it works
 
+```mermaid
+flowchart LR
+    Boot[BootScreen<br/>POST sequence] --> Desk[Desktop]
+    Desk --> WM[WindowManager]
+    Entry["Desktop icon · Dock · Start · ⌘K"] -->|open app| WS[(windowsStore)]
+    WS --> WM
+    WM --> Apps[Built-in apps]
+    WM --> Emu[EmulatorWindow]
+    Emu --> V86[v86 · WASM x86]
+    Emu --> DOS[js-dos · DOSBox-X]
+    Apps <--> FS[(OPFS VFS)]
+    V86 -. save / resume .-> FS
+    Set[(settingsStore)] -. localStorage .-> Desk
 ```
-retrograde/
+
+**The shell.** Boot plays once, then hands off to the desktop. Every window, the dock and the start menu are driven by a single Zustand `windowsStore` — opening an app from any entry point pushes the same window state. Settings (`accent`, `crt`, `monitor`, `motion`, `sound`, `screensaver`, `wallpaper`, `lang`) persist to `localStorage`.
+
+**Emulation.** Each OS / game in `src/data/os.ts` and `src/data/games.ts` declares its engine, disk drive, memory profile and image source. Enabled entries become real desktop apps automatically; disabled ones show as *coming soon* until their image is hosted.
+
+**Legal boundary.** No copyrighted OS image (e.g. Windows) is ever bundled or hosted. Windows-flavoured catalog cards only launch with an image the user supplies (BYOI) — Retrograde just provides the matching hardware profile.
+
+<details>
+<summary><b>📐 Project structure</b></summary>
+
+```text
+Cathode/
 ├── src/
-│   ├── app/                       # layout, page (boot → desktop), globals.css, sw.ts
+│   ├── app/                  # layout, page (boot → desktop), sw.ts, api/proxy
 │   ├── components/
-│   │   ├── boot/                  # BootScreen
-│   │   ├── desktop/                # Desktop, Wallpaper, CommandPalette, Screensaver, ContextMenu
-│   │   ├── window/                 # Window, WindowManager, TitleBar, ResizeHandles, WindowSwitcher
-│   │   ├── dock/                   # Dock, StartMenu, SystemBar, Clock
-│   │   ├── apps/                   # About, Settings, Notepad, Terminal, Systems, Games
-│   │   │   └── emulator/           # LazyEmulator (v86), LazyJsDos, EmulatorWindow, JsDosScreen
-│   │   └── ui/                     # Button, Toggle, Segmented, AppIcon
-│   ├── store/                      # windowsStore, settingsStore (Zustand + localStorage persist)
-│   ├── lib/                        # motion, cn, pwa, persist (OPFS), sound, emu/v86Engine
-│   └── data/                       # apps (registry), os (v86 catalog), games (js-dos catalog)
-├── public/                          # icons, wallpapers, (setup:emu →) v86, js-dos, images
-├── deploy/                          # nginx.conf, R2.md
-└── RETROGRADE_BUILD_SPEC.md            # phased build spec this project was implemented against
+│   │   ├── boot/             # BootScreen
+│   │   ├── desktop/          # Desktop, Wallpaper, CommandPalette, Screensaver, ContextMenu
+│   │   ├── window/           # Window, WindowManager, TitleBar, ResizeHandles, WindowSwitcher
+│   │   ├── dock/             # Dock, StartMenu, SystemBar, Clock
+│   │   ├── apps/             # Terminal, FileManager, Notepad, Paint, Calculator, Browser…
+│   │   │   └── emulator/     # LazyEmulator (v86), LazyJsDos, EmulatorWindow
+│   │   └── ui/               # Button, Toggle, Segmented, AppIcon
+│   ├── store/                # windows, desktop, files, settings, ui (Zustand)
+│   ├── lib/                  # emu/ (v86 engine, sessions), fs/ (OPFS), i18n/, sound, pwa
+│   └── data/                 # apps registry, os catalog, games catalog, wallpapers
+├── e2e/                      # Playwright specs (boot, fs, emu, a11y, mobile…)
+├── public/                   # icons, wallpapers, (setup:emu →) v86, js-dos, images
+├── deploy/                   # nginx.conf, R2.md
+└── RETROGRADE_BUILD_SPEC.md  # phased build spec
 ```
 
----
-
-## 📊 How It Works
-
-### The Shell
-Boot screen plays once, then hands off to the desktop. Every window, the dock, and
-the start menu are driven by a single `windowsStore` (Zustand) — opening an app from
-any entry point (desktop icon, dock, start menu, or Command Palette) pushes the same
-window state. Settings (`accent`, `crt`, `monitor`, `motion`, `sound`, `screensaver`,
-`wallpaper`) live in `settingsStore` and persist to `localStorage` across sessions.
-
-### Emulation
-Each OS/game in the catalog (`src/data/os.ts`, `src/data/games.ts`) declares its own
-engine, disk drive, memory profile, and image source. Enabled entries render as real
-desktop apps; disabled ones show as "coming soon" until their image is hosted. Large
-images stream via HTTP range requests from Cloudflare R2 so the app itself stays light.
-
-### Legal Boundary
-No copyrighted OS images (e.g. Windows) are ever bundled or hosted by Retrograde. Where
-a "Windows-flavored" card exists in the catalog, it only launches using an image the
-user supplies themselves (BYOI) — Retrograde just provides the matching hardware profile.
-
----
+</details>
 
 ## 🗺️ Roadmap
 
-| Status | Feature |
+| | |
 |:-:|---|
 | ✅ | Boot screen, desktop, window manager, dock, start menu |
 | ✅ | Terminal, Command Palette, Window Switcher, Screensaver |
-| ✅ | v86 integration — KolibriOS + FreeDOS bundled |
-| ✅ | js-dos integration for DOS software |
-| ✅ | BYOI / BYOG (bring your own disk image or game bundle) |
-| ✅ | PWA — installable, offline app shell |
-| ✅ | Files app + OPFS virtual filesystem · draggable persistent desktop icons |
-| ✅ | Seamless auto sleep/resume for emulators (save on close, restore on reopen) |
-| ✅ | Mini apps — Calculator, Paint, Image Viewer |
-| ✅ | Multi-window emulator instances (+ performance warning) |
-| ✅ | Playwright e2e suite · mobile single-window mode · a11y baseline |
-| ✅ | Theme variety (amber / green / blue / white) · easter eggs |
-| 🔄 | ReactOS and additional OS images hosted on R2 (external asset hosting) |
-| 🔄 | Free/shareware DOS game catalog population (external bundles) |
+| ✅ | v86 (KolibriOS + FreeDOS) and js-dos integration · BYOI / BYOG |
+| ✅ | Files app + OPFS VFS · draggable persistent desktop icons |
+| ✅ | Emulator auto sleep / resume · multi-instance |
+| ✅ | Calculator, Paint, Image Viewer, Browser |
+| ✅ | Playwright e2e · mobile mode · a11y · TR / EN |
+| ✅ | 4 phosphor themes · easter eggs · installable PWA |
+| 🔄 | ReactOS and more OS images hosted on R2 |
+| 🔄 | Free / shareware DOS game catalog |
 
-<sub>✅ Shipped &nbsp; · &nbsp; 🔄 In progress &nbsp; · &nbsp; ○ Planned</sub>
+<img src="docs/readme/divider.svg" width="100%" alt="" />
 
----
+## ⚖️ Legal & content policy
 
-## ⚖️ Legal / Content Policy
-
-Retrograde is a hobby / educational / digital-preservation project. All emulation engines
-are open source. Legacy operating systems belong to their respective copyright holders
-and are run **only** for archival/nostalgia purposes, fully sandboxed in the browser.
-Content is removed on request from a rights holder. This site carries no ads and has
-no commercial purpose. **Windows is never bundled** — copyrighted images run only via
-a user-supplied disk image (BYOI).
-
----
+Retrograde is a hobby / educational / digital-preservation project. All emulation engines are open source. Legacy operating systems belong to their copyright holders and run **only** for archival and nostalgia purposes, sandboxed in the browser. Content is removed on a rights holder's request. No ads, no commercial purpose. **Windows is never bundled.**
 
 ## 📄 License
 
-Distributed under the **MIT License**. See [`LICENSE`](LICENSE) for more information.
-
-> KolibriOS, FreeDOS, and ReactOS are trademarks of their respective projects. This is
-> an independent hobby project, not affiliated with or endorsed by any of them.
-
----
+[MIT](LICENSE). KolibriOS, FreeDOS and ReactOS are trademarks of their respective projects; this is an independent project, not affiliated with or endorsed by any of them.
 
 ## 🙏 Acknowledgements
 
-- [v86](https://github.com/copy/v86) — x86 emulation in the browser (WASM).
-- [js-dos](https://js-dos.com) — DOSBox-X based DOS emulator.
-- [ReactOS](https://reactos.org), [KolibriOS](https://kolibrios.org), [FreeDOS](https://freedos.org) — open-source operating systems.
-- [SeaBIOS](https://www.seabios.org) — open-source BIOS.
-
----
+[v86](https://github.com/copy/v86) · [js-dos](https://js-dos.com) · [KolibriOS](https://kolibrios.org) · [FreeDOS](https://freedos.org) · [ReactOS](https://reactos.org) · [SeaBIOS](https://www.seabios.org)
 
 <div align="center">
 
 <br />
 
-Built by [**Kutluhan Gil**](https://github.com/kutluhangil)
+<img src="docs/readme/poweroff.svg" alt="" width="360" />
 
-<br />
+Built by [**Kutluhan Gül**](https://github.com/kutluhangil) · *ReBuildReBreak*
 
-*If you find this useful, consider giving it a ⭐*
-
-<br />
+<sub>If Retrograde made you nostalgic, leave a ⭐</sub>
 
 </div>

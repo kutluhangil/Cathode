@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="90" viewBox="0 0 600 90" role="img" aria-label="CRT power-off">
+  <title>CRT power-off</title>
+  <defs>
+    <style>
+      /* CRT kapanışı: ekran çizgiye, çizgi noktaya çöker; nokta sönerken döngü baştan başlar */
+      .tube { transform-box: fill-box; transform-origin: center; animation: off 6s cubic-bezier(.7,0,.3,1) infinite; }
+      .dot { transform-box: fill-box; transform-origin: center; animation: dot 6s ease-out infinite; }
+      @keyframes off {
+        0%, 30% { transform: scale(1, 1); opacity: 1; }
+        45% { transform: scale(1, .03); opacity: 1; }
+        60% { transform: scale(0, .03); opacity: 1; }
+        61%, 100% { transform: scale(0, .03); opacity: 0; }
+      }
+      @keyframes dot {
+        0%, 58% { opacity: 0; transform: scale(1); }
+        60% { opacity: 1; transform: scale(1.6); }
+        90%, 100% { opacity: 0; transform: scale(.4); }
+      }
+      @media (prefers-reduced-motion: reduce) { .tube, .dot { animation: none; } .dot { opacity: 0; } }
+    </style>
+    <linearGradient id="screen" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffb000" stop-opacity=".05" />
+      <stop offset=".5" stop-color="#ffb000" stop-opacity=".55" />
+      <stop offset="1" stop-color="#ffb000" stop-opacity=".05" />
+    </linearGradient>
+    <filter id="g" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3" result="b" />
+      <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
+    </filter>
+  </defs>
+  <rect class="tube" x="150" y="15" width="300" height="60" rx="6" fill="url(#screen)" filter="url(#g)" />
+  <circle class="dot" cx="300" cy="45" r="3" fill="#fff3d1" filter="url(#g)" />
+</svg>

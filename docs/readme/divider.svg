@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="24" viewBox="0 0 1200 24" role="img" aria-label="divider">
+  <defs>
+    <style>
+      .sweep { animation: sweep 5s cubic-bezier(.6,0,.4,1) infinite; }
+      @keyframes sweep { from { transform: translateX(-260px); } to { transform: translateX(1200px); } }
+      @media (prefers-reduced-motion: reduce) { .sweep { animation: none; opacity: 0; } }
+    </style>
+    <linearGradient id="beam" x1="0" x2="1">
+      <stop offset="0" stop-color="#ffb000" stop-opacity="0" />
+      <stop offset=".75" stop-color="#ffb000" stop-opacity=".9" />
+      <stop offset="1" stop-color="#fff3d1" />
+    </linearGradient>
+    <linearGradient id="rail" x1="0" x2="1">
+      <stop offset="0" stop-color="#888" stop-opacity="0" />
+      <stop offset=".5" stop-color="#888" stop-opacity=".35" />
+      <stop offset="1" stop-color="#888" stop-opacity="0" />
+    </linearGradient>
+    <filter id="g" x="-10%" y="-400%" width="120%" height="900%"><feGaussianBlur stdDeviation="3" /></filter>
+  </defs>
+  <rect y="11.5" width="1200" height="1" fill="url(#rail)" />
+  <g class="sweep">
+    <rect y="10" width="260" height="4" rx="2" fill="url(#beam)" filter="url(#g)" />
+    <rect y="11.25" width="260" height="1.5" fill="url(#beam)" />
+  </g>
+</svg>
